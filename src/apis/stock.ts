@@ -38,14 +38,13 @@ const FeatureSchema = z
   }));
 
 const StockDataSchema = z.object({
-  data: z.object({
-    ts_code: z.string(),
-    stock: z.array(StockPriceSchema),
-    features: z.array(FeatureSchema),
-  }),
+  ts_code: z.string(),
+  stock: z.array(StockPriceSchema),
+  features: z.array(FeatureSchema),
 });
 
 type StockData = z.infer<typeof StockDataSchema>;
+type StockPrice = z.infer<typeof StockPriceSchema>;
 
 type DataWindowOpt = "Days30" | "Days60" | "Year1" | "Years3" | "All";
 const DataWindow: Record<DataWindowOpt, string> = {
@@ -74,7 +73,7 @@ const getStockData = async (
     throw new Error(errorMessage);
   }
   const responseData = await response.json();
-  const parsedResult = StockDataSchema.safeParse(responseData);
+  const parsedResult = StockDataSchema.safeParse(responseData.data);
   if (parsedResult.success) {
     return parsedResult.data;
   }
@@ -82,4 +81,4 @@ const getStockData = async (
 };
 
 export { getStockData };
-export type { DataWindowOpt, StockData };
+export type { DataWindowOpt, StockData, StockPrice };

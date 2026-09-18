@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Chart from "@/components/chart";
+import Chart from "@/components/Chart";
 
 function App() {
   useEffect(() => {
@@ -8,7 +8,9 @@ function App() {
   return (
     <div>
       <h1>Hello</h1>
-      <Chart />
+      <div>
+        <Chart />
+      </div>
     </div>
   );
 }
