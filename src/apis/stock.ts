@@ -1,4 +1,51 @@
 import { DATA_URL, type DataServiceError } from "@/apis/shared";
+import { z } from "zod";
+
+const StockPriceSchema = z
+  .object({
+    ts_code: z.string(),
+    trade_date: z.string(),
+    adj_open: z.float32(),
+    adj_close: z.float32(),
+    adj_high: z.float32(),
+    adj_low: z.float32(),
+  })
+  .transform((input) => ({
+    tsCode: input.ts_code,
+    tradeDate: input.trade_date,
+    adjOpen: input.adj_open,
+    adjClose: input.adj_close,
+    adjHigh: input.adj_high,
+    adjLow: input.adj_low,
+  }));
+
+const FeatureSchema = z
+  .object({
+    ts_code: z.string(),
+    trade_date: z.string(),
+    ma_5: z.float32(),
+    ma_10: z.float32(),
+    ma_20: z.float32(),
+    ma_60: z.float32(),
+  })
+  .transform((input) => ({
+    tsCode: input.ts_code,
+    tradeDate: input.trade_date,
+    ma5: input.ma_5,
+    ma10: input.ma_10,
+    ma20: input.ma_20,
+    ma60: input.ma_60,
+  }));
+
+const StockDataSchema = z.object({
+  data: z.object({
+    ts_code: z.string(),
+    stock: z.array(StockPriceSchema),
+    features: z.array(FeatureSchema),
+  }),
+});
+
+type StockData = z.infer<typeof StockDataSchema>;
 
 type DataWindowOpt = "Days30" | "Days60" | "Year1" | "Years3" | "All";
 const DataWindow: Record<DataWindowOpt, string> = {
@@ -10,11 +57,11 @@ const DataWindow: Record<DataWindowOpt, string> = {
 };
 
 const getStockData = async (
-  ts_code: string,
+  ticker: string,
   window: DataWindowOpt,
   signal?: AbortSignal,
-) => {
-  const url = new URL(`stock/${ts_code}?window=${DataWindow[window]}`, DATA_URL);
+): Promise<StockData> => {
+  const url = new URL(`stock/${ticker}?window=${DataWindow[window]}`, DATA_URL);
   const response = await fetch(url, {
     method: "GET",
     signal,
@@ -23,11 +70,16 @@ const getStockData = async (
     const errorData = (await response.json()) as DataServiceError;
     const errorMessage =
       errorData.detail ||
-      `failed to get stock data for ${ts_code}. Status: ${response.status}`;
+      `failed to get stock data for ${ticker}. Status: ${response.status}`;
     throw new Error(errorMessage);
   }
   const responseData = await response.json();
-  return responseData;
+  const parsedResult = StockDataSchema.safeParse(responseData);
+  if (parsedResult.success) {
+    return parsedResult.data;
+  }
+  throw new Error(parsedResult.error.message);
 };
 
-export { DataWindow, getStockData };
+export { getStockData };
+export type { DataWindowOpt, StockData };
