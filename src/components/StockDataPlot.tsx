@@ -1,6 +1,8 @@
 import * as d3 from "d3";
 import type { StockData } from "@/apis/stock";
-import CandleStick from "@/components/plots/CandleSticks";
+import CandleStick from "@/components/plot/CandleSticks";
+import XAxis from "./plot/XAxis";
+import YAxis from "./plot/YAxis";
 
 type StockDataPlotProps = {
   data: StockData;
@@ -13,21 +15,14 @@ type StockDataPlotProps = {
   maxXTickNum?: number;
 };
 
-const parseDate = (tradeDate: string): Array<string> => {
-  const year = tradeDate.slice(0, 4);
-  const month = tradeDate.slice(4, 6);
-  const day = tradeDate.slice(-2);
-  return [year, month, day];
-};
-
 export default function StockDataPlot({
   data,
-  width = 1200,
+  width = 1100,
   height = 600,
   marginTop = 20,
-  marginRight = 55,
+  marginRight = 40,
   marginBottom = 40,
-  marginLeft = 20,
+  marginLeft = 0,
   maxXTickNum = 30,
 }: StockDataPlotProps) {
   const { stock } = data;
@@ -52,58 +47,16 @@ export default function StockDataPlot({
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
       {/* y axis marks */}
-      <g transform={`translate(${marginLeft}, 0)`} fontSize={12}>
-        {y.ticks(5).map((tick) => (
-          <g key={`stock-${tick}`}>
-            <line
-              x1={0}
-              x2={width - marginLeft - marginRight}
-              y1={y(tick)}
-              y2={y(tick)}
-              stroke="lightgray"
-              strokeDasharray={"6 4"}
-            />
-            <text x={width - marginRight + 12} y={y(tick)} dy={"0.33em"} textAnchor="end">
-              ${tick}
-            </text>
-          </g>
-        ))}
-      </g>
+      <YAxis
+        y={y}
+        xPos={marginLeft}
+        yPos={0}
+        plotWidth={width - marginLeft - marginRight}
+        labelXPos={width - marginRight / 2}
+        labelPrefix="$"
+      />
       {/* x axis marks */}
-      <g transform={`translate(0, ${height - marginBottom})`} fontSize={12}>
-        {xLabels.map((d, i) => {
-          let [showYear, showMonth] = [false, false];
-          const [year, month, day] = parseDate(d);
-          if (i > 0) {
-            const [prevYear, prevMonth] = parseDate(xLabels[i - 1]);
-            showMonth = month != prevMonth;
-            showYear = year != prevYear;
-          }
-          return (
-            <g key={d}>
-              <text
-                x={(x(d) ?? 0) + x.bandwidth() / 2}
-                y={18}
-                textAnchor="middle"
-                color="black"
-              >
-                {day}
-              </text>
-              {(showMonth || showYear) && (
-                <text
-                  x={(x(d) ?? 0) + x.bandwidth() / 2}
-                  y={32}
-                  textAnchor="middle"
-                  color="black"
-                >
-                  {/* will switch between year and month */}
-                  {showYear ? year : month}
-                </text>
-              )}
-            </g>
-          );
-        })}
-      </g>
+      <XAxis labels={xLabels} x={x} xPos={0} yPos={height - marginBottom} />
       {/* candle sticks */}
       <CandleStick prices={stock} x={x} y={y} />
     </svg>
