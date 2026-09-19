@@ -46,10 +46,10 @@ const StockDataSchema = z.object({
 type StockData = z.infer<typeof StockDataSchema>;
 type StockPrice = z.infer<typeof StockPriceSchema>;
 
-type DataWindowOpt = "Days30" | "Days60" | "Year1" | "Years3" | "All";
+type DataWindowOpt = "Days60" | "Days180" | "Year1" | "Years3" | "All";
 const DataWindow: Record<DataWindowOpt, string> = {
-  Days30: "30days",
   Days60: "60days",
+  Days180: "180days",
   Year1: "1year",
   Years3: "3years",
   All: "all",

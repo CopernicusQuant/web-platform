@@ -3,5 +3,12 @@ import StockDataPlot from "@/components/StockDataPlot";
 
 export default function Chart() {
   const { data } = useGetStockQuery("GOOG", "Days60");
-  return <div>{data && <StockDataPlot data={data} />}</div>;
+  return (
+    <div>
+      <h2 className="font-medium mb-2">stock price trend</h2>
+      <div className="border border-gray-300 rounded-xl px-4 py-2 w-fit">
+        {data && <StockDataPlot data={data} />}
+      </div>
+    </div>
+  );
 }
