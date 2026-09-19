@@ -21,6 +21,7 @@ const getMonthName = (monthStr: string): string => {
     "May",
     "Jun",
     "Jul",
+    "Aug",
     "Sep",
     "Oct",
     "Nov",
