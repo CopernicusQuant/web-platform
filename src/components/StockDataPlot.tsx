@@ -83,9 +83,10 @@ export default function StockDataPlot({
   };
 
   const onPointerLeave = () => {
-    if (!indicatorRef.current || !currDateRef.current) return;
-    indicatorRef.current.setAttribute("opacity", "0");
-    currDateRef.current.setAttribute("opacity", "0");
+    const line = d3.select(indicatorRef.current);
+    line.interrupt().attr("opacity", "0");
+    const currDate = d3.select(currDateRef.current);
+    currDate.interrupt().attr("opacity", "0");
   };
 
   return (
