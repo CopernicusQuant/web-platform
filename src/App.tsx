@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Chart from "@/components/Chart";
+import PriceChart from "@/components/PriceChart";
 import Header from "./components/Header";
 
 function App() {
@@ -9,10 +9,12 @@ function App() {
   return (
     <div className="w-full flex flex-col items-center gap-6">
       <Header />
-      <div>
-        <h2 className="font-semibold text-lg">AAPL</h2>
+      <div className="w-full max-w-360">
+        <div>
+          <h2 className="font-semibold text-lg">AAPL</h2>
+        </div>
+        <PriceChart />
       </div>
-      <Chart />
     </div>
   );
 }

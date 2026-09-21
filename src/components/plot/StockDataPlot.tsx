@@ -1,10 +1,10 @@
+import { useRef } from "react";
 import * as d3 from "d3";
+import { parseDate, getMonthName } from "@/lib/utils";
 import type { StockData } from "@/apis/stock";
 import CandleStick from "@/components/plot/CandleSticks";
 import XAxis from "@/components/plot/XAxis";
 import YAxis from "@/components/plot/YAxis";
-import { useRef } from "react";
-import { parseDate, getMonthName } from "@/lib/utils";
 
 type StockDataPlotProps = {
   data: StockData;

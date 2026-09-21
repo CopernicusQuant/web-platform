@@ -46,12 +46,12 @@ const StockDataSchema = z.object({
 type StockData = z.infer<typeof StockDataSchema>;
 type StockPrice = z.infer<typeof StockPriceSchema>;
 
-type DataWindowOpt = "Days60" | "Days180" | "Year1" | "Years3" | "All";
-const DataWindow: Record<DataWindowOpt, string> = {
-  Days60: "60days",
-  Days180: "180days",
-  Year1: "1year",
-  Years3: "3years",
+type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "All";
+const dataWindow: Record<DataWindowOpt, string> = {
+  "60D": "60days",
+  "180D": "180days",
+  "1Y": "1year",
+  "3Y": "3years",
   All: "all",
 };
 
@@ -60,7 +60,7 @@ const getStockData = async (
   window: DataWindowOpt,
   signal?: AbortSignal,
 ): Promise<StockData> => {
-  const url = new URL(`stock/${ticker}?window=${DataWindow[window]}`, DATA_URL);
+  const url = new URL(`stock/${ticker}?window=${dataWindow[window]}`, DATA_URL);
   const response = await fetch(url, {
     method: "GET",
     signal,
@@ -80,5 +80,5 @@ const getStockData = async (
   throw new Error(parsedResult.error.message);
 };
 
-export { getStockData };
+export { getStockData, dataWindow };
 export type { DataWindowOpt, StockData, StockPrice };
