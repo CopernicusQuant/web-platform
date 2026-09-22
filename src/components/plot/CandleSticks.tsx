@@ -12,7 +12,7 @@ export default function CandleStick({ prices, x, y }: CandleStickProps) {
       {prices.map((price) => {
         const xCoord = x(price.tradeDate) ?? 0;
         const isUp = price.adjClose > price.adjOpen;
-        const color = isUp ? "#8EC3B0" : "#FF8787";
+        const color = isUp ? "#79C9C5" : "#F96E5B";
         const top = y(Math.max(price.adjClose, price.adjOpen));
         const height = Math.abs(y(price.adjClose) - y(price.adjOpen));
         return (

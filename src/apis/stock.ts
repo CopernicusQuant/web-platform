@@ -9,6 +9,7 @@ const StockPriceSchema = z
     adj_close: z.float32(),
     adj_high: z.float32(),
     adj_low: z.float32(),
+    adj_vol: z.int32(),
   })
   .transform((input) => ({
     tsCode: input.ts_code,
@@ -17,6 +18,7 @@ const StockPriceSchema = z
     adjClose: input.adj_close,
     adjHigh: input.adj_high,
     adjLow: input.adj_low,
+    adjVol: input.adj_vol,
   }));
 
 const FeatureSchema = z
@@ -73,6 +75,7 @@ const getStockData = async (
     throw new Error(errorMessage);
   }
   const responseData = await response.json();
+  console.log(responseData);
   const parsedResult = StockDataSchema.safeParse(responseData.data);
   if (parsedResult.success) {
     return parsedResult.data;
