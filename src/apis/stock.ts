@@ -9,7 +9,7 @@ const StockPriceSchema = z
     adj_close: z.float32(),
     adj_high: z.float32(),
     adj_low: z.float32(),
-    adj_vol: z.int32(),
+    adj_vol: z.float32(),
   })
   .transform((input) => ({
     tsCode: input.ts_code,
