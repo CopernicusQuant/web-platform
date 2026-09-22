@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { useRef } from "react";
 import type { PriceChartType } from "@/atoms/stocks";
-import { parseDate, getMonthName } from "@/lib/utils";
+import { parseDate, getMonthName, parseVolume } from "@/lib/utils";
 import type { StockData } from "@/apis/stock";
 import CandleStick from "@/components/plot/CandleSticks";
 import XAxis from "@/components/plot/XAxis";
@@ -27,6 +27,11 @@ const elementIds = {
   indicatorDateGroup: "price-indicator-date",
   indicatorDay: "price-indicator-day",
   indicatorMonth: "price-indicator-month",
+  valuesOpen: "price-values-open",
+  valuesClose: "price-values-close",
+  valuesHigh: "price-values-high",
+  valuesLow: "price-values-low",
+  valuesVol: "price-values-vol",
 };
 
 export default function StockDataPlot({
@@ -69,10 +74,10 @@ export default function StockDataPlot({
     indicatorGroup.attr("opacity", 1);
     if (pointerPos > 0 && pointerPos < width - marginLeft - marginRight) {
       const xIdx = Math.floor(pointerPos / x.step());
-      const { tradeDate, adjClose: closePrice } = stock[xIdx];
+      const { tradeDate, adjClose, adjOpen, adjHigh, adjLow, adjVol } = stock[xIdx];
       const dateElements = parseDate(tradeDate);
       const xPos = (x(tradeDate) ?? 0) + x.bandwidth() / 2;
-      const yPos = y(closePrice) ?? 0;
+      const yPos = y(adjClose) ?? 0;
       const line = indicatorGroup.select(`#${elementIds.indicatorLine}`);
       const currDate = indicatorGroup.select(`#${elementIds.indicatorDateGroup}`);
       const circle = indicatorGroup.select(`#${elementIds.indicatorPoint}`);
@@ -97,6 +102,11 @@ export default function StockDataPlot({
       currDate
         .select(`#${elementIds.indicatorMonth}`)
         .text(getMonthName(dateElements[1]));
+      d3.select(`#${elementIds.valuesClose}`).text(`${adjClose.toFixed(2)}`);
+      d3.select(`#${elementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
+      d3.select(`#${elementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
+      d3.select(`#${elementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
+      d3.select(`#${elementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
     } else {
       indicatorGroup.attr("opacity", 0);
     }
@@ -105,6 +115,14 @@ export default function StockDataPlot({
   const onPointerLeave = () => {
     const indicatorGroup = d3.select("#price-indicator-group");
     indicatorGroup.attr("opacity", 0);
+    const lastestStock = stock.at(-1);
+    if (!lastestStock) return;
+    const { adjClose, adjOpen, adjHigh, adjLow, adjVol } = stock.at(-1)!;
+    d3.select(`#${elementIds.valuesClose}`).text(`${adjClose.toFixed(2)}`);
+    d3.select(`#${elementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
+    d3.select(`#${elementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
+    d3.select(`#${elementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
+    d3.select(`#${elementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
   };
 
   return (
@@ -170,6 +188,38 @@ export default function StockDataPlot({
           opacity={chartType === "line" ? 1 : 0}
         />
       </g>
+      {/* values */}
+      {stock.at(-1) && (
+        <g>
+          <text x={0} y={16} textAnchor="start" fontSize={13} fill="gray">
+            <tspan x={0}>Open</tspan>
+            <tspan x={92}>Close</tspan>
+            <tspan x={92 * 2 + 3}>High</tspan>
+            <tspan x={92 * 3 + 3}>Low</tspan>
+            <tspan x={92 * 3 + 3}>Low</tspan>
+            <tspan x={0} dy={22}>
+              Volume
+            </tspan>
+          </text>
+          <text x={0} y={16} textAnchor="start" fontSize={14}>
+            <tspan x={36} id={elementIds.valuesOpen}>
+              {stock.at(-1)!.adjOpen.toFixed(2)}
+            </tspan>
+            <tspan x={92 + 36 + 3} id={elementIds.valuesClose}>
+              {stock.at(-1)!.adjClose.toFixed(2)}
+            </tspan>
+            <tspan x={92 * 2 + 36} id={elementIds.valuesHigh}>
+              {stock.at(-1)!.adjHigh.toFixed(2)}
+            </tspan>
+            <tspan x={92 * 3 + 36 - 3} id={elementIds.valuesLow}>
+              {stock.at(-1)!.adjLow.toFixed(2)}
+            </tspan>
+            <tspan x={50} dy={22} id={elementIds.valuesVol}>
+              {parseVolume(stock.at(-1)!.adjVol)}
+            </tspan>
+          </text>
+        </g>
+      )}
     </svg>
   );
 }

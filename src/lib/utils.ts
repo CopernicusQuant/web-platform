@@ -12,6 +12,14 @@ const parseDate = (tradeDate: string): Array<string> => {
   return [year, month, day];
 };
 
+const parseVolume = (volume: number): string => {
+  if (volume >= 1_000_000) {
+    return `${(volume / 1_000_000).toFixed(2)}M`;
+  } else {
+    return `${(volume / 1_000).toFixed(2)}K`;
+  }
+};
+
 const getMonthName = (monthStr: string): string => {
   const monthNames = [
     "Jan",
@@ -31,4 +39,4 @@ const getMonthName = (monthStr: string): string => {
   return monthNames[monthIdx];
 };
 
-export { cn, parseDate, getMonthName };
+export { cn, parseDate, getMonthName, parseVolume };
