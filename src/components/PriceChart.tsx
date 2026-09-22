@@ -1,7 +1,11 @@
 import { useState, useRef, useLayoutEffect } from "react";
 import { useAtom } from "jotai";
 import { dataWindow, type DataWindowOpt } from "@/apis/stock";
-import { stockSelectionAtom } from "@/atoms/stocks";
+import {
+  priceChartTypeAtom,
+  stockSelectionAtom,
+  type PriceChartType,
+} from "@/atoms/stocks";
 import { cn } from "@/lib/utils";
 import { useGetStockQuery } from "@/hooks/queries/useGetStockQuery";
 import StockDataPlot from "@/components/plot/StockDataPlot";
@@ -9,7 +13,6 @@ import CandleIcon from "@/components/plot/CandleIcon";
 import LineIcon from "@/components/plot/LineIcon";
 import clsx from "clsx";
 
-type PriceChartType = "candle" | "line";
 const priceChartTypes: PriceChartType[] = ["candle", "line"];
 
 const styles = {
@@ -24,7 +27,7 @@ const styles = {
 export default function PriceChart() {
   const plotContainerRef = useRef<HTMLDivElement>(null);
   const [plotWidth, setPlotWidth] = useState<number>(0);
-  const [chartType, setChartType] = useState<PriceChartType>("candle");
+  const [chartType, setChartType] = useAtom(priceChartTypeAtom);
 
   const [stockSelection, setStockSelection] = useAtom(stockSelectionAtom);
   const updateWindow = (newWindow: DataWindowOpt) => {
@@ -89,7 +92,7 @@ export default function PriceChart() {
         ref={plotContainerRef}
         className="border border-gray-300 rounded-md px-6 py-2 w-full"
       >
-        {data && <StockDataPlot data={data} width={plotWidth} />}
+        {data && <StockDataPlot data={data} chartType={chartType} width={plotWidth} />}
       </div>
     </div>
   );

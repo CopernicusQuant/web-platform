@@ -1,13 +1,16 @@
-import { useRef } from "react";
 import * as d3 from "d3";
+import { useRef } from "react";
+import type { PriceChartType } from "@/atoms/stocks";
 import { parseDate, getMonthName } from "@/lib/utils";
 import type { StockData } from "@/apis/stock";
 import CandleStick from "@/components/plot/CandleSticks";
 import XAxis from "@/components/plot/XAxis";
 import YAxis from "@/components/plot/YAxis";
+import TrendLine from "@/components/plot/TrendLine";
 
 type StockDataPlotProps = {
   data: StockData;
+  chartType: PriceChartType;
   width?: number;
   height?: number;
   marginTop?: number;
@@ -17,11 +20,21 @@ type StockDataPlotProps = {
   maxXTickNum?: number;
 };
 
+const elementIds = {
+  indicatorGroup: "price-indicator-group",
+  indicatorLine: "price-indicator-line",
+  indicatorPoint: "price-indicator-point",
+  indicatorDateGroup: "price-indicator-date",
+  indicatorDay: "price-indicator-day",
+  indicatorMonth: "price-indicator-month",
+};
+
 export default function StockDataPlot({
   data,
+  chartType,
   width = 1100,
   height = 600,
-  marginTop = 20,
+  marginTop = 40,
   marginRight = 40,
   marginBottom = 40,
   marginLeft = 0,
@@ -29,8 +42,6 @@ export default function StockDataPlot({
 }: StockDataPlotProps) {
   const { stock } = data;
   const plotRef = useRef<SVGSVGElement>(null);
-  const indicatorRef = useRef<SVGLineElement>(null);
-  const currDateRef = useRef<SVGGElement>(null);
 
   // x-axis mapper
   const x = d3
@@ -50,43 +61,50 @@ export default function StockDataPlot({
     [height - marginBottom, marginTop],
   );
 
+  // controls hover-based indicators
   const onPointerMove = (event: React.PointerEvent<SVGSVGElement>) => {
-    if (!indicatorRef.current || !currDateRef.current) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const pointerPos = event.clientX - rect.x - marginLeft;
+    const indicatorGroup = d3.select(`#${elementIds.indicatorGroup}`);
+    indicatorGroup.attr("opacity", 1);
     if (pointerPos > 0 && pointerPos < width - marginLeft - marginRight) {
       const xIdx = Math.floor(pointerPos / x.step());
-      const tradeDate = stock[xIdx].tradeDate;
+      const { tradeDate, adjClose: closePrice } = stock[xIdx];
       const dateElements = parseDate(tradeDate);
       const xPos = (x(tradeDate) ?? 0) + x.bandwidth() / 2;
-      const line = d3.select(indicatorRef.current);
+      const yPos = y(closePrice) ?? 0;
+      const line = indicatorGroup.select(`#${elementIds.indicatorLine}`);
+      const currDate = indicatorGroup.select(`#${elementIds.indicatorDateGroup}`);
+      const circle = indicatorGroup.select(`#${elementIds.indicatorPoint}`);
       line
         .transition()
         .duration(50)
         .ease(d3.easeLinear)
-        .attr("opacity", 1)
         .attr("x1", xPos)
         .attr("x2", xPos);
-      const currDate = d3.select(currDateRef.current);
+      circle
+        .transition()
+        .duration(50)
+        .ease(d3.easeLinear)
+        .attr("cx", xPos)
+        .attr("cy", yPos);
       currDate
         .transition()
         .duration(50)
         .ease(d3.easeLinear)
-        .attr("opacity", "1")
         .attr("transform", `translate(${xPos}, ${height - marginBottom})`);
-      currDate.select("#stock-day").text(dateElements[2]);
-      currDate.select("#stock-month").text(getMonthName(dateElements[1]));
+      currDate.select(`#${elementIds.indicatorDay}`).text(dateElements[2]);
+      currDate
+        .select(`#${elementIds.indicatorMonth}`)
+        .text(getMonthName(dateElements[1]));
     } else {
-      indicatorRef.current.setAttribute("opacity", "0");
-      currDateRef.current.setAttribute("opacity", "0");
+      indicatorGroup.attr("opacity", 0);
     }
   };
 
   const onPointerLeave = () => {
-    const line = d3.select(indicatorRef.current);
-    line.interrupt().attr("opacity", "0");
-    const currDate = d3.select(currDateRef.current);
-    currDate.interrupt().attr("opacity", "0");
+    const indicatorGroup = d3.select("#price-indicator-group");
+    indicatorGroup.attr("opacity", 0);
   };
 
   return (
@@ -110,28 +128,47 @@ export default function StockDataPlot({
       />
       {/* x axis marks */}
       <XAxis labels={xLabels} x={x} xPos={0} yPos={height - marginBottom} />
-      {/* candle sticks */}
-      <CandleStick prices={stock} x={x} y={y} />
+      {/* price trend */}
+      {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
+      {chartType === "line" && <TrendLine prices={stock} x={x} y={y} />}
       {/* hover line */}
-      <g>
+      <g id={elementIds.indicatorGroup} opacity={0}>
         <line
-          ref={indicatorRef}
+          id={elementIds.indicatorLine}
           y1={marginTop}
           y2={height - marginBottom}
           stroke="gray"
-          opacity="0"
           strokeDasharray={"6 4"}
         />
         <g
-          ref={currDateRef}
+          id={elementIds.indicatorDateGroup}
           transform={`translate(0 ${height - marginBottom})`}
-          opacity={0}
           fontSize={12}
         >
           <rect x={-18} y={2} width={36} height={36} rx={4} fill="black" opacity={0.9} />
-          <text id="stock-day" x={0} y={16} textAnchor="middle" fill="white"></text>
-          <text id="stock-month" x={0} y={32} textAnchor="middle" fill="white"></text>
+          <text
+            id={elementIds.indicatorDay}
+            x={0}
+            y={16}
+            textAnchor="middle"
+            fill="white"
+          ></text>
+          <text
+            id={elementIds.indicatorMonth}
+            x={0}
+            y={32}
+            textAnchor="middle"
+            fill="white"
+          ></text>
         </g>
+        <circle
+          id={elementIds.indicatorPoint}
+          cx={0}
+          cy={0}
+          r={5}
+          fill={"#3368A0"}
+          opacity={chartType === "line" ? 1 : 0}
+        />
       </g>
     </svg>
   );

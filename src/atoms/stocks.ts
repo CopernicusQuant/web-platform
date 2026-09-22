@@ -5,11 +5,15 @@ type StockSelection = {
   ticker: string;
   window: DataWindowOpt;
 };
+
 const initSelection: StockSelection = {
   ticker: "AAPL",
   window: "60D",
 };
-
 const stockSelectionAtom = atom<StockSelection>(initSelection);
 
-export { stockSelectionAtom };
+type PriceChartType = "candle" | "line";
+const priceChartTypeAtom = atom<PriceChartType>("candle");
+
+export { stockSelectionAtom, priceChartTypeAtom };
+export type { PriceChartType };
