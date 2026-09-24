@@ -12,7 +12,7 @@ const StockPriceSchema = z
     adj_vol: z.float32(),
   })
   .transform((input) => ({
-    tsCode: input.ts_code,
+    ticker: input.ts_code,
     tradeDate: input.trade_date,
     adjOpen: input.adj_open,
     adjClose: input.adj_close,
@@ -31,7 +31,7 @@ const FeatureSchema = z
     ma_60: z.float32(),
   })
   .transform((input) => ({
-    tsCode: input.ts_code,
+    ticker: input.ts_code,
     tradeDate: input.trade_date,
     ma5: input.ma_5,
     ma10: input.ma_10,
@@ -75,7 +75,6 @@ const getStockData = async (
     throw new Error(errorMessage);
   }
   const responseData = await response.json();
-  console.log(responseData);
   const parsedResult = StockDataSchema.safeParse(responseData.data);
   if (parsedResult.success) {
     return parsedResult.data;

@@ -184,6 +184,8 @@ export default function StockDataPlot({
           cx={0}
           cy={0}
           r={5}
+          stroke="white"
+          strokeWidth={2}
           fill={"#3368A0"}
           opacity={chartType === "line" ? 1 : 0}
         />
