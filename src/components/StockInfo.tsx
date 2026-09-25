@@ -1,12 +1,13 @@
-import { stockSelectionAtom } from "@/atoms/stocks";
-import { useGetStockInfoQuery } from "@/hooks/queries/useGetStockInfoQuery";
 import clsx from "clsx";
 import { useAtom } from "jotai";
 import { cn } from "@/lib/utils";
+import { stockSelectionAtom } from "@/atoms/stocks";
+import { useGetStockInfoQuery } from "@/hooks/queries/useGetStockInfoQuery";
+import StockSelector from "./StockSelector";
 
 const styles = {
   container: clsx(
-    "w-full h-20 grid grid-cols-5 items-center border border-gray-300 rounded-md overflow-hidden",
+    "box-border w-full h-20 grid grid-cols-5 items-center border border-gray-300 rounded-md overflow-hidden",
   ),
   columnBasic: clsx(
     "w-full h-full px-8 border-r border-gray-300 flex flex-col justify-center transition duration-100 text-sm",
@@ -28,10 +29,12 @@ export default function StockInfo() {
       <div className={styles.container}>
         {data && (
           <>
-            <div className={cn(styles.columnBasic, "cursor-pointer hover:bg-gray-200")}>
-              <h2 className="font-semibold text-lg">{data.ticker}</h2>
-              <p>{data.companyName}</p>
-            </div>
+            <StockSelector>
+              <div className={cn(styles.columnBasic, "cursor-pointer hover:bg-gray-200")}>
+                <h2 className="font-semibold text-lg">{data.ticker}</h2>
+                <p>{data.companyName}</p>
+              </div>
+            </StockSelector>
             <div className={cn(styles.columnBasic, "col-span-2")}>
               <p>{data.sector}</p>
               <p>{data.subIndustry}</p>

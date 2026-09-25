@@ -1,7 +1,7 @@
 import z from "zod";
 import { DATA_URL, type DataServiceError } from "@/apis/shared";
 
-const StockListSchema = z
+const StockInfoSchema = z
   .object({
     ts_code: z.string(),
     company_name: z.string(),
@@ -29,11 +29,11 @@ const getStockInfo = async (ticker: string, signal?: AbortSignal) => {
     const errorData = (await response.json()) as DataServiceError;
     const errorMessage =
       errorData.detail ||
-      `Failed to get stock list from server. Status ${response.status}`;
+      `Failed to get ${ticker} stock info from server. Status ${response.status}`;
     throw new Error(errorMessage);
   }
   const responseData = await response.json();
-  const parsedResult = StockListSchema.safeParse(responseData.data);
+  const parsedResult = StockInfoSchema.safeParse(responseData.data);
   if (parsedResult.success) {
     return parsedResult.data;
   }

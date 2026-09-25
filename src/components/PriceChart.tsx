@@ -1,5 +1,6 @@
 import { useState, useRef, useLayoutEffect } from "react";
 import { useAtom } from "jotai";
+import clsx from "clsx";
 import { dataWindow, type DataWindowOpt } from "@/apis/stock";
 import {
   priceChartTypeAtom,
@@ -9,9 +10,8 @@ import {
 import { cn } from "@/lib/utils";
 import { useGetStockQuery } from "@/hooks/queries/useGetStockQuery";
 import StockDataPlot from "@/components/plot/StockDataPlot";
-import CandleIcon from "@/components/plot/CandleIcon";
-import LineIcon from "@/components/plot/LineIcon";
-import clsx from "clsx";
+import CandleIcon from "@/components/icons/CandleIcon";
+import LineIcon from "@/components/icons/LineIcon";
 
 const priceChartTypes: PriceChartType[] = ["candle", "line"];
 
