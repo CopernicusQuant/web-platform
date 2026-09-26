@@ -1,6 +1,16 @@
 import { DATA_URL, type DataServiceError } from "@/apis/shared";
 import { z } from "zod";
 
+type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "All";
+
+const dataWindow: Record<DataWindowOpt, string> = {
+  "60D": "60days",
+  "180D": "180days",
+  "1Y": "1year",
+  "3Y": "3years",
+  All: "all",
+};
+
 const StockPriceSchema = z
   .object({
     ts_code: z.string(),
@@ -21,7 +31,7 @@ const StockPriceSchema = z
     adjVol: input.adj_vol,
   }));
 
-const FeatureSchema = z
+const PriceMomentumFeaturesSchema = z
   .object({
     ts_code: z.string(),
     trade_date: z.string(),
@@ -39,29 +49,51 @@ const FeatureSchema = z
     ma60: input.ma_60,
   }));
 
-const StockDataSchema = z.object({
-  ts_code: z.string(),
-  stock: z.array(StockPriceSchema),
-  features: z.array(FeatureSchema),
-});
+const VolumeMomentumFeaturesSchema = z
+  .object({
+    ts_code: z.string(),
+    trade_date: z.string(),
+  })
+  .transform((input) => ({
+    ticker: input.ts_code,
+    tradeDate: input.trade_date,
+  }));
 
-type StockData = z.infer<typeof StockDataSchema>;
+type FeatureGroupOpt = "priceMomentum" | "volumeMomentum";
+const FeatureSchemas = {
+  priceMomentum: PriceMomentumFeaturesSchema,
+  volumeMomentum: VolumeMomentumFeaturesSchema,
+} satisfies Record<FeatureGroupOpt, z.ZodType>;
+type FeatureByGroup = {
+  priceMomentum: z.infer<typeof PriceMomentumFeaturesSchema>;
+  volumeMomentum: z.infer<typeof VolumeMomentumFeaturesSchema>;
+};
+
+const createStockSchema = <G extends FeatureGroupOpt>(group: G) =>
+  z
+    .object({
+      ts_code: z.string(),
+      stock: z.array(StockPriceSchema),
+      features: z.array(FeatureSchemas[group]),
+    })
+    .transform(({ ts_code, ...data }) => ({
+      ticker: ts_code,
+      ...data,
+    }));
+
 type StockPrice = z.infer<typeof StockPriceSchema>;
-
-type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "All";
-const dataWindow: Record<DataWindowOpt, string> = {
-  "60D": "60days",
-  "180D": "180days",
-  "1Y": "1year",
-  "3Y": "3years",
-  All: "all",
+type StockData<G extends FeatureGroupOpt> = {
+  ticker: string;
+  stock: StockPrice[];
+  features: FeatureByGroup[G][];
 };
 
 const getStockData = async (
   ticker: string,
   window: DataWindowOpt,
+  featureGroup: FeatureGroupOpt = "priceMomentum",
   signal?: AbortSignal,
-): Promise<StockData> => {
+) => {
   const url = new URL(`stock/${ticker}?window=${dataWindow[window]}`, DATA_URL);
   const response = await fetch(url, {
     method: "GET",
@@ -75,6 +107,7 @@ const getStockData = async (
     throw new Error(errorMessage);
   }
   const responseData = await response.json();
+  const StockDataSchema = createStockSchema(featureGroup);
   const parsedResult = StockDataSchema.safeParse(responseData.data);
   if (parsedResult.success) {
     return parsedResult.data;
@@ -83,4 +116,4 @@ const getStockData = async (
 };
 
 export { getStockData, dataWindow };
-export type { DataWindowOpt, StockData, StockPrice };
+export type { DataWindowOpt, StockPrice, StockData, FeatureGroupOpt, FeatureByGroup };
