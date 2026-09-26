@@ -20,6 +20,17 @@ const parseVolume = (volume: number): string => {
   }
 };
 
+const computePriceChange = (
+  startPrice: number | undefined,
+  endPrice: number | undefined,
+) => {
+  if (startPrice === undefined || endPrice === undefined) {
+    return "0%";
+  }
+  const pctChange = ((endPrice - startPrice) / Math.max(startPrice, 0.01)) * 100;
+  return `${pctChange.toFixed(2)}%`;
+};
+
 const getMonthName = (monthStr: string): string => {
   const monthNames = [
     "Jan",
@@ -39,4 +50,4 @@ const getMonthName = (monthStr: string): string => {
   return monthNames[monthIdx];
 };
 
-export { cn, parseDate, getMonthName, parseVolume };
+export { cn, parseDate, getMonthName, parseVolume, computePriceChange };

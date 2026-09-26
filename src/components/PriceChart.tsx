@@ -34,7 +34,11 @@ export default function PriceChart() {
     setStockSelection((prev) => ({ ...prev, window: newWindow }));
   };
 
-  const { data } = useGetStockQuery(stockSelection.ticker, stockSelection.window);
+  const { data } = useGetStockQuery(
+    stockSelection.ticker,
+    stockSelection.window,
+    stockSelection.featureGroup,
+  );
 
   useLayoutEffect(() => {
     const container = plotContainerRef.current;
@@ -92,7 +96,14 @@ export default function PriceChart() {
         ref={plotContainerRef}
         className="border border-gray-300 rounded-md px-6 py-2 w-full"
       >
-        {data && <StockDataPlot data={data} chartType={chartType} width={plotWidth} />}
+        {data && (
+          <StockDataPlot
+            data={data}
+            chartType={chartType}
+            featureGroup={stockSelection.featureGroup}
+            width={plotWidth}
+          />
+        )}
       </div>
     </div>
   );

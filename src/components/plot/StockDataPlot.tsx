@@ -1,16 +1,18 @@
 import * as d3 from "d3";
 import { useRef } from "react";
 import type { PriceChartType } from "@/atoms/stocks";
-import { parseDate, getMonthName, parseVolume } from "@/lib/utils";
-import type { StockData } from "@/apis/stock";
+import { parseDate, getMonthName, parseVolume, computePriceChange } from "@/lib/utils";
+import type { FeatureByGroup, FeatureGroupOpt, StockData } from "@/apis/stock";
 import CandleStick from "@/components/plot/CandleSticks";
 import XAxis from "@/components/plot/XAxis";
 import YAxis from "@/components/plot/YAxis";
-import TrendLine from "@/components/plot/TrendLine";
+import TrendLine from "@/components/plot/StockTrendLine";
+import MALines from "./price-momentum/MALines";
 
 type StockDataPlotProps = {
-  data: StockData;
+  data: StockData<FeatureGroupOpt>;
   chartType: PriceChartType;
+  featureGroup: FeatureGroupOpt;
   width?: number;
   height?: number;
   marginTop?: number;
@@ -32,11 +34,13 @@ const elementIds = {
   valuesHigh: "price-values-high",
   valuesLow: "price-values-low",
   valuesVol: "price-values-vol",
+  valuesPctChange: "price-pct-change",
 };
 
 export default function StockDataPlot({
   data,
   chartType,
+  featureGroup,
   width = 1100,
   height = 600,
   marginTop = 40,
@@ -45,7 +49,7 @@ export default function StockDataPlot({
   marginLeft = 0,
   maxXTickNum = 30,
 }: StockDataPlotProps) {
-  const { stock } = data;
+  const { stock, features } = data;
   const plotRef = useRef<SVGSVGElement>(null);
 
   // x-axis mapper
@@ -60,7 +64,7 @@ export default function StockDataPlot({
   // y-axis mapper
   const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
   const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
-  const yPadding = (yMax - yMin) * 0.01 || 1;
+  const yPadding = (yMax - yMin) * 0.05 || 1;
   const y = d3.scaleLinear(
     [yMin - yPadding, yMax + yPadding],
     [height - marginBottom, marginTop],
@@ -106,6 +110,9 @@ export default function StockDataPlot({
       d3.select(`#${elementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
       d3.select(`#${elementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
       d3.select(`#${elementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
+      d3.select(`#${elementIds.valuesPctChange}`).text(
+        `${computePriceChange(stock.at(0)?.adjClose, adjClose)}`,
+      );
       d3.select(`#${elementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
     } else {
       indicatorGroup.attr("opacity", 0);
@@ -122,6 +129,9 @@ export default function StockDataPlot({
     d3.select(`#${elementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
     d3.select(`#${elementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
     d3.select(`#${elementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
+    d3.select(`#${elementIds.valuesPctChange}`).text(
+      `${computePriceChange(stock.at(0)?.adjClose, stock.at(-1)?.adjClose)}`,
+    );
     d3.select(`#${elementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
   };
 
@@ -147,6 +157,15 @@ export default function StockDataPlot({
       {/* x axis marks */}
       <XAxis labels={xLabels} x={x} xPos={0} yPos={height - marginBottom} />
       {/* price trend */}
+      {featureGroup === "priceMomentum" && (
+        <MALines
+          features={features as FeatureByGroup["priceMomentum"][]}
+          x={x}
+          y={y}
+          yAxisMin={marginTop}
+          yAxisMax={height - marginBottom}
+        />
+      )}
       {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
       {chartType === "line" && <TrendLine prices={stock} x={x} y={y} />}
       {/* hover line */}
@@ -199,6 +218,7 @@ export default function StockDataPlot({
             <tspan x={92 * 2 + 3}>High</tspan>
             <tspan x={92 * 3 + 3}>Low</tspan>
             <tspan x={92 * 3 + 3}>Low</tspan>
+            <tspan x={92 * 4 + 3}>Pct.</tspan>
             <tspan x={0} dy={22}>
               Volume
             </tspan>
@@ -215,6 +235,9 @@ export default function StockDataPlot({
             </tspan>
             <tspan x={92 * 3 + 36 - 3} id={elementIds.valuesLow}>
               {stock.at(-1)!.adjLow.toFixed(2)}
+            </tspan>
+            <tspan x={92 * 4 + 32} dy={0} id={elementIds.valuesPctChange}>
+              {computePriceChange(stock.at(0)?.adjClose, stock.at(-1)?.adjClose)}
             </tspan>
             <tspan x={50} dy={22} id={elementIds.valuesVol}>
               {parseVolume(stock.at(-1)!.adjVol)}

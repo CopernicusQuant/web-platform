@@ -53,7 +53,9 @@ export default function StockSelector({
                   }}
                 >
                   <p className="text-sm">{stock[0]}</p>
-                  <p className="text-sm text-gray-400 text-left">{stock[1]}</p>
+                  <p className="text-xs text-gray-400 text-left tracking-tight">
+                    {stock[1]}
+                  </p>
                 </button>
               );
             })}
