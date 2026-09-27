@@ -1,5 +1,10 @@
 import * as d3 from "d3";
 import type { FeatureByGroup } from "@/apis/stock";
+import {
+  getMALineId,
+  maFeatures,
+  maColors,
+} from "@/components/plot/interactions/price-momentum";
 
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
@@ -11,12 +16,9 @@ type MALinesProps = {
   yAxisMax: number;
 };
 
-const plotFeatures = ["ma5", "ma10", "ma20", "ma60"] as const;
-const strokeColors = ["#F38181", "#FCE38A", "#93BFCF", "#95E1D3"];
-
 export default function MALines({ features, x, y, yAxisMin, yAxisMax }: MALinesProps) {
   const paths: Record<string, string> = {};
-  plotFeatures.forEach((featureName) => {
+  maFeatures.forEach((featureName) => {
     const path = d3
       .line<PriceMomentumFeature>()
       .defined(
@@ -31,13 +33,14 @@ export default function MALines({ features, x, y, yAxisMin, yAxisMax }: MALinesP
   });
   return (
     <g>
-      {Object.entries(paths).map(([key, value], i) => (
+      {Object.entries(paths).map(([featureName, value], i) => (
         <path
-          key={`priceMomentum-${key}`}
+          key={getMALineId(featureName)}
+          id={getMALineId(featureName)}
           d={value}
           fill="none"
-          stroke={strokeColors[i]}
-          strokeWidth={1.5}
+          stroke={maColors[i]}
+          strokeWidth={2.0}
           opacity={0.7}
         />
       ))}
