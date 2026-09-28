@@ -82,7 +82,9 @@ export default function PriceChart() {
                 className={cn(
                   styles.selectorButtonBase,
                   "px-2 py-1 text-xs cursor-pointer tracking-tight",
-                  key === stockSelection.window ? "text-white bg-black" : "",
+                  key === stockSelection.window
+                    ? "text-white bg-black"
+                    : "bg-white text-black",
                 )}
                 onClick={() => updateWindow(key as DataWindowOpt)}
               >
@@ -94,7 +96,7 @@ export default function PriceChart() {
       </div>
       <div
         ref={plotContainerRef}
-        className="border border-gray-300 rounded-md px-6 py-2 w-full"
+        className="border border-gray-300 rounded-md w-full bg-white px-6 py-2 h-154"
       >
         {data && (
           <StockDataPlot
@@ -102,6 +104,7 @@ export default function PriceChart() {
             chartType={chartType}
             featureGroup={stockSelection.featureGroup}
             width={plotWidth}
+            height={600}
           />
         )}
       </div>

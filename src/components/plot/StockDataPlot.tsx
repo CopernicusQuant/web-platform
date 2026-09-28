@@ -22,8 +22,8 @@ type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
   chartType: PriceChartType;
   featureGroup: FeatureGroupOpt;
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
   marginTop?: number;
   marginRight?: number;
   marginBottom?: number;
@@ -35,8 +35,8 @@ export default function StockDataPlot({
   data,
   chartType,
   featureGroup,
-  width = 1100,
-  height = 600,
+  width,
+  height,
   marginTop = 40,
   marginRight = 40,
   marginBottom = 40,

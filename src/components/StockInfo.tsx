@@ -25,7 +25,7 @@ export default function StockInfo() {
   const [selection] = useAtom(stockSelectionAtom);
   const { data } = useGetStockInfoQuery(selection.ticker);
   return (
-    <div className="w-full">
+    <div className="w-full bg-white">
       <div className={styles.container}>
         {data && (
           <>
