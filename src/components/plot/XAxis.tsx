@@ -35,7 +35,8 @@ export default function XAxis({ labels, x, xPos, yPos }: XAxisProps) {
                 x={(x(d) ?? 0) + x.bandwidth() / 2}
                 y={LINE_HEIGHT * 2}
                 textAnchor="middle"
-                fill="gray"
+                fill={showYear ? "black" : "gray"}
+                fontWeight={showYear ? 600 : 400}
               >
                 {showYear ? year : getMonthName(month)}
               </text>

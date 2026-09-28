@@ -54,7 +54,9 @@ export default function StockDataPlot({
     )
     .paddingInner(0.2);
   const xSteps = Math.floor(stock.length / maxXTickNum);
-  const xLabels = stock.filter((_, i) => i % xSteps == 0).map((d) => d.tradeDate);
+  const xLabels = stock
+    .filter((_, i) => (stock.length - 1 - i) % xSteps == 0)
+    .map((d) => d.tradeDate);
   // y-axis mapper
   const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
   const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
@@ -74,7 +76,9 @@ export default function StockDataPlot({
       stock,
       pointerPos,
       xIdx,
+      width,
       height,
+      marginRight,
       marginBottom,
       x,
       y,
@@ -91,7 +95,7 @@ export default function StockDataPlot({
   };
 
   const onPointerLeave = () => {
-    resetPriceTrendIndicators({ stock });
+    resetPriceTrendIndicators({ stock, width, marginRight, y });
     switch (featureGroup) {
       case "priceMomentum":
         resetPriceMomentumIndicators();
@@ -138,6 +142,8 @@ export default function StockDataPlot({
         height={height}
         marginTop={marginTop}
         marginBottom={marginBottom}
+        marginRight={marginRight}
+        y={y}
       />
       {featureGroup === "priceMomentum" && <MAIndicators chartType={chartType} />}
     </svg>

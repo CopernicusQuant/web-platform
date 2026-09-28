@@ -4,7 +4,7 @@ import type { FeatureByGroup } from "@/apis/stock";
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
 const maFeatures = ["ma5", "ma10", "ma20", "ma60"] as const;
-const maColors = ["#F38181", "#FCE38A", "#93BFCF", "#95E1D3"];
+const maColors = ["#F38181", "#FCE38A", "#93BFCF", "#C5B3D3"];
 
 const idPrefix = "price-momentum";
 const maCircleGroupID = `${idPrefix}-circle-group`;
