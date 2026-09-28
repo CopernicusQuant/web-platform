@@ -36,17 +36,23 @@ const PriceMomentumFeaturesSchema = z
     ts_code: z.string(),
     trade_date: z.string(),
     ma_5: z.float32(),
-    ma_10: z.float32(),
+    // ma_10: z.float32(),
     ma_20: z.float32(),
     ma_60: z.float32(),
+    ma_5_bias: z.float32(),
+    ma_20_bias: z.float32(),
+    ma_60_bias: z.float32(),
   })
   .transform((input) => ({
     ticker: input.ts_code,
     tradeDate: input.trade_date,
     ma5: input.ma_5,
-    ma10: input.ma_10,
+    // ma10: input.ma_10,
     ma20: input.ma_20,
     ma60: input.ma_60,
+    ma5Bias: input.ma_5_bias,
+    ma20Bias: input.ma_20_bias,
+    ma60Bias: input.ma_60_bias,
   }));
 
 const VolumeMomentumFeaturesSchema = z
