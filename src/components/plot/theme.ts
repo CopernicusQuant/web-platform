@@ -3,4 +3,11 @@ const priceColors = {
   down: "#F96E5B",
 };
 
-export { priceColors };
+const priceTrendConfig = {
+  top: 4,
+  lineHeight: 16,
+  valueFontSize: 13,
+  rectCorner: 4,
+};
+
+export { priceColors, priceTrendConfig };

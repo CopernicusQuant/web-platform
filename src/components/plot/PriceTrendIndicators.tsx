@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import type { StockPrice } from "@/apis/stock";
-import { priceColors } from "@/components/plot/theme";
+import { priceColors, priceTrendConfig } from "@/components/plot/theme";
 import type { PriceChartType } from "@/atoms/stocks";
 import { parseVolume, computePriceChange } from "@/lib/utils";
 import { elementIds } from "@/components/plot/interactions/price-trend";
@@ -16,11 +16,9 @@ type PriceTrendIndicators = {
   y: d3.ScaleLinear<number, number>;
 };
 
-const valuesPosConfig = {
-  top: 4,
-  lineHeight: 16,
-  left: 126,
-  width: 72,
+const visConfig = {
+  left: 130,
+  width: 68,
 };
 
 export default function PriceTrendIndicators({
@@ -51,7 +49,15 @@ export default function PriceTrendIndicators({
           transform={`translate(0 ${height - marginBottom})`}
           fontSize={12}
         >
-          <rect x={-18} y={2} width={36} height={36} rx={4} fill="black" opacity={0.9} />
+          <rect
+            x={-18}
+            y={2}
+            width={36}
+            height={36}
+            rx={priceTrendConfig.rectCorner}
+            fill="black"
+            opacity={0.9}
+          />
           <text
             id={elementIds.indicatorDay}
             x={0}
@@ -86,12 +92,12 @@ export default function PriceTrendIndicators({
           <rect
             id={elementIds.valuesPctRect}
             x={0}
-            y={valuesPosConfig.top}
+            y={priceTrendConfig.top}
             width={116}
             height={22}
-            rx={4}
+            rx={priceTrendConfig.rectCorner}
             fill={isUp ? priceColors.up : priceColors.down}
-          ></rect>
+          />
           <text
             x={58}
             y={20}
@@ -106,28 +112,28 @@ export default function PriceTrendIndicators({
             </tspan>
           </text>
           <text
-            y={valuesPosConfig.top + valuesPosConfig.lineHeight}
+            y={priceTrendConfig.top + priceTrendConfig.lineHeight}
             textAnchor="start"
-            fontSize={13}
+            fontSize={priceTrendConfig.valueFontSize}
             fill="gray"
           >
-            <tspan x={valuesPosConfig.left}>O</tspan>
+            <tspan x={visConfig.left}>O</tspan>
             <tspan dx={4} id={elementIds.valuesOpen} fill="black">
               {stock.at(-1)!.adjOpen.toFixed(2)}
             </tspan>
-            <tspan x={valuesPosConfig.left + valuesPosConfig.width}>C</tspan>
+            <tspan x={visConfig.left + visConfig.width}>C</tspan>
             <tspan dx={4} id={elementIds.valuesClose} fill="black">
               {stock.at(-1)!.adjClose.toFixed(2)}
             </tspan>
-            <tspan x={valuesPosConfig.left + valuesPosConfig.width * 2}>H</tspan>
+            <tspan x={visConfig.left + visConfig.width * 2}>H</tspan>
             <tspan dx={4} id={elementIds.valuesHigh} fill="black">
               {stock.at(-1)!.adjHigh.toFixed(2)}
             </tspan>
-            <tspan x={valuesPosConfig.left + valuesPosConfig.width * 3}>L</tspan>
+            <tspan x={visConfig.left + visConfig.width * 3}>L</tspan>
             <tspan dx={4} id={elementIds.valuesLow} fill="black">
               {stock.at(-1)!.adjLow.toFixed(2)}
             </tspan>
-            <tspan x={valuesPosConfig.left + valuesPosConfig.width * 4}>V</tspan>
+            <tspan x={visConfig.left + visConfig.width * 4}>V</tspan>
             <tspan dx={4} id={elementIds.valuesVol} fill="black">
               {parseVolume(stock.at(-1)!.adjVol)}
             </tspan>
@@ -142,17 +148,17 @@ export default function PriceTrendIndicators({
           id={elementIds.valuesCurrRect}
           x={4}
           y={-10}
-          width={45}
+          width={48}
           height={20}
-          rx={4}
+          rx={priceTrendConfig.rectCorner}
           fill={isUp ? priceColors.up : priceColors.down}
         />
         <text
           id={elementIds.valuesCurrVal}
-          x={8}
+          x={28}
           y={0}
           dy={"0.33em"}
-          textAnchor="start"
+          textAnchor="middle"
           fill="white"
           fontSize={12}
         >
