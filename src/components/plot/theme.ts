@@ -8,6 +8,8 @@ const priceTrendConfig = {
   lineHeight: 16,
   valueFontSize: 13,
   rectCorner: 4,
+  paddingX: 8,
+  paddingY: 16,
 };
 
 export { priceColors, priceTrendConfig };

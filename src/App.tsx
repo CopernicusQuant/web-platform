@@ -1,12 +1,8 @@
-import { useEffect } from "react";
 import PriceChart from "@/components/PriceChart";
 import Header from "@/components/Header";
 import StockInfo from "@/components/StockInfo";
 
 function App() {
-  useEffect(() => {
-    console.log("hello");
-  }, []);
   return (
     <div className="w-full flex flex-col items-center gap-2">
       <Header />
