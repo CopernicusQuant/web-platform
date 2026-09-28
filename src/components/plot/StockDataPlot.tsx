@@ -1,22 +1,22 @@
 import * as d3 from "d3";
 import { useRef } from "react";
-import type { PriceChartType } from "@/atoms/stocks";
 import type { FeatureByGroup, FeatureGroupOpt, StockData } from "@/apis/stock";
+import type { PriceChartType } from "@/atoms/stocks";
+import {
+  resetPriceTrendIndicators,
+  updatePriceTrendIndicators,
+} from "@/components/plot/interactions/price-trend";
+import {
+  updatePriceMomentumIndicators,
+  resetPriceMomentumIndicators,
+} from "@/components/plot/interactions/price-momentum";
 import CandleStick from "@/components/plot/CandleSticks";
 import XAxis from "@/components/plot/XAxis";
 import YAxis from "@/components/plot/YAxis";
 import TrendLine from "@/components/plot/StockTrendLine";
 import MALines from "@/components/plot/price-momentum/MALines";
-import {
-  resetPriceTrendIndicators,
-  updatePriceTrendIndicators,
-} from "@/components/plot/interactions/price-trend";
-import PriceTrendIndicators from "./PriceTrendIndicators";
-import {
-  updatePriceMomentumIndicators,
-  resetPriceMomentumIndicators,
-} from "./interactions/price-momentum";
-import MAIndicators from "./price-momentum/MAIndicators";
+import PriceTrendIndicators from "@/components/plot/PriceTrendIndicators";
+import MAIndicators from "@/components/plot/price-momentum/MAIndicators";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -54,7 +54,9 @@ export default function StockDataPlot({
     )
     .paddingInner(0.2);
   const xSteps = Math.floor(stock.length / maxXTickNum);
-  const xLabels = stock.filter((_, i) => i % xSteps == 0).map((d) => d.tradeDate);
+  const xLabels = stock
+    .filter((_, i) => (stock.length - 1 - i) % xSteps == 0)
+    .map((d) => d.tradeDate);
   // y-axis mapper
   const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
   const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
@@ -74,7 +76,9 @@ export default function StockDataPlot({
       stock,
       pointerPos,
       xIdx,
+      width,
       height,
+      marginRight,
       marginBottom,
       x,
       y,
@@ -84,6 +88,9 @@ export default function StockDataPlot({
         updatePriceMomentumIndicators({
           xIdx,
           features: features as FeatureByGroup["priceMomentum"][],
+          height,
+          marginTop,
+          marginBottom,
           x,
           y,
         });
@@ -91,7 +98,7 @@ export default function StockDataPlot({
   };
 
   const onPointerLeave = () => {
-    resetPriceTrendIndicators({ stock });
+    resetPriceTrendIndicators({ stock, width, marginRight, y });
     switch (featureGroup) {
       case "priceMomentum":
         resetPriceMomentumIndicators();
@@ -138,8 +145,16 @@ export default function StockDataPlot({
         height={height}
         marginTop={marginTop}
         marginBottom={marginBottom}
+        marginRight={marginRight}
+        y={y}
       />
-      {featureGroup === "priceMomentum" && <MAIndicators chartType={chartType} />}
+      {featureGroup === "priceMomentum" && (
+        <MAIndicators
+          features={features as FeatureByGroup["priceMomentum"][]}
+          chartType={chartType}
+          width={width}
+        />
+      )}
     </svg>
   );
 }

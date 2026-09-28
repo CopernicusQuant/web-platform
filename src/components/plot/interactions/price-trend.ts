@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { parseDate, getMonthName, parseVolume, computePriceChange } from "@/lib/utils";
 import type { StockPrice } from "@/apis/stock";
+import { priceColors } from "../theme";
 
 const elementIds = {
   indicatorGroup: "price-indicator-group",
@@ -15,12 +16,18 @@ const elementIds = {
   valuesLow: "price-values-low",
   valuesVol: "price-values-vol",
   valuesPctChange: "price-pct-change",
+  valuesPctRect: "price-pct-rect",
+  valuesCurrGroup: "price-curr-group",
+  valuesCurrRect: "price-curr-rect",
+  valuesCurrVal: "price-curr-val",
 };
 
 const updatePriceTrendIndicators = ({
   stock,
   xIdx,
+  width,
   height,
+  marginRight,
   marginBottom,
   x,
   y,
@@ -28,7 +35,9 @@ const updatePriceTrendIndicators = ({
   stock: StockPrice[];
   pointerPos: number;
   xIdx: number;
+  width: number;
   height: number;
+  marginRight: number;
   marginBottom: number;
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
@@ -59,9 +68,34 @@ const updatePriceTrendIndicators = ({
     `${computePriceChange(stock.at(0)?.adjClose, adjClose)}`,
   );
   d3.select(`#${elementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
+  d3.select(`#${elementIds.valuesPctRect}`).attr(
+    "fill",
+    adjClose > stock[0].adjClose ? priceColors.up : priceColors.down,
+  );
+
+  const currPriceGroup = d3
+    .transition()
+    .duration(50)
+    .ease(d3.easeLinear)
+    .select(`#${elementIds.valuesCurrGroup}`)
+    .attr("transform", `translate(${width - marginRight} ${y(adjClose)})`);
+  currPriceGroup
+    .select("rect")
+    .attr("fill", adjClose > stock[0].adjClose ? priceColors.up : priceColors.down);
+  currPriceGroup.select("text").text(`${adjClose.toFixed(2)}`);
 };
 
-const resetPriceTrendIndicators = ({ stock }: { stock: StockPrice[] }) => {
+const resetPriceTrendIndicators = ({
+  stock,
+  width,
+  marginRight,
+  y,
+}: {
+  stock: StockPrice[];
+  width: number;
+  marginRight: number;
+  y: d3.ScaleLinear<number, number>;
+}) => {
   const indicatorGroup = d3.select("#price-indicator-group");
   indicatorGroup.attr("opacity", 0);
   const lastestStock = stock.at(-1);
@@ -75,6 +109,20 @@ const resetPriceTrendIndicators = ({ stock }: { stock: StockPrice[] }) => {
     `${computePriceChange(stock.at(0)?.adjClose, stock.at(-1)?.adjClose)}`,
   );
   d3.select(`#${elementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
+  d3.select(`#${elementIds.valuesPctRect}`).attr(
+    "fill",
+    adjClose > stock[0].adjClose ? priceColors.up : priceColors.down,
+  );
+  const currPriceGroup = d3
+    .transition()
+    .duration(50)
+    .ease(d3.easeLinear)
+    .select(`#${elementIds.valuesCurrGroup}`)
+    .attr("transform", `translate(${width - marginRight} ${y(adjClose)})`);
+  currPriceGroup
+    .select("rect")
+    .attr("fill", adjClose > stock[0].adjClose ? priceColors.up : priceColors.down);
+  currPriceGroup.select("text").text(`${adjClose.toFixed(2)}`);
 };
 
 export { elementIds, updatePriceTrendIndicators, resetPriceTrendIndicators };
