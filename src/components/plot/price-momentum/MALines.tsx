@@ -40,7 +40,7 @@ export default function MALines({ features, x, y, yAxisMin, yAxisMax }: MALinesP
           d={value}
           fill="none"
           stroke={maColors[i]}
-          strokeWidth={2.0}
+          strokeWidth={1.5}
           opacity={0.7}
         />
       ))}

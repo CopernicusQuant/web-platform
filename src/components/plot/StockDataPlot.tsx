@@ -113,7 +113,7 @@ export default function StockDataPlot({
       viewBox={`0 0 ${width} ${height}`}
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
-      className="overflow-visible"
+      className="overflow-visible cursor-crosshair"
     >
       {/* y axis marks */}
       <YAxis

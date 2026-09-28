@@ -1,0 +1,91 @@
+import { useState, useRef, useLayoutEffect } from "react";
+import { useAtom } from "jotai";
+import { dataWindow, type DataWindowOpt } from "@/apis/stock";
+import {
+  priceChartTypeAtom,
+  stockSelectionAtom,
+  type PriceChartType,
+} from "@/atoms/stocks";
+import {
+  Section,
+  Content,
+  Header,
+  Selections,
+  Button,
+} from "@/components/plot/ui/PlotSection";
+import { useGetStockQuery } from "@/hooks/queries/useGetStockQuery";
+import StockDataPlot from "@/components/plot/StockDataPlot";
+import CandleIcon from "@/components/icons/CandleIcon";
+import LineIcon from "@/components/icons/LineIcon";
+
+const priceChartTypes: PriceChartType[] = ["candle", "line"];
+
+export default function PriceChart() {
+  const plotContainerRef = useRef<HTMLDivElement>(null);
+  const [plotWidth, setPlotWidth] = useState<number>(0);
+  const [chartType, setChartType] = useAtom(priceChartTypeAtom);
+
+  const [stockSelection, setStockSelection] = useAtom(stockSelectionAtom);
+  const updateWindow = (newWindow: DataWindowOpt) => {
+    setStockSelection((prev) => ({ ...prev, window: newWindow }));
+  };
+
+  const { data } = useGetStockQuery(
+    stockSelection.ticker,
+    stockSelection.window,
+    stockSelection.featureGroup,
+  );
+
+  useLayoutEffect(() => {
+    const container = plotContainerRef.current;
+    if (!container) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const nextWidth = Math.round(entry.contentRect.width);
+      setPlotWidth((prev) => (prev === nextWidth ? prev : nextWidth));
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <Section>
+      <Header title={"price trend"}>
+        <Selections>
+          {priceChartTypes.map((currType) => (
+            <Button
+              key={`selector-button-${currType}`}
+              active={chartType === currType}
+              onClick={() => setChartType(currType)}
+            >
+              {currType === "line" ? <LineIcon /> : <CandleIcon />}
+            </Button>
+          ))}
+        </Selections>
+        {/* Data window selector */}
+        <Selections>
+          {Object.entries(dataWindow).map(([key]) => (
+            <Button
+              key={`selector-button-${key}`}
+              active={key === stockSelection.window}
+              className={"w-11"}
+              onClick={() => updateWindow(key as DataWindowOpt)}
+            >
+              {key}
+            </Button>
+          ))}
+        </Selections>
+      </Header>
+      <Content ref={plotContainerRef} className="h-154">
+        {data && (
+          <StockDataPlot
+            data={data}
+            chartType={chartType}
+            featureGroup={stockSelection.featureGroup}
+            width={plotWidth}
+            height={600}
+          />
+        )}
+      </Content>
+    </Section>
+  );
+}
