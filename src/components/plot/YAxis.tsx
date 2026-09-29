@@ -3,8 +3,10 @@ type YAxisProps = {
   xPos: number;
   yPos: number;
   plotWidth: number;
-  labelXPos?: number;
+  labelXOffset?: number;
   labelPrefix?: string;
+  labelPostfix?: string;
+  labelFormatter?: (value: number) => string;
 };
 
 export default function YAxis({
@@ -12,8 +14,10 @@ export default function YAxis({
   xPos,
   yPos,
   plotWidth,
-  labelXPos,
+  labelXOffset,
   labelPrefix,
+  labelPostfix,
+  labelFormatter,
 }: YAxisProps) {
   return (
     <g transform={`translate(${xPos}, ${yPos})`} fontSize={12}>
@@ -27,9 +31,16 @@ export default function YAxis({
             stroke="lightgray"
             strokeDasharray={"6 4"}
           />
-          <text x={labelXPos} y={y(tick)} dy={"0.33em"} textAnchor="middle" fill="gray">
+          <text
+            x={plotWidth + (labelXOffset ?? 0)}
+            y={y(tick)}
+            dy={"0.33em"}
+            textAnchor="end"
+            fill="gray"
+          >
             {labelPrefix && labelPrefix}
-            {tick}
+            {labelFormatter ? labelFormatter(tick) : tick}
+            {labelPostfix && labelPostfix}
           </text>
         </g>
       ))}

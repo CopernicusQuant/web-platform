@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import type { FeatureByGroup } from "@/apis/stock";
 import {
-  getMALineId,
+  getPMLineId,
   maFeatures,
   maColors,
 } from "@/components/plot/interactions/price-momentum";
@@ -35,8 +35,8 @@ export default function MALines({ features, x, y, yAxisMin, yAxisMax }: MALinesP
     <g>
       {Object.entries(paths).map(([featureName, value], i) => (
         <path
-          key={getMALineId(featureName)}
-          id={getMALineId(featureName)}
+          key={getPMLineId(featureName)}
+          id={getPMLineId(featureName)}
           d={value}
           fill="none"
           stroke={maColors[i]}

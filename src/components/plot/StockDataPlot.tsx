@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import { useRef } from "react";
 import type { FeatureByGroup, FeatureGroupOpt, StockData } from "@/apis/stock";
 import type { PriceChartType } from "@/atoms/stocks";
 import {
@@ -15,7 +14,7 @@ import XAxis from "@/components/plot/XAxis";
 import YAxis from "@/components/plot/YAxis";
 import TrendLine from "@/components/plot/StockTrendLine";
 import MALines from "@/components/plot/price-momentum/MALines";
-import PriceTrendIndicators from "@/components/plot/PriceTrendIndicators";
+import StockDataIndicators from "@/components/plot/StockDataIndicators";
 import MAIndicators from "@/components/plot/price-momentum/MAIndicators";
 
 type StockDataPlotProps = {
@@ -39,12 +38,11 @@ export default function StockDataPlot({
   height,
   marginTop = 40,
   marginRight = 40,
-  marginBottom = 40,
+  marginBottom = 45,
   marginLeft = 0,
   maxXTickNum = 30,
 }: StockDataPlotProps) {
   const { stock, features } = data;
-  const plotRef = useRef<SVGSVGElement>(null);
 
   // x-axis mapper
   const x = d3
@@ -107,7 +105,6 @@ export default function StockDataPlot({
 
   return (
     <svg
-      ref={plotRef}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
@@ -121,7 +118,7 @@ export default function StockDataPlot({
         xPos={marginLeft}
         yPos={0}
         plotWidth={width - marginLeft - marginRight}
-        labelXPos={width - marginRight / 2}
+        labelXOffset={marginRight}
         labelPrefix="$"
       />
       {/* x axis marks */}
@@ -138,7 +135,7 @@ export default function StockDataPlot({
       )}
       {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
       {chartType === "line" && <TrendLine prices={stock} x={x} y={y} />}
-      <PriceTrendIndicators
+      <StockDataIndicators
         stock={stock}
         chartType={chartType}
         width={width}

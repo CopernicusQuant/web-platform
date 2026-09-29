@@ -70,7 +70,7 @@ const updatePriceTrendIndicators = ({
   d3.select(`#${elementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
   d3.select(`#${elementIds.valuesPctRect}`).attr(
     "fill",
-    adjClose > stock[0].adjClose ? priceColors.up : priceColors.down,
+    adjClose >= stock[0].adjClose ? priceColors.up : priceColors.down,
   );
 
   const currPriceGroup = d3
