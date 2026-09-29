@@ -17,5 +17,7 @@ const stockSelectionAtom = atom<StockSelection>(initSelection);
 type PriceChartType = "candle" | "line";
 const priceChartTypeAtom = atom<PriceChartType>("candle");
 
-export { stockSelectionAtom, priceChartTypeAtom };
+const plotWidthAtom = atom<number>(0);
+
+export { stockSelectionAtom, priceChartTypeAtom, plotWidthAtom };
 export type { PriceChartType };

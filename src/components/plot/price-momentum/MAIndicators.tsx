@@ -1,12 +1,12 @@
 import type { FeatureByGroup } from "@/apis/stock";
 import type { PriceChartType } from "@/atoms/stocks";
 import {
-  getMACircleId,
+  getPMCircleId,
   maCircleGroupID,
   maFeatures,
   maColors,
   toggleMALine,
-  getMALegentId,
+  getPMLegendId,
 } from "@/components/plot/interactions/price-momentum";
 import { priceTrendConfig } from "../theme";
 
@@ -28,8 +28,8 @@ export default function MAIndicators({ features, chartType, width }: MAIndicator
         <g id={maCircleGroupID} opacity={0}>
           {maFeatures.map((featureName, i) => (
             <circle
-              key={getMACircleId(featureName)}
-              id={getMACircleId(featureName)}
+              key={getPMCircleId(featureName)}
+              id={getPMCircleId(featureName)}
               r={5}
               fill={maColors[i]}
               stroke="white"
@@ -47,7 +47,7 @@ export default function MAIndicators({ features, chartType, width }: MAIndicator
             return (
               <g
                 key={`temp-${featureName}`}
-                id={getMALegentId(featureName)}
+                id={getPMLegendId(featureName)}
                 transform={`translate(${-visConfig.legendWidth * i - 10 * i} 0)`}
                 className="group"
                 onMouseDown={() => toggleMALine(featureName)}

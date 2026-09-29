@@ -5,7 +5,7 @@ import type { PriceChartType } from "@/atoms/stocks";
 import { parseVolume, computePriceChange } from "@/lib/utils";
 import { elementIds } from "@/components/plot/interactions/price-trend";
 
-type PriceTrendIndicators = {
+type StockDataIndicatorsProps = {
   stock: StockPrice[];
   chartType: PriceChartType;
   width: number;
@@ -21,7 +21,7 @@ const visConfig = {
   width: 68,
 };
 
-export default function PriceTrendIndicators({
+export default function StockDataIndicators({
   stock,
   chartType,
   width,
@@ -30,7 +30,7 @@ export default function PriceTrendIndicators({
   marginBottom,
   marginRight,
   y,
-}: PriceTrendIndicators) {
+}: StockDataIndicatorsProps) {
   const isUp = (stock.at(0)?.adjClose ?? 0) <= (stock.at(-1)?.adjClose ?? 0);
   return (
     <g>
