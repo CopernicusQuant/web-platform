@@ -16,6 +16,10 @@ import TrendLine from "@/components/plot/StockTrendLine";
 import MALines from "@/components/plot/price-momentum/MALines";
 import StockDataIndicators from "@/components/plot/StockDataIndicators";
 import MAIndicators from "@/components/plot/price-momentum/MAIndicators";
+import {
+  resetFeatureTrendIndicators,
+  updateFeatureTrendIndicators,
+} from "@/components/plot/interactions/feature-trend";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -81,6 +85,13 @@ export default function StockDataPlot({
       x,
       y,
     });
+    updateFeatureTrendIndicators({
+      stock,
+      xIdx,
+      height,
+      marginBottom,
+      x,
+    });
     switch (featureGroup) {
       case "priceMomentum":
         updatePriceMomentumIndicators({
@@ -97,6 +108,7 @@ export default function StockDataPlot({
 
   const onPointerLeave = () => {
     resetPriceTrendIndicators({ stock, width, marginRight, y });
+    resetFeatureTrendIndicators();
     switch (featureGroup) {
       case "priceMomentum":
         resetPriceMomentumIndicators();

@@ -3,6 +3,10 @@ const priceColors = {
   down: "#F96E5B",
 };
 
+const animationConfig = {
+  duration: 50,
+};
+
 const priceTrendConfig = {
   top: 4,
   lineHeight: 16,
@@ -12,4 +16,4 @@ const priceTrendConfig = {
   paddingY: 16,
 };
 
-export { priceColors, priceTrendConfig };
+export { priceColors, priceTrendConfig, animationConfig };

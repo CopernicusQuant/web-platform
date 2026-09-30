@@ -1,7 +1,11 @@
 import * as d3 from "d3";
 import type { FeatureByGroup } from "@/apis/stock";
 import YAxis from "@/components/plot/YAxis";
-import { maBiasFeatures, maColors } from "../interactions/price-momentum";
+import {
+  maBiasFeatures,
+  maColors,
+  getPMLineId,
+} from "@/components/plot/interactions/price-momentum";
 
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
@@ -46,7 +50,7 @@ export default function MABias({
   maBiasFeatures.forEach((featrueName) => {
     const path = d3
       .line<PriceMomentumFeature>()
-      .x((feature) => x(feature.tradeDate) ?? 0 + x.bandwidth() / 2)
+      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
       .y((feature) => y(feature[featrueName]))(features);
     if (path !== null) paths[featrueName] = path;
   });
@@ -64,7 +68,7 @@ export default function MABias({
       />
       {Object.entries(paths).map(([featureName, value], i) => (
         <path
-          key={`${featureName}`}
+          key={`${getPMLineId(featureName)}`}
           d={value}
           fill="none"
           strokeWidth={1.7}

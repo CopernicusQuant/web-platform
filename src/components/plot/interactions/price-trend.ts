@@ -1,11 +1,11 @@
 import * as d3 from "d3";
-import { parseDate, getMonthName, parseVolume, computePriceChange } from "@/lib/utils";
+import { parseVolume, computePriceChange } from "@/lib/utils";
 import type { StockPrice } from "@/apis/stock";
 import { priceColors } from "../theme";
+import { updateDateLine } from "./date-line";
 
-const elementIds = {
+const priceElementIds = {
   indicatorGroup: "price-indicator-group",
-  indicatorLine: "price-indicator-line",
   indicatorPoint: "price-indicator-point",
   indicatorDateGroup: "price-indicator-date",
   indicatorDay: "price-indicator-day",
@@ -26,9 +26,7 @@ const updatePriceTrendIndicators = ({
   stock,
   xIdx,
   width,
-  height,
   marginRight,
-  marginBottom,
   x,
   y,
 }: {
@@ -42,33 +40,30 @@ const updatePriceTrendIndicators = ({
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 }) => {
-  const indicatorGroup = d3.select(`#${elementIds.indicatorGroup}`);
+  const indicatorGroup = d3.select(`#${priceElementIds.indicatorGroup}`);
   indicatorGroup.attr("opacity", 1);
   const { tradeDate, adjClose, adjOpen, adjHigh, adjLow, adjVol } = stock[xIdx];
-  const dateElements = parseDate(tradeDate);
   const xPos = (x(tradeDate) ?? 0) + x.bandwidth() / 2;
   const yPos = y(adjClose) ?? 0;
-  const line = indicatorGroup.select(`#${elementIds.indicatorLine}`);
-  const currDate = indicatorGroup.select(`#${elementIds.indicatorDateGroup}`);
-  const circle = indicatorGroup.select(`#${elementIds.indicatorPoint}`);
-  line.transition().duration(50).ease(d3.easeLinear).attr("x1", xPos).attr("x2", xPos);
-  circle.transition().duration(50).ease(d3.easeLinear).attr("cx", xPos).attr("cy", yPos);
-  currDate
-    .transition()
-    .duration(50)
-    .ease(d3.easeLinear)
-    .attr("transform", `translate(${xPos}, ${height - marginBottom})`);
-  currDate.select(`#${elementIds.indicatorDay}`).text(dateElements[2]);
-  currDate.select(`#${elementIds.indicatorMonth}`).text(getMonthName(dateElements[1]));
-  d3.select(`#${elementIds.valuesClose}`).text(`${adjClose.toFixed(2)}`);
-  d3.select(`#${elementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
-  d3.select(`#${elementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
-  d3.select(`#${elementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
-  d3.select(`#${elementIds.valuesPctChange}`).text(
+  updateDateLine({
+    date: tradeDate,
+    xPos,
+    groupId: priceElementIds.indicatorGroup,
+    dateGroupId: priceElementIds.indicatorDateGroup,
+    dayId: priceElementIds.indicatorDay,
+    monthId: priceElementIds.indicatorMonth,
+  });
+  const circle = indicatorGroup.select(`#${priceElementIds.indicatorPoint}`);
+  circle.transition().duration(50).ease(d3.easeLinear).attr("cy", yPos);
+  d3.select(`#${priceElementIds.valuesClose}`).text(`${adjClose.toFixed(2)}`);
+  d3.select(`#${priceElementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
+  d3.select(`#${priceElementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
+  d3.select(`#${priceElementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
+  d3.select(`#${priceElementIds.valuesPctChange}`).text(
     `${computePriceChange(stock.at(0)?.adjClose, adjClose)}`,
   );
-  d3.select(`#${elementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
-  d3.select(`#${elementIds.valuesPctRect}`).attr(
+  d3.select(`#${priceElementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
+  d3.select(`#${priceElementIds.valuesPctRect}`).attr(
     "fill",
     adjClose >= stock[0].adjClose ? priceColors.up : priceColors.down,
   );
@@ -77,7 +72,7 @@ const updatePriceTrendIndicators = ({
     .transition()
     .duration(50)
     .ease(d3.easeLinear)
-    .select(`#${elementIds.valuesCurrGroup}`)
+    .select(`#${priceElementIds.valuesCurrGroup}`)
     .attr("transform", `translate(${width - marginRight} ${y(adjClose)})`);
   currPriceGroup
     .select("rect")
@@ -96,20 +91,20 @@ const resetPriceTrendIndicators = ({
   marginRight: number;
   y: d3.ScaleLinear<number, number>;
 }) => {
-  const indicatorGroup = d3.select("#price-indicator-group");
+  const indicatorGroup = d3.select(`#${priceElementIds.indicatorGroup}`);
   indicatorGroup.attr("opacity", 0);
   const lastestStock = stock.at(-1);
   if (!lastestStock) return;
   const { adjClose, adjOpen, adjHigh, adjLow, adjVol } = stock.at(-1)!;
-  d3.select(`#${elementIds.valuesClose}`).text(`${adjClose.toFixed(2)}`);
-  d3.select(`#${elementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
-  d3.select(`#${elementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
-  d3.select(`#${elementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
-  d3.select(`#${elementIds.valuesPctChange}`).text(
+  d3.select(`#${priceElementIds.valuesClose}`).text(`${adjClose.toFixed(2)}`);
+  d3.select(`#${priceElementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
+  d3.select(`#${priceElementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
+  d3.select(`#${priceElementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
+  d3.select(`#${priceElementIds.valuesPctChange}`).text(
     `${computePriceChange(stock.at(0)?.adjClose, stock.at(-1)?.adjClose)}`,
   );
-  d3.select(`#${elementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
-  d3.select(`#${elementIds.valuesPctRect}`).attr(
+  d3.select(`#${priceElementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
+  d3.select(`#${priceElementIds.valuesPctRect}`).attr(
     "fill",
     adjClose > stock[0].adjClose ? priceColors.up : priceColors.down,
   );
@@ -117,7 +112,7 @@ const resetPriceTrendIndicators = ({
     .transition()
     .duration(50)
     .ease(d3.easeLinear)
-    .select(`#${elementIds.valuesCurrGroup}`)
+    .select(`#${priceElementIds.valuesCurrGroup}`)
     .attr("transform", `translate(${width - marginRight} ${y(adjClose)})`);
   currPriceGroup
     .select("rect")
@@ -125,4 +120,4 @@ const resetPriceTrendIndicators = ({
   currPriceGroup.select("text").text(`${adjClose.toFixed(2)}`);
 };
 
-export { elementIds, updatePriceTrendIndicators, resetPriceTrendIndicators };
+export { priceElementIds, updatePriceTrendIndicators, resetPriceTrendIndicators };

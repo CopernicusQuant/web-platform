@@ -3,7 +3,8 @@ import type { StockPrice } from "@/apis/stock";
 import { priceColors, priceTrendConfig } from "@/components/plot/theme";
 import type { PriceChartType } from "@/atoms/stocks";
 import { parseVolume, computePriceChange } from "@/lib/utils";
-import { elementIds } from "@/components/plot/interactions/price-trend";
+import { priceElementIds } from "@/components/plot/interactions/price-trend";
+import DateLine from "./DateLine";
 
 type StockDataIndicatorsProps = {
   stock: StockPrice[];
@@ -34,48 +35,19 @@ export default function StockDataIndicators({
   const isUp = (stock.at(0)?.adjClose ?? 0) <= (stock.at(-1)?.adjClose ?? 0);
   return (
     <g>
-      <g id={elementIds.indicatorGroup} opacity={0}>
-        {/* Vertical dashed line */}
-        <line
-          id={elementIds.indicatorLine}
-          y1={marginTop}
-          y2={height - marginBottom}
-          stroke="gray"
-          strokeDasharray={"6 4"}
+      <g id={priceElementIds.indicatorGroup} opacity={0}>
+        <DateLine
+          height={height}
+          marginTop={marginTop}
+          marginBottom={marginBottom}
+          dateGroupId={priceElementIds.indicatorDateGroup}
+          dayId={priceElementIds.indicatorDay}
+          monthId={priceElementIds.indicatorMonth}
         />
-        {/* Date indicators */}
-        <g
-          id={elementIds.indicatorDateGroup}
-          transform={`translate(0 ${height - marginBottom})`}
-          fontSize={12}
-        >
-          <rect
-            x={-18}
-            y={2}
-            width={36}
-            height={36}
-            rx={priceTrendConfig.rectCorner}
-            fill="black"
-            opacity={0.9}
-          />
-          <text
-            id={elementIds.indicatorDay}
-            x={0}
-            y={16}
-            textAnchor="middle"
-            fill="white"
-          ></text>
-          <text
-            id={elementIds.indicatorMonth}
-            x={0}
-            y={32}
-            textAnchor="middle"
-            fill="white"
-          ></text>
-        </g>
+
         {chartType === "line" && (
           <circle
-            id={elementIds.indicatorPoint}
+            id={priceElementIds.indicatorPoint}
             cx={0}
             cy={0}
             r={5}
@@ -90,7 +62,7 @@ export default function StockDataIndicators({
       {stock.at(-1) && (
         <g>
           <rect
-            id={elementIds.valuesPctRect}
+            id={priceElementIds.valuesPctRect}
             x={0}
             y={priceTrendConfig.top}
             width={116}
@@ -107,7 +79,7 @@ export default function StockDataIndicators({
             fontWeight={600}
           >
             <tspan>Pct.</tspan>
-            <tspan dx={6} id={elementIds.valuesPctChange}>
+            <tspan dx={6} id={priceElementIds.valuesPctChange}>
               {computePriceChange(stock.at(0)?.adjClose, stock.at(-1)?.adjClose)}
             </tspan>
           </text>
@@ -118,34 +90,34 @@ export default function StockDataIndicators({
             fill="gray"
           >
             <tspan x={visConfig.left}>O</tspan>
-            <tspan dx={4} id={elementIds.valuesOpen} fill="black">
+            <tspan dx={4} id={priceElementIds.valuesOpen} fill="black">
               {stock.at(-1)!.adjOpen.toFixed(2)}
             </tspan>
             <tspan x={visConfig.left + visConfig.width}>C</tspan>
-            <tspan dx={4} id={elementIds.valuesClose} fill="black">
+            <tspan dx={4} id={priceElementIds.valuesClose} fill="black">
               {stock.at(-1)!.adjClose.toFixed(2)}
             </tspan>
             <tspan x={visConfig.left + visConfig.width * 2}>H</tspan>
-            <tspan dx={4} id={elementIds.valuesHigh} fill="black">
+            <tspan dx={4} id={priceElementIds.valuesHigh} fill="black">
               {stock.at(-1)!.adjHigh.toFixed(2)}
             </tspan>
             <tspan x={visConfig.left + visConfig.width * 3}>L</tspan>
-            <tspan dx={4} id={elementIds.valuesLow} fill="black">
+            <tspan dx={4} id={priceElementIds.valuesLow} fill="black">
               {stock.at(-1)!.adjLow.toFixed(2)}
             </tspan>
             <tspan x={visConfig.left + visConfig.width * 4}>V</tspan>
-            <tspan dx={4} id={elementIds.valuesVol} fill="black">
+            <tspan dx={4} id={priceElementIds.valuesVol} fill="black">
               {parseVolume(stock.at(-1)!.adjVol)}
             </tspan>
           </text>
         </g>
       )}
       <g
-        id={elementIds.valuesCurrGroup}
+        id={priceElementIds.valuesCurrGroup}
         transform={`translate(${width - marginRight}, ${y(stock.at(-1)?.adjClose || 0)})`}
       >
         <rect
-          id={elementIds.valuesCurrRect}
+          id={priceElementIds.valuesCurrRect}
           x={4}
           y={-10}
           width={48}
@@ -154,7 +126,7 @@ export default function StockDataIndicators({
           fill={isUp ? priceColors.up : priceColors.down}
         />
         <text
-          id={elementIds.valuesCurrVal}
+          id={priceElementIds.valuesCurrVal}
           x={28}
           y={0}
           dy={"0.33em"}
