@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 
 import type { FeatureByGroup } from "@/apis/stock";
+import { animationConfig } from "@/components/plot/theme";
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
 const maFeatures = ["ma5", "ma20", "ma60"] as const;
@@ -36,14 +37,20 @@ const updatePriceMomentumIndicators = ({
   maFeatures.forEach((featureName) => {
     const xPos = (x(currFeature.tradeDate) ?? 0) + x.bandwidth() / 2;
     const yPos = y(currFeature[featureName]) ?? 0;
-    circleGroup
-      .select(`#${getPMCircleId(featureName)}`)
+    const currCircle = circleGroup.select(`#${getPMCircleId(featureName)}`);
+    const currLineOpacity = d3.select(`#${getPMLineId(featureName)}`).attr("opacity");
+    currCircle
       .transition()
       .duration(50)
       .ease(d3.easeLinear)
       .attr("cx", xPos)
-      .attr("cy", yPos)
-      .attr("opacity", yPos <= height - marginBottom && yPos >= marginTop ? "1" : "0");
+      .attr("cy", yPos);
+    if (currLineOpacity !== "0") {
+      currCircle.attr(
+        "opacity",
+        yPos <= height - marginBottom && yPos >= marginTop ? "1" : "0",
+      );
+    }
   });
 };
 
@@ -53,16 +60,21 @@ const resetPriceMomentumIndicators = () => {
 };
 
 const toggleMALine = (featureName: (typeof maFeatures)[number]) => {
+  const { duration } = animationConfig;
   const maLineID = getPMLineId(featureName);
   const maLegentID = getPMLegendId(featureName);
+  const maCircleID = getPMCircleId(featureName);
   const currLine = d3.select(`#${maLineID}`);
   const currLegend = d3.select(`#${maLegentID}`);
+  const currCircle = d3.select(`#${maCircleID}`);
   if (currLine.attr("opacity") != "0") {
-    currLine.transition().duration(50).attr("opacity", "0");
-    currLegend.transition().duration(50).attr("opacity", "0.3");
+    currLine.transition().duration(duration).attr("opacity", "0");
+    currCircle.transition().duration(duration).attr("opacity", "0");
+    currLegend.transition().duration(duration).attr("opacity", "0.3");
   } else {
-    currLine.transition().duration(50).attr("opacity", "0.7");
-    currLegend.transition().duration(50).attr("opacity", "1.0");
+    currLine.transition().duration(duration).attr("opacity", "0.7");
+    currCircle.transition().duration(duration).attr("opacity", "1.0");
+    currLegend.transition().duration(duration).attr("opacity", "1.0");
   }
 };
 

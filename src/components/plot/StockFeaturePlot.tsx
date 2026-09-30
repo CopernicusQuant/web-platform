@@ -3,6 +3,7 @@ import type { FeatureGroupOpt, StockData } from "@/apis/stock";
 import XAxis from "@/components/plot/XAxis";
 import MABias from "./price-momentum/MABias";
 import type { FeatureByGroup } from "@/apis/stock";
+import StockFeatureIndicators from "./StockFeatureIndicators";
 
 type StockFeaturePlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -38,7 +39,7 @@ export default function StockFeaturePlot({
     .map((d) => d.tradeDate);
 
   return (
-    <svg width={width} height={height}>
+    <svg width={width} height={height} className="overflow-visible">
       <XAxis labels={xLabels} x={x} xPos={0} yPos={height - marginBottom} />
       {features && (
         <MABias
@@ -52,6 +53,11 @@ export default function StockFeaturePlot({
           marginLeft={marginLeft}
         />
       )}
+      <StockFeatureIndicators
+        height={height}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+      />
     </svg>
   );
 }
