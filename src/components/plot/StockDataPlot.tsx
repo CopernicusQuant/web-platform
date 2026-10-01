@@ -1,14 +1,6 @@
 import * as d3 from "d3";
 import type { FeatureByGroup, FeatureGroupOpt, StockData } from "@/apis/stock";
 import type { PriceChartType } from "@/atoms/stocks";
-import {
-  resetPriceTrendIndicators,
-  updatePriceTrendIndicators,
-} from "@/components/plot/interactions/price-trend";
-import {
-  updatePriceMomentumIndicators,
-  resetPriceMomentumIndicators,
-} from "@/components/plot/interactions/price-momentum";
 import CandleStick from "@/components/plot/CandleSticks";
 import XAxis from "@/components/plot/XAxis";
 import YAxis from "@/components/plot/YAxis";
@@ -16,21 +8,14 @@ import TrendLine from "@/components/plot/StockTrendLine";
 import MALines from "@/components/plot/price-momentum/MALines";
 import StockDataIndicators from "@/components/plot/StockDataIndicators";
 import MAIndicators from "@/components/plot/price-momentum/MAIndicators";
-import {
-  resetFeatureTrendIndicators,
-  updateFeatureTrendIndicators,
-} from "@/components/plot/interactions/feature-trend";
+import { getHoverPlotFn, getLeavePlotFn } from "./interactions/hover";
+import { plotSizeConfig } from "@/components/plot/theme";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
   chartType: PriceChartType;
   featureGroup: FeatureGroupOpt;
   width: number;
-  height: number;
-  marginTop?: number;
-  marginRight?: number;
-  marginBottom?: number;
-  marginLeft?: number;
   maxXTickNum?: number;
 };
 
@@ -39,14 +24,16 @@ export default function StockDataPlot({
   chartType,
   featureGroup,
   width,
-  height,
-  marginTop = 40,
-  marginRight = 40,
-  marginBottom = 45,
-  marginLeft = 0,
   maxXTickNum = 30,
 }: StockDataPlotProps) {
   const { stock, features } = data;
+  const {
+    pricePlotHeight: height,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+  } = plotSizeConfig;
 
   // x-axis mapper
   const x = d3
@@ -69,51 +56,17 @@ export default function StockDataPlot({
   );
 
   // controls hover-based indicators
-  const onPointerMove = (event: React.PointerEvent<SVGSVGElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const pointerPos = event.clientX - rect.x - marginLeft;
-    let xIdx = Math.floor(pointerPos / x.step());
-    xIdx = Math.max(Math.min(xIdx, stock.length - 1), 0);
-    updatePriceTrendIndicators({
-      stock,
-      pointerPos,
-      xIdx,
-      width,
-      height,
-      marginRight,
-      marginBottom,
-      x,
-      y,
-    });
-    updateFeatureTrendIndicators({
-      stock,
-      xIdx,
-      height,
-      marginBottom,
-      x,
-    });
-    switch (featureGroup) {
-      case "priceMomentum":
-        updatePriceMomentumIndicators({
-          xIdx,
-          features: features as FeatureByGroup["priceMomentum"][],
-          height,
-          marginTop,
-          marginBottom,
-          x,
-          y,
-        });
-    }
-  };
+  const onPointerMove = getHoverPlotFn({
+    data,
+    featureGroup,
+    width,
+  });
 
-  const onPointerLeave = () => {
-    resetPriceTrendIndicators({ stock, width, marginRight, y });
-    resetFeatureTrendIndicators();
-    switch (featureGroup) {
-      case "priceMomentum":
-        resetPriceMomentumIndicators();
-    }
-  };
+  const onPointerLeave = getLeavePlotFn({
+    stock,
+    featureGroup,
+    width,
+  });
 
   return (
     <svg
@@ -147,16 +100,7 @@ export default function StockDataPlot({
       )}
       {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
       {chartType === "line" && <TrendLine prices={stock} x={x} y={y} />}
-      <StockDataIndicators
-        stock={stock}
-        chartType={chartType}
-        width={width}
-        height={height}
-        marginTop={marginTop}
-        marginBottom={marginBottom}
-        marginRight={marginRight}
-        y={y}
-      />
+      <StockDataIndicators stock={stock} chartType={chartType} width={width} y={y} />
       {featureGroup === "priceMomentum" && (
         <MAIndicators
           features={features as FeatureByGroup["priceMomentum"][]}

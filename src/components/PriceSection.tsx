@@ -22,6 +22,7 @@ import {
 import StockDataPlot from "@/components/plot/StockDataPlot";
 import CandleIcon from "@/components/icons/CandleIcon";
 import LineIcon from "@/components/icons/LineIcon";
+import { plotSizeConfig } from "./plot/theme";
 
 const priceChartTypes: PriceChartType[] = ["candle", "line"];
 
@@ -83,14 +84,16 @@ export default function PriceChart({ stockData }: PriceChartProps) {
           ))}
         </Selections>
       </Header>
-      <Content ref={plotContainerRef} className="h-154">
+      <Content
+        ref={plotContainerRef}
+        style={{ height: plotSizeConfig.pricePlotHeight + 8 * 2 }}
+      >
         {stockData && (
           <StockDataPlot
             data={stockData}
             chartType={chartType}
             featureGroup={stockSelection.featureGroup}
             width={plotWidth}
-            height={600}
           />
         )}
       </Content>

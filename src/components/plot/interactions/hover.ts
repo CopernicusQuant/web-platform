@@ -1,0 +1,112 @@
+import * as d3 from "d3";
+import type {
+  StockData,
+  FeatureGroupOpt,
+  FeatureByGroup,
+  StockPrice,
+} from "@/apis/stock";
+import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
+import {
+  updateFeatureTrendIndicators,
+  resetFeatureTrendIndicators,
+} from "@/components/plot/interactions/feature-trend";
+import {
+  updatePriceMomentumIndicators,
+  resetPriceMomentumIndicators,
+} from "@/components/plot/interactions/price-momentum";
+import { plotSizeConfig } from "@/components/plot/theme";
+
+const getHoverPlotFn = ({
+  data,
+  featureGroup,
+  width,
+}: {
+  data: StockData<FeatureGroupOpt>;
+  featureGroup: FeatureGroupOpt;
+  width: number;
+}) => {
+  const { stock, features } = data;
+  const { pricePlotHeight, marginBottom, marginTop, marginLeft, marginRight } =
+    plotSizeConfig;
+
+  // x-axis mapper
+  const x = d3
+    .scaleBand(
+      stock.map((d) => d.tradeDate),
+      [marginLeft, width - marginRight],
+    )
+    .paddingInner(0.2);
+  // y-axis mapper
+  const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
+  const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
+  const yPadding = (yMax - yMin) * 0.05 || 1;
+  const y = d3.scaleLinear(
+    [yMin - yPadding, yMax + yPadding],
+    [pricePlotHeight - marginBottom, marginTop],
+  );
+
+  return (event: React.PointerEvent<SVGSVGElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const pointerPos = event.clientX - rect.x - marginLeft;
+    let xIdx = Math.floor(pointerPos / x.step());
+    xIdx = Math.max(Math.min(xIdx, stock.length - 1), 0);
+    updatePriceTrendIndicators({
+      stock,
+      pointerPos,
+      xIdx,
+      width,
+      height: pricePlotHeight,
+      marginRight,
+      marginBottom,
+      x,
+      y,
+    });
+    updateFeatureTrendIndicators({
+      stock,
+      xIdx,
+      x,
+    });
+    switch (featureGroup) {
+      case "priceMomentum":
+        updatePriceMomentumIndicators({
+          xIdx,
+          features: features as FeatureByGroup["priceMomentum"][],
+          height: pricePlotHeight,
+          marginTop,
+          marginBottom,
+          x,
+          y,
+        });
+    }
+  };
+};
+
+const getLeavePlotFn = ({
+  stock,
+  featureGroup,
+  width,
+}: {
+  stock: StockPrice[];
+  featureGroup: FeatureGroupOpt;
+  width: number;
+}) => {
+  const { marginRight, pricePlotHeight, marginBottom, marginTop } = plotSizeConfig;
+  // y-axis mapper
+  const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
+  const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
+  const yPadding = (yMax - yMin) * 0.05 || 1;
+  const y = d3.scaleLinear(
+    [yMin - yPadding, yMax + yPadding],
+    [pricePlotHeight - marginBottom, marginTop],
+  );
+  return () => {
+    resetPriceTrendIndicators({ stock, width, marginRight, y });
+    resetFeatureTrendIndicators();
+    switch (featureGroup) {
+      case "priceMomentum":
+        resetPriceMomentumIndicators();
+    }
+  };
+};
+
+export { getHoverPlotFn, getLeavePlotFn };

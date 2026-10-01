@@ -1,32 +1,31 @@
 import * as d3 from "d3";
-import type { FeatureGroupOpt, StockData } from "@/apis/stock";
+import type { FeatureGroupOpt, StockData, FeatureByGroup } from "@/apis/stock";
 import XAxis from "@/components/plot/XAxis";
-import MABias from "./price-momentum/MABias";
-import type { FeatureByGroup } from "@/apis/stock";
-import StockFeatureIndicators from "./StockFeatureIndicators";
+import MABias from "@/components/plot/price-momentum/MABias";
+import StockFeatureIndicators from "@/components/plot/StockFeatureIndicators";
+import { getHoverPlotFn, getLeavePlotFn } from "@/components/plot/interactions/hover";
+import { plotSizeConfig } from "@/components/plot/theme";
 
 type StockFeaturePlotProps = {
   data: StockData<FeatureGroupOpt>;
   width: number;
-  height: number;
-  marginTop?: number;
-  marginRight?: number;
-  marginBottom?: number;
-  marginLeft?: number;
+  featureGroup: FeatureGroupOpt;
   maxXTickNum?: number;
 };
 
 export default function StockFeaturePlot({
   data,
   width,
-  height,
-  marginTop = 20,
-  marginRight = 40,
-  marginBottom = 45,
-  marginLeft = 0,
+  featureGroup,
   maxXTickNum = 30,
 }: StockFeaturePlotProps) {
-  const { features } = data;
+  const {
+    featurePlotHeight: height,
+    marginRight,
+    marginBottom,
+    marginLeft,
+  } = plotSizeConfig;
+  const { stock, features } = data;
   const x = d3
     .scaleBand(
       features.map((d) => d.tradeDate),
@@ -38,8 +37,26 @@ export default function StockFeaturePlot({
     .filter((_, i) => (features.length - 1 - i) % xSteps == 0)
     .map((d) => d.tradeDate);
 
+  // controls hover-based indicators
+  const onPointerMove = getHoverPlotFn({
+    data,
+    featureGroup,
+    width,
+  });
+  const onPointerLeave = getLeavePlotFn({
+    stock,
+    featureGroup,
+    width,
+  });
+
   return (
-    <svg width={width} height={height} className="overflow-visible">
+    <svg
+      width={width}
+      height={height}
+      className="overflow-visible hover:cursor-crosshair"
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+    >
       <XAxis labels={xLabels} x={x} xPos={0} yPos={height - marginBottom} />
       {features && (
         <MABias
@@ -47,17 +64,9 @@ export default function StockFeaturePlot({
           width={width}
           height={height}
           x={x}
-          marginTop={marginTop}
-          marginRight={marginRight}
-          marginBottom={marginBottom}
-          marginLeft={marginLeft}
         />
       )}
-      <StockFeatureIndicators
-        height={height}
-        marginTop={marginTop}
-        marginBottom={marginBottom}
-      />
+      <StockFeatureIndicators height={height} />
     </svg>
   );
 }

@@ -16,4 +16,13 @@ const priceTrendConfig = {
   paddingY: 16,
 };
 
-export { priceColors, priceTrendConfig, animationConfig };
+const plotSizeConfig = {
+  pricePlotHeight: 600,
+  featurePlotHeight: 350,
+  marginTop: 20,
+  marginRight: 40,
+  marginBottom: 45,
+  marginLeft: 0,
+};
+
+export { priceColors, priceTrendConfig, animationConfig, plotSizeConfig };

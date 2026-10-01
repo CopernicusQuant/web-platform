@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { updateDateLine } from "./date-line";
+import { updateDateLine } from "@/components/plot/interactions/date-line";
 import type { StockPrice } from "@/apis/stock";
 
 const featureElementIds = {
@@ -16,8 +16,6 @@ const updateFeatureTrendIndicators = ({
 }: {
   stock: StockPrice[];
   xIdx: number;
-  height: number;
-  marginBottom: number;
   x: d3.ScaleBand<string>;
 }) => {
   d3.select(`#${featureElementIds.indicatorGroup}`).attr("opacity", 1);
