@@ -6,6 +6,7 @@ import {
   maColors,
   getPMLineId,
 } from "@/components/plot/interactions/price-momentum";
+import { plotSizeConfig } from "../theme";
 
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
@@ -14,22 +15,10 @@ type MABiasProps = {
   width: number;
   height: number;
   x: d3.ScaleBand<string>;
-  marginTop?: number;
-  marginRight?: number;
-  marginBottom?: number;
-  marginLeft?: number;
 };
 
-export default function MABias({
-  features,
-  width,
-  height,
-  x,
-  marginTop = 20,
-  marginRight = 40,
-  marginBottom = 45,
-  marginLeft = 0,
-}: MABiasProps) {
+export default function MABias({ features, width, height, x }: MABiasProps) {
+  const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
   // y-axis mapper
   let yMin = 1.0;
   let yMax = -1.0;

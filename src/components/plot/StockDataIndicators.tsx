@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import type { StockPrice } from "@/apis/stock";
-import { priceColors, priceTrendConfig } from "@/components/plot/theme";
+import { plotSizeConfig, priceColors, priceTrendConfig } from "@/components/plot/theme";
 import type { PriceChartType } from "@/atoms/stocks";
 import { parseVolume, computePriceChange } from "@/lib/utils";
 import { priceElementIds } from "@/components/plot/interactions/price-trend";
@@ -10,10 +10,6 @@ type StockDataIndicatorsProps = {
   stock: StockPrice[];
   chartType: PriceChartType;
   width: number;
-  height: number;
-  marginTop: number;
-  marginBottom: number;
-  marginRight: number;
   y: d3.ScaleLinear<number, number>;
 };
 
@@ -26,20 +22,15 @@ export default function StockDataIndicators({
   stock,
   chartType,
   width,
-  height,
-  marginTop,
-  marginBottom,
-  marginRight,
   y,
 }: StockDataIndicatorsProps) {
+  const { pricePlotHeight: height, marginRight } = plotSizeConfig;
   const isUp = (stock.at(0)?.adjClose ?? 0) <= (stock.at(-1)?.adjClose ?? 0);
   return (
     <g>
       <g id={priceElementIds.indicatorGroup} opacity={0}>
         <DateLine
           height={height}
-          marginTop={marginTop}
-          marginBottom={marginBottom}
           dateGroupId={priceElementIds.indicatorDateGroup}
           dayId={priceElementIds.indicatorDay}
           monthId={priceElementIds.indicatorMonth}

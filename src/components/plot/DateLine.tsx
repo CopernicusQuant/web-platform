@@ -1,22 +1,14 @@
-import { priceTrendConfig } from "@/components/plot/theme";
+import { plotSizeConfig, priceTrendConfig } from "@/components/plot/theme";
 
 type DateLineProps = {
   height: number;
-  marginTop: number;
-  marginBottom: number;
   dateGroupId: string;
   dayId: string;
   monthId: string;
 };
 
-export default function DateLine({
-  height,
-  marginTop,
-  marginBottom,
-  dateGroupId,
-  dayId,
-  monthId,
-}: DateLineProps) {
+export default function DateLine({ height, dateGroupId, dayId, monthId }: DateLineProps) {
+  const { marginTop, marginBottom } = plotSizeConfig;
   return (
     <>
       {/* Vertical dashed line */}
