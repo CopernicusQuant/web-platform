@@ -31,7 +31,6 @@ const updatePriceMomentumIndicators = ({
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 }) => {
-  console.log("go");
   const circleGroup = d3.select(`#${maCircleGroupID}`);
   circleGroup.attr("opacity", 1);
   const currFeature = features[xIdx];
