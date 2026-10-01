@@ -1,7 +1,7 @@
 import type { FeatureGroupOpt, StockData } from "@/apis/stock";
 import { Section, Header, Selections, Content } from "@/components/ui/PlotSection";
 import { useAtomValue } from "jotai";
-import { plotWidthAtom } from "@/atoms/stocks";
+import { plotWidthAtom, stockSelectionAtom } from "@/atoms/stocks";
 import StockFeaturePlot from "./plot/StockFeaturePlot";
 
 type FeaturesSectionProps = {
@@ -9,6 +9,7 @@ type FeaturesSectionProps = {
 };
 
 export default function FeaturesSection({ stockData }: FeaturesSectionProps) {
+  const stockSelection = useAtomValue(stockSelectionAtom);
   const plotWidth = useAtomValue(plotWidthAtom);
   return (
     <Section>
@@ -19,7 +20,11 @@ export default function FeaturesSection({ stockData }: FeaturesSectionProps) {
       </Header>
       <Content className="h-91.5">
         {stockData && (
-          <StockFeaturePlot data={stockData} width={plotWidth} height={350} />
+          <StockFeaturePlot
+            data={stockData}
+            width={plotWidth}
+            featureGroup={stockSelection.featureGroup}
+          />
         )}
       </Content>
     </Section>
