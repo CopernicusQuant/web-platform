@@ -1,10 +1,12 @@
 import * as d3 from "d3";
-import type { FeatureGroupOpt, StockData, FeatureByGroup } from "@/apis/stock";
-import XAxis from "@/components/plot/XAxis";
-import MABias from "@/components/plot/price-momentum/MABias";
-import StockFeatureIndicators from "@/components/plot/StockFeatureIndicators";
+import { useAtomValue } from "jotai";
+import type { FeatureGroupOpt, StockData, PriceMomentumFeature } from "@/apis/stock";
+import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@/components/plot/interactions/hover";
 import { plotSizeConfig } from "@/components/plot/theme";
+import XAxis from "@/components/plot/XAxis";
+import StockFeatureIndicators from "@/components/plot/StockFeatureIndicators";
+import PMFeature from "@/components/plot/price-momentum/PMFeature";
 
 type StockFeaturePlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -25,6 +27,7 @@ export default function StockFeaturePlot({
     marginBottom,
     marginLeft,
   } = plotSizeConfig;
+  const { featureSubPlot } = useAtomValue(stockSelectionAtom);
   const { stock, features } = data;
   const x = d3
     .scaleBand(
@@ -58,12 +61,11 @@ export default function StockFeaturePlot({
       onPointerLeave={onPointerLeave}
     >
       <XAxis labels={xLabels} x={x} xPos={0} yPos={height - marginBottom} />
-      {features && (
-        <MABias
-          features={features as FeatureByGroup["priceMomentum"][]}
-          width={width}
-          height={height}
+      {featureGroup === "priceMomentum" && (
+        <PMFeature
+          features={features as PriceMomentumFeature[]}
           x={x}
+          subplotName={featureSubPlot}
         />
       )}
       <StockFeatureIndicators height={height} />

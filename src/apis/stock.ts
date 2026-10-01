@@ -1,14 +1,14 @@
 import { DATA_URL, type DataServiceError } from "@/apis/shared";
 import { z } from "zod";
 
-type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "All";
+type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "5Y";
 
 const dataWindow: Record<DataWindowOpt, string> = {
   "60D": "60days",
   "180D": "180days",
   "1Y": "1year",
   "3Y": "3years",
-  All: "all",
+  "5Y": "5years",
 };
 
 const StockPriceSchema = z
@@ -42,6 +42,9 @@ const PriceMomentumFeaturesSchema = z
     ma_5_bias: z.float32(),
     ma_20_bias: z.float32(),
     ma_60_bias: z.float32(),
+    return_5d: z.float32(),
+    return_20d: z.float32(),
+    return_60d: z.float32(),
   })
   .transform((input) => ({
     ticker: input.ts_code,
@@ -53,6 +56,9 @@ const PriceMomentumFeaturesSchema = z
     ma5Bias: input.ma_5_bias,
     ma20Bias: input.ma_20_bias,
     ma60Bias: input.ma_60_bias,
+    return5d: input.return_5d,
+    return20d: input.return_20d,
+    return60d: input.return_60d,
   }));
 
 const VolumeMomentumFeaturesSchema = z
@@ -66,13 +72,19 @@ const VolumeMomentumFeaturesSchema = z
   }));
 
 type FeatureGroupOpt = "priceMomentum" | "volumeMomentum";
+type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
+type FeatureByGroup = {
+  priceMomentum: PriceMomentumFeature;
+  volumeMomentum: z.infer<typeof VolumeMomentumFeaturesSchema>;
+};
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
   volumeMomentum: VolumeMomentumFeaturesSchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
-type FeatureByGroup = {
-  priceMomentum: z.infer<typeof PriceMomentumFeaturesSchema>;
-  volumeMomentum: z.infer<typeof VolumeMomentumFeaturesSchema>;
+
+const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
+  priceMomentum: ["MA Bias", "Return", "Up-Day Share"],
+  volumeMomentum: ["maBias"],
 };
 
 const createStockSchema = <G extends FeatureGroupOpt>(group: G) =>
@@ -121,5 +133,12 @@ const getStockData = async (
   throw new Error(parsedResult.error.message);
 };
 
-export { getStockData, dataWindow };
-export type { DataWindowOpt, StockPrice, StockData, FeatureGroupOpt, FeatureByGroup };
+export { getStockData, dataWindow, FeatureSubplots };
+export type {
+  DataWindowOpt,
+  StockPrice,
+  StockData,
+  FeatureGroupOpt,
+  FeatureByGroup,
+  PriceMomentumFeature,
+};
