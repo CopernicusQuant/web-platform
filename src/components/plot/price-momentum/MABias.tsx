@@ -6,7 +6,7 @@ import {
   maColors,
   getPMLineId,
 } from "@/components/plot/interactions/price-momentum";
-import { plotSizeConfig } from "../theme";
+import { plotSizeConfig } from "@/components/plot/theme";
 
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 

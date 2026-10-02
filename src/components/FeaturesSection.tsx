@@ -8,8 +8,9 @@ import {
 } from "@/components/ui/PlotSection";
 import { useAtom, useAtomValue } from "jotai";
 import { plotWidthAtom, stockSelectionAtom } from "@/atoms/stocks";
-import StockFeaturePlot from "./plot/StockFeaturePlot";
-import { plotSizeConfig } from "./plot/theme";
+import StockFeaturePlot from "@/components/plot/StockFeaturePlot";
+import { plotSizeConfig } from "@/components/plot/theme";
+import { pmPlotName } from "@/components/plot/price-momentum/config";
 
 type FeaturesSectionProps = {
   stockData: StockData<FeatureGroupOpt> | undefined;
@@ -33,7 +34,7 @@ export default function FeaturesSection({ stockData }: FeaturesSectionProps) {
               className="min-w-28"
               onClick={() => updateFeatureSubplot(subPlotName)}
             >
-              {subPlotName}
+              {pmPlotName[subPlotName]}
             </Button>
           ))}
         </Selections>
