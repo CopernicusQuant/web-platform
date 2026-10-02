@@ -1,10 +1,5 @@
 import * as d3 from "d3";
-import type {
-  StockData,
-  FeatureGroupOpt,
-  FeatureByGroup,
-  StockPrice,
-} from "@/apis/stock";
+import type { StockData, FeatureGroupOpt, PriceMomentumFeature } from "@/apis/stock";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
   updateFeatureTrendIndicators,
@@ -70,7 +65,7 @@ const getHoverPlotFn = ({
       case "priceMomentum":
         updatePriceMomentumIndicators({
           xIdx,
-          features: features as FeatureByGroup["priceMomentum"][],
+          features: features as PriceMomentumFeature[],
           height: pricePlotHeight,
           marginTop,
           marginBottom,
@@ -82,14 +77,15 @@ const getHoverPlotFn = ({
 };
 
 const getLeavePlotFn = ({
-  stock,
+  data,
   featureGroup,
   width,
 }: {
-  stock: StockPrice[];
+  data: StockData<FeatureGroupOpt>;
   featureGroup: FeatureGroupOpt;
   width: number;
 }) => {
+  const { stock, features } = data;
   const { marginRight, pricePlotHeight, marginBottom, marginTop } = plotSizeConfig;
   // y-axis mapper
   const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
@@ -104,7 +100,7 @@ const getLeavePlotFn = ({
     resetFeatureTrendIndicators();
     switch (featureGroup) {
       case "priceMomentum":
-        resetPriceMomentumIndicators();
+        resetPriceMomentumIndicators({ features: features as PriceMomentumFeature[] });
     }
   };
 };
