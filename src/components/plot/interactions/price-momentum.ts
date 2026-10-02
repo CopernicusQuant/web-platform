@@ -6,7 +6,9 @@ type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
 const maFeatures = ["ma5", "ma20", "ma60"] as const;
 const maBiasFeatures = ["ma5Bias", "ma20Bias", "ma60Bias"] as const;
-const maColors = ["#FCE38A", "#93BFCF", "#F38181", "#C5B3D3"];
+const returnFeatures = ["return5d", "return20d", "return60d"] as const;
+const upDayRatioFeatures = ["upRatio5d", "upRatio20d"] as const;
+const maColors = ["#C5B3D3", "#F38181", "#93BFCF", "#FCE38A"];
 
 const idPrefix = "price-momentum";
 const maCircleGroupID = `${idPrefix}-circle-group`;
@@ -80,9 +82,11 @@ const toggleMALine = (featureName: (typeof maFeatures)[number]) => {
 
 export {
   maCircleGroupID,
+  maColors,
   maFeatures,
   maBiasFeatures,
-  maColors,
+  returnFeatures,
+  upDayRatioFeatures,
   getPMCircleId,
   getPMLineId,
   getPMLegendId,

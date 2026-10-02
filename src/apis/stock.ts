@@ -45,6 +45,8 @@ const PriceMomentumFeaturesSchema = z
     return_5d: z.float32(),
     return_20d: z.float32(),
     return_60d: z.float32(),
+    up_ratio_5d: z.float32(),
+    up_ratio_20d: z.float32(),
   })
   .transform((input) => ({
     ticker: input.ts_code,
@@ -59,6 +61,8 @@ const PriceMomentumFeaturesSchema = z
     return5d: input.return_5d,
     return20d: input.return_20d,
     return60d: input.return_60d,
+    upRatio5d: input.up_ratio_5d,
+    upRatio20d: input.up_ratio_20d,
   }));
 
 const VolumeMomentumFeaturesSchema = z
@@ -83,7 +87,7 @@ const FeatureSchemas = {
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
-  priceMomentum: ["MA Bias", "Return", "Up-Day Share"],
+  priceMomentum: ["maBias", "return", "upDayRatio"] as const,
   volumeMomentum: ["maBias"],
 };
 

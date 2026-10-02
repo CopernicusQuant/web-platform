@@ -22,7 +22,7 @@ import {
 import StockDataPlot from "@/components/plot/StockDataPlot";
 import CandleIcon from "@/components/icons/CandleIcon";
 import LineIcon from "@/components/icons/LineIcon";
-import { plotSizeConfig } from "./plot/theme";
+import { plotSizeConfig } from "@/components/plot/theme";
 
 const priceChartTypes: PriceChartType[] = ["candle", "line"];
 
@@ -53,8 +53,7 @@ export default function PriceChart({ stockData }: PriceChartProps) {
     });
     observer.observe(container);
     return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [plotWidth, setPlotWidth]);
 
   return (
     <Section>
