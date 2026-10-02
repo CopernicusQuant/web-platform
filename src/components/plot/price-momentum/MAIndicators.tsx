@@ -7,8 +7,9 @@ import {
   maColors,
   toggleMALine,
   getPMLegendId,
+  getPMLegendValueId,
 } from "@/components/plot/interactions/price-momentum";
-import { priceTrendConfig } from "../theme";
+import { legendConfig } from "../theme";
 
 type MAIndicatorsProps = {
   features: FeatureByGroup["priceMomentum"][];
@@ -17,13 +18,14 @@ type MAIndicatorsProps = {
 };
 
 const visConfig = {
-  legendWidth: 52,
-  width: 72,
+  legendWidth: 96,
+  gap: 10,
 };
 
 export default function MAIndicators({ features, chartType, width }: MAIndicatorsProps) {
   return (
     <>
+      {/* Moving average lines */}
       {chartType === "line" && (
         <g id={maCircleGroupID} opacity={0}>
           {maFeatures.map((featureName, i) => (
@@ -38,18 +40,20 @@ export default function MAIndicators({ features, chartType, width }: MAIndicator
           ))}
         </g>
       )}
+      {/* Moving average legends */}
       <g
-        transform={`translate(${width - visConfig.legendWidth / 2} ${priceTrendConfig.top})`}
+        transform={`translate(${width - visConfig.legendWidth / 2} ${legendConfig.top})`}
         fontSize={13}
       >
         {features.at(-1) &&
           maFeatures.map((featureName, i) => {
             return (
               <g
-                key={`temp-${featureName}`}
+                key={getPMLegendId(featureName)}
                 id={getPMLegendId(featureName)}
-                transform={`translate(${-visConfig.legendWidth * i - 10 * i} 0)`}
-                className="group"
+                // make the legend 5 - 20 - 60
+                transform={`translate(${-visConfig.legendWidth * (maFeatures.length - 1 - i) - visConfig.gap * (maFeatures.length - 1 - i)} 0)`}
+                className="group hover:cursor-pointer"
                 onMouseDown={() => toggleMALine(featureName)}
               >
                 <rect
@@ -57,16 +61,20 @@ export default function MAIndicators({ features, chartType, width }: MAIndicator
                   width={visConfig.legendWidth}
                   height={22}
                   rx={4}
-                  fill={maColors[i]}
-                  className="group-hover:cursor-pointer"
+                  fill={"transparent"}
+                  stroke={maColors[i]}
+                  className="group-hover:cursor-pointer select-none"
                 />
                 <text
-                  y={priceTrendConfig.lineHeight}
+                  y={legendConfig.lineHeight}
                   textAnchor="middle"
-                  fill="white"
-                  className="group-hover:cursor-pointer"
+                  fill={maColors[i]}
+                  className="group-hover:cursor-pointer select-none"
                 >
-                  <tspan>{featureName.toUpperCase()}</tspan>
+                  <tspan fontWeight={"700"}>{featureName.toUpperCase()}</tspan>
+                  <tspan id={getPMLegendValueId(featureName)} dx={4}>
+                    {features.at(-1)![featureName].toFixed(2)}
+                  </tspan>
                 </text>
               </g>
             );

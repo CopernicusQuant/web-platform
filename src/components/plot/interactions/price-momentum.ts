@@ -2,6 +2,7 @@ import * as d3 from "d3";
 
 import type { FeatureByGroup } from "@/apis/stock";
 import { animationConfig } from "@/components/plot/theme";
+import { updateTextValue } from "./d3-utils";
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
 const maFeatures = ["ma5", "ma20", "ma60"] as const;
@@ -15,6 +16,8 @@ const maCircleGroupID = `${idPrefix}-circle-group`;
 const getPMLineId = (featureName: string) => `${idPrefix}-line-${featureName}`;
 const getPMCircleId = (featureName: string) => `${idPrefix}-circle-${featureName}`;
 const getPMLegendId = (featureName: string) => `${idPrefix}-legend-${featureName}`;
+const getPMLegendValueId = (featureName: string) =>
+  `${idPrefix}-legend-text-${featureName}`;
 
 const updatePriceMomentumIndicators = ({
   features,
@@ -37,6 +40,7 @@ const updatePriceMomentumIndicators = ({
   circleGroup.attr("opacity", 1);
   const currFeature = features[xIdx];
   maFeatures.forEach((featureName) => {
+    // update circle visibility and position
     const xPos = (x(currFeature.tradeDate) ?? 0) + x.bandwidth() / 2;
     const yPos = y(currFeature[featureName]) ?? 0;
     const currCircle = circleGroup.select(`#${getPMCircleId(featureName)}`);
@@ -53,12 +57,24 @@ const updatePriceMomentumIndicators = ({
         yPos <= height - marginBottom && yPos >= marginTop ? "1" : "0",
       );
     }
+    // update legend value
+    updateTextValue(getPMLegendValueId(featureName), currFeature[featureName].toFixed(2));
   });
 };
 
-const resetPriceMomentumIndicators = () => {
+const resetPriceMomentumIndicators = ({
+  features,
+}: {
+  features: PriceMomentumFeature[];
+}) => {
   const circleGroup = d3.select(`#${maCircleGroupID}`);
   circleGroup.attr("opacity", 0);
+  if (!features.at(-1)) return;
+  maFeatures.forEach((featureName) =>
+    d3
+      .select(`#${getPMLegendValueId(featureName)}`)
+      .text(features.at(-1)![featureName].toFixed(2)),
+  );
 };
 
 const toggleMALine = (featureName: (typeof maFeatures)[number]) => {
@@ -90,6 +106,7 @@ export {
   getPMCircleId,
   getPMLineId,
   getPMLegendId,
+  getPMLegendValueId,
   updatePriceMomentumIndicators,
   resetPriceMomentumIndicators,
   toggleMALine,

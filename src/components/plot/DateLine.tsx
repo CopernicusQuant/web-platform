@@ -1,4 +1,4 @@
-import { plotSizeConfig, priceTrendConfig } from "@/components/plot/theme";
+import { plotSizeConfig, legendConfig } from "@/components/plot/theme";
 
 type DateLineProps = {
   height: number;
@@ -31,7 +31,7 @@ export default function DateLine({ height, dateGroupId, dayId, monthId }: DateLi
           y={2}
           width={36}
           height={36}
-          rx={priceTrendConfig.rectCorner}
+          rx={legendConfig.rectCorner}
           fill="black"
           opacity={0.9}
         />

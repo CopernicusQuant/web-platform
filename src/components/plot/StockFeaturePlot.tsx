@@ -28,7 +28,7 @@ export default function StockFeaturePlot({
     marginLeft,
   } = plotSizeConfig;
   const { featureSubPlot } = useAtomValue(stockSelectionAtom);
-  const { stock, features } = data;
+  const { features } = data;
   const x = d3
     .scaleBand(
       features.map((d) => d.tradeDate),
@@ -47,7 +47,7 @@ export default function StockFeaturePlot({
     width,
   });
   const onPointerLeave = getLeavePlotFn({
-    stock,
+    data,
     featureGroup,
     width,
   });

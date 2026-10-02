@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import type { StockPrice } from "@/apis/stock";
-import { plotSizeConfig, priceColors, priceTrendConfig } from "@/components/plot/theme";
+import { plotSizeConfig, priceColors, legendConfig } from "@/components/plot/theme";
 import type { PriceChartType } from "@/atoms/stocks";
 import { parseVolume, computePriceChange } from "@/lib/utils";
 import { priceElementIds } from "@/components/plot/interactions/price-trend";
@@ -55,10 +55,10 @@ export default function StockDataIndicators({
           <rect
             id={priceElementIds.valuesPctRect}
             x={0}
-            y={priceTrendConfig.top}
+            y={legendConfig.top}
             width={116}
             height={22}
-            rx={priceTrendConfig.rectCorner}
+            rx={legendConfig.rectCorner}
             fill={isUp ? priceColors.up : priceColors.down}
           />
           <text
@@ -75,9 +75,9 @@ export default function StockDataIndicators({
             </tspan>
           </text>
           <text
-            y={priceTrendConfig.top + priceTrendConfig.lineHeight}
+            y={legendConfig.top + legendConfig.lineHeight}
             textAnchor="start"
-            fontSize={priceTrendConfig.valueFontSize}
+            fontSize={legendConfig.valueFontSize}
             fill="gray"
           >
             <tspan x={visConfig.left}>O</tspan>
@@ -113,7 +113,7 @@ export default function StockDataIndicators({
           y={-10}
           width={48}
           height={20}
-          rx={priceTrendConfig.rectCorner}
+          rx={legendConfig.rectCorner}
           fill={isUp ? priceColors.up : priceColors.down}
         />
         <text

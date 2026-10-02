@@ -3,6 +3,7 @@ import { parseVolume, computePriceChange } from "@/lib/utils";
 import type { StockPrice } from "@/apis/stock";
 import { priceColors } from "../theme";
 import { updateDateLine } from "./date-line";
+import { updateTextValue } from "./d3-utils";
 
 const priceElementIds = {
   indicatorGroup: "price-indicator-group",
@@ -55,14 +56,15 @@ const updatePriceTrendIndicators = ({
   });
   const circle = indicatorGroup.select(`#${priceElementIds.indicatorPoint}`);
   circle.transition().duration(50).ease(d3.easeLinear).attr("cy", yPos);
-  d3.select(`#${priceElementIds.valuesClose}`).text(`${adjClose.toFixed(2)}`);
-  d3.select(`#${priceElementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
-  d3.select(`#${priceElementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
-  d3.select(`#${priceElementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
-  d3.select(`#${priceElementIds.valuesPctChange}`).text(
-    `${computePriceChange(stock.at(0)?.adjClose, adjClose)}`,
+  updateTextValue(priceElementIds.valuesClose, adjClose.toFixed(2));
+  updateTextValue(priceElementIds.valuesOpen, adjOpen.toFixed(2));
+  updateTextValue(priceElementIds.valuesHigh, adjHigh.toFixed(2));
+  updateTextValue(priceElementIds.valuesLow, adjLow.toFixed(2));
+  updateTextValue(priceElementIds.valuesVol, parseVolume(adjVol));
+  updateTextValue(
+    priceElementIds.valuesPctChange,
+    computePriceChange(stock.at(0)?.adjClose, adjClose),
   );
-  d3.select(`#${priceElementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
   d3.select(`#${priceElementIds.valuesPctRect}`).attr(
     "fill",
     adjClose >= stock[0].adjClose ? priceColors.up : priceColors.down,
@@ -96,14 +98,15 @@ const resetPriceTrendIndicators = ({
   const lastestStock = stock.at(-1);
   if (!lastestStock) return;
   const { adjClose, adjOpen, adjHigh, adjLow, adjVol } = stock.at(-1)!;
-  d3.select(`#${priceElementIds.valuesClose}`).text(`${adjClose.toFixed(2)}`);
-  d3.select(`#${priceElementIds.valuesOpen}`).text(`${adjOpen.toFixed(2)}`);
-  d3.select(`#${priceElementIds.valuesHigh}`).text(`${adjHigh.toFixed(2)}`);
-  d3.select(`#${priceElementIds.valuesLow}`).text(`${adjLow.toFixed(2)}`);
-  d3.select(`#${priceElementIds.valuesPctChange}`).text(
-    `${computePriceChange(stock.at(0)?.adjClose, stock.at(-1)?.adjClose)}`,
+  updateTextValue(priceElementIds.valuesClose, adjClose.toFixed(2));
+  updateTextValue(priceElementIds.valuesOpen, adjOpen.toFixed(2));
+  updateTextValue(priceElementIds.valuesHigh, adjHigh.toFixed(2));
+  updateTextValue(priceElementIds.valuesLow, adjLow.toFixed(2));
+  updateTextValue(priceElementIds.valuesVol, parseVolume(adjVol));
+  updateTextValue(
+    priceElementIds.valuesPctChange,
+    computePriceChange(stock.at(0)?.adjClose, adjClose),
   );
-  d3.select(`#${priceElementIds.valuesVol}`).text(`${parseVolume(adjVol)}`);
   d3.select(`#${priceElementIds.valuesPctRect}`).attr(
     "fill",
     adjClose > stock[0].adjClose ? priceColors.up : priceColors.down,
