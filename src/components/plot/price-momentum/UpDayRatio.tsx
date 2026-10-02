@@ -45,7 +45,7 @@ export default function UpDayRatio({ features, width, x }: UpDayRatioProps) {
         yPos={0}
         plotWidth={width - marginLeft - marginRight}
         labelXOffset={marginRight}
-        labelPrefix="%"
+        labelPostfix="%"
         labelFormatter={(value: number) => (value * 100).toFixed(1)}
       />
       {Object.entries(paths).map(([key, value], i) => (
@@ -57,6 +57,15 @@ export default function UpDayRatio({ features, width, x }: UpDayRatioProps) {
           stroke={maColors[i]}
         />
       ))}
+      <line
+        x1={marginLeft}
+        x2={width - marginRight}
+        y1={y(0.5)}
+        y2={y(0.5)}
+        stroke="black"
+        strokeWidth={1.4}
+        strokeDasharray={"6 4"}
+      />
     </>
   );
 }
