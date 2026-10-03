@@ -7,6 +7,8 @@ import {
 } from "@/components/plot/interactions/price-momentum";
 import YAxis from "@/components/plot/YAxis";
 import { plotSizeConfig } from "@/components/plot/theme";
+import FeatureIndicators from "./FeatureIndicators";
+import { digitToPercent } from "@/lib/utils";
 
 type UpDayRatioProps = {
   features: PriceMomentumFeature[];
@@ -29,12 +31,18 @@ export default function UpDayRatio({ features, width, x }: UpDayRatioProps) {
     [height - marginBottom, marginTop],
   );
   const paths: Record<string, string> = {};
+  const legendLabels: string[] = [];
   upDayRatioFeatures.forEach((featureName) => {
     const path = d3
       .line<PriceMomentumFeature>()
       .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
       .y((feature) => y(feature[featureName]))(features);
     if (path !== null) paths[featureName] = path;
+    else return;
+    // create label
+    const daysLabel = featureName.match(/\d+/);
+    if (!daysLabel) legendLabels.push(featureName);
+    else legendLabels.push(`${daysLabel}D`);
   });
 
   return (
@@ -65,6 +73,12 @@ export default function UpDayRatio({ features, width, x }: UpDayRatioProps) {
         stroke="black"
         strokeWidth={1.4}
         strokeDasharray={"6 4"}
+      />
+      <FeatureIndicators
+        featureNames={upDayRatioFeatures}
+        features={features}
+        valueFormatFn={digitToPercent}
+        labels={legendLabels}
       />
     </>
   );

@@ -105,7 +105,6 @@ export default function StockDataPlot({
         <MAIndicators
           features={features as FeatureByGroup["priceMomentum"][]}
           chartType={chartType}
-          width={width}
         />
       )}
     </svg>

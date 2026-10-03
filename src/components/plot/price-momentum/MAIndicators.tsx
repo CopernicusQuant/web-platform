@@ -9,20 +9,21 @@ import {
   getPMLegendId,
   getPMLegendValueId,
 } from "@/components/plot/interactions/price-momentum";
-import { legendConfig } from "../theme";
+import { legendConfig } from "@/components/plot/theme";
 
 type MAIndicatorsProps = {
   features: FeatureByGroup["priceMomentum"][];
   chartType: PriceChartType;
-  width: number;
 };
 
-const visConfig = {
-  legendWidth: 96,
-  gap: 10,
-};
-
-export default function MAIndicators({ features, chartType, width }: MAIndicatorsProps) {
+export default function MAIndicators({ features, chartType }: MAIndicatorsProps) {
+  const getTranslateX = (i: number) => {
+    return (
+      legendConfig.featureWidth * i +
+      legendConfig.featureWidth / 2 +
+      legendConfig.featureGap * i
+    );
+  };
   return (
     <>
       {/* Moving average lines */}
@@ -42,8 +43,8 @@ export default function MAIndicators({ features, chartType, width }: MAIndicator
       )}
       {/* Moving average legends */}
       <g
-        transform={`translate(${width - visConfig.legendWidth / 2} ${legendConfig.top})`}
-        fontSize={13}
+        transform={`translate(0 ${legendConfig.top})`}
+        fontSize={legendConfig.valueFontSize}
       >
         {features.at(-1) &&
           maFeatures.map((featureName, i) => {
@@ -52,13 +53,13 @@ export default function MAIndicators({ features, chartType, width }: MAIndicator
                 key={getPMLegendId(featureName)}
                 id={getPMLegendId(featureName)}
                 // make the legend 5 - 20 - 60
-                transform={`translate(${-visConfig.legendWidth * (maFeatures.length - 1 - i) - visConfig.gap * (maFeatures.length - 1 - i)} 0)`}
+                transform={`translate(${getTranslateX(i)} 0)`}
                 className="group hover:cursor-pointer"
                 onMouseDown={() => toggleMALine(featureName)}
               >
                 <rect
-                  x={-visConfig.legendWidth / 2}
-                  width={visConfig.legendWidth}
+                  x={-legendConfig.featureWidth / 2}
+                  width={legendConfig.featureWidth}
                   height={22}
                   rx={4}
                   fill={"transparent"}

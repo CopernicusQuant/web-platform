@@ -1,9 +1,11 @@
+import * as d3 from "d3";
 import { useMemo } from "react";
 import type { PriceMomentumFeature } from "@/apis/stock";
-import * as d3 from "d3";
+import { digitToPercent } from "@/lib/utils";
 import { returnFeatures } from "@/components/plot/interactions/price-momentum";
 import { plotSizeConfig, priceColors } from "@/components/plot/theme";
 import YAxis from "@/components/plot/YAxis";
+import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
 
 type ReturnsProps = {
   features: PriceMomentumFeature[];
@@ -33,8 +35,15 @@ export default function Returns({ features, x, width }: ReturnsProps) {
     return [yMin - yPadding, yMax + yPadding];
   }, [features]);
 
+  const legendLabels = returnFeatures.map(
+    (featureName) => `${featureName.match(/\d+/)}D`,
+  );
+  const initialColors = returnFeatures.map((featureName) =>
+    features.at(-1)![featureName] >= 0 ? priceColors.up : priceColors.down,
+  );
+
   const y = d3.scaleLinear([yMin, yMax], [height - marginBottom, marginTop]);
-  const opacities = [1.0, 0.5, 0.2];
+  const opacities = [1.0, 0.6, 0.4];
 
   return (
     <g>
@@ -63,6 +72,14 @@ export default function Returns({ features, x, width }: ReturnsProps) {
           );
         });
       })}
+      <FeatureIndicators
+        featureNames={returnFeatures}
+        features={features}
+        valueFormatFn={digitToPercent}
+        labels={legendLabels}
+        colors={initialColors}
+        opacities={opacities}
+      />
     </g>
   );
 }

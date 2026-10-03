@@ -7,6 +7,8 @@ import {
   getPMLineId,
 } from "@/components/plot/interactions/price-momentum";
 import { plotSizeConfig } from "@/components/plot/theme";
+import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
+import { digitToPercent } from "@/lib/utils";
 
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
@@ -39,14 +41,20 @@ export default function MABias({ features, width, x }: MABiasProps) {
     [height - marginBottom, marginTop],
   );
 
-  // create value paths
   const paths: Record<string, string> = {};
-  maBiasFeatures.forEach((featrueName) => {
+  const legendLabels: string[] = [];
+  maBiasFeatures.forEach((featureName) => {
+    // create path
     const path = d3
       .line<PriceMomentumFeature>()
       .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featrueName]))(features);
-    if (path !== null) paths[featrueName] = path;
+      .y((feature) => y(feature[featureName]))(features);
+    if (path !== null) paths[featureName] = path;
+    else return;
+    // create label
+    const daysLabel = featureName.match(/\d+/);
+    if (!daysLabel) legendLabels.push(featureName);
+    else legendLabels.push(`${daysLabel}D`);
   });
 
   return (
@@ -78,6 +86,12 @@ export default function MABias({ features, width, x }: MABiasProps) {
         stroke="black"
         strokeWidth={1.4}
         strokeDasharray={"6 4"}
+      />
+      <FeatureIndicators
+        featureNames={maBiasFeatures}
+        features={features}
+        valueFormatFn={digitToPercent}
+        labels={legendLabels}
       />
     </>
   );

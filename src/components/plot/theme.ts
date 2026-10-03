@@ -12,6 +12,8 @@ const legendConfig = {
   lineHeight: 16,
   valueFontSize: 13,
   rectCorner: 4,
+  featureWidth: 96,
+  featureGap: 10,
 };
 
 const plotSizeConfig = {

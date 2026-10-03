@@ -14,8 +14,8 @@ type StockDataIndicatorsProps = {
 };
 
 const visConfig = {
-  left: 130,
   width: 68,
+  pctWidth: 116,
 };
 
 export default function StockDataIndicators({
@@ -54,15 +54,15 @@ export default function StockDataIndicators({
         <g>
           <rect
             id={priceElementIds.valuesPctRect}
-            x={0}
+            x={width - visConfig.pctWidth}
             y={legendConfig.top}
-            width={116}
+            width={visConfig.pctWidth}
             height={22}
             rx={legendConfig.rectCorner}
             fill={isUp ? priceColors.up : priceColors.down}
           />
           <text
-            x={58}
+            x={width - visConfig.pctWidth / 2}
             y={20}
             textAnchor="middle"
             fontSize={13.5}
@@ -74,33 +74,37 @@ export default function StockDataIndicators({
               {computePriceChange(stock.at(0)?.adjClose, stock.at(-1)?.adjClose)}
             </tspan>
           </text>
-          <text
-            y={legendConfig.top + legendConfig.lineHeight}
-            textAnchor="start"
-            fontSize={legendConfig.valueFontSize}
-            fill="gray"
+          <g
+            transform={`translate(${width - marginRight - visConfig.pctWidth - visConfig.width / 2} 0)`}
           >
-            <tspan x={visConfig.left}>O</tspan>
-            <tspan dx={4} id={priceElementIds.valuesOpen} fill="black">
-              {stock.at(-1)!.adjOpen.toFixed(2)}
-            </tspan>
-            <tspan x={visConfig.left + visConfig.width}>C</tspan>
-            <tspan dx={4} id={priceElementIds.valuesClose} fill="black">
-              {stock.at(-1)!.adjClose.toFixed(2)}
-            </tspan>
-            <tspan x={visConfig.left + visConfig.width * 2}>H</tspan>
-            <tspan dx={4} id={priceElementIds.valuesHigh} fill="black">
-              {stock.at(-1)!.adjHigh.toFixed(2)}
-            </tspan>
-            <tspan x={visConfig.left + visConfig.width * 3}>L</tspan>
-            <tspan dx={4} id={priceElementIds.valuesLow} fill="black">
-              {stock.at(-1)!.adjLow.toFixed(2)}
-            </tspan>
-            <tspan x={visConfig.left + visConfig.width * 4}>V</tspan>
-            <tspan dx={4} id={priceElementIds.valuesVol} fill="black">
-              {parseVolume(stock.at(-1)!.adjVol)}
-            </tspan>
-          </text>
+            <text
+              y={legendConfig.top + legendConfig.lineHeight}
+              textAnchor="start"
+              fontSize={legendConfig.valueFontSize}
+              fill="gray"
+            >
+              <tspan>O</tspan>
+              <tspan dx={4} id={priceElementIds.valuesOpen} fill="black">
+                {stock.at(-1)!.adjOpen.toFixed(2)}
+              </tspan>
+              <tspan x={-visConfig.width}>C</tspan>
+              <tspan dx={4} id={priceElementIds.valuesClose} fill="black">
+                {stock.at(-1)!.adjClose.toFixed(2)}
+              </tspan>
+              <tspan x={-visConfig.width * 2}>H</tspan>
+              <tspan dx={4} id={priceElementIds.valuesHigh} fill="black">
+                {stock.at(-1)!.adjHigh.toFixed(2)}
+              </tspan>
+              <tspan x={-visConfig.width * 3}>L</tspan>
+              <tspan dx={4} id={priceElementIds.valuesLow} fill="black">
+                {stock.at(-1)!.adjLow.toFixed(2)}
+              </tspan>
+              <tspan x={-visConfig.width * 4}>V</tspan>
+              <tspan dx={4} id={priceElementIds.valuesVol} fill="black">
+                {parseVolume(stock.at(-1)!.adjVol)}
+              </tspan>
+            </text>
+          </g>
         </g>
       )}
       <g
