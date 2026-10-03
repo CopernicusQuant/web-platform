@@ -4,7 +4,6 @@ import type { FeatureByGroup } from "@/apis/stock";
 import { animationConfig, priceColors } from "@/components/plot/theme";
 import { updateTextValue } from "./d3-utils";
 import { digitToPercent } from "@/lib/utils";
-
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
 const maFeatures = ["ma5", "ma20", "ma60"] as const;
@@ -89,12 +88,21 @@ const resetPriceMomentumIndicators = ({
   const circleGroup = d3.select(`#${maCircleGroupID}`);
   circleGroup.attr("opacity", 0);
   if (!features.at(-1)) return;
+
   [...maBiasFeatures, ...upDayRatioFeatures, ...returnFeatures].forEach((featureName) => {
     updateTextValue(
       getPMLegendValueId(featureName),
       digitToPercent(features.at(-1)![featureName]),
     );
   });
+
+  maFeatures.forEach((featureName) => {
+    updateTextValue(
+      getPMLegendValueId(featureName),
+      features.at(-1)![featureName].toFixed(2),
+    );
+  });
+
   returnFeatures.forEach((featureName) => {
     const currColor =
       features.at(-1)![featureName] >= 0 ? priceColors.up : priceColors.down;
