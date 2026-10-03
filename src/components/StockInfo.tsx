@@ -7,7 +7,7 @@ import StockSelector from "@/components/StockSelector";
 
 const styles = {
   container: clsx(
-    "box-border w-full h-20 grid grid-cols-5 items-center border border-gray-300 rounded-md overflow-hidden",
+    "box-border w-full h-20 grid grid-cols-5 items-center border border-gray-300 rounded-md overflow-hidden bg-white",
   ),
   columnBasic: clsx(
     "w-full h-full px-8 border-r border-gray-300 flex flex-col justify-center transition duration-100 text-sm",
@@ -25,7 +25,7 @@ export default function StockInfo() {
   const [selection] = useAtom(stockSelectionAtom);
   const { data } = useGetStockInfoQuery(selection.ticker);
   return (
-    <div className="w-full bg-white">
+    <div className="w-full">
       <div className={styles.container}>
         {data && (
           <>
