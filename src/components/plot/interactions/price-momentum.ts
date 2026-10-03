@@ -1,8 +1,10 @@
 import * as d3 from "d3";
 
 import type { FeatureByGroup } from "@/apis/stock";
-import { animationConfig } from "@/components/plot/theme";
+import { animationConfig, priceColors } from "@/components/plot/theme";
 import { updateTextValue } from "./d3-utils";
+import { digitToPercent } from "@/lib/utils";
+
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
 const maFeatures = ["ma5", "ma20", "ma60"] as const;
@@ -36,6 +38,7 @@ const updatePriceMomentumIndicators = ({
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 }) => {
+  const { duration } = animationConfig;
   const circleGroup = d3.select(`#${maCircleGroupID}`);
   circleGroup.attr("opacity", 1);
   const currFeature = features[xIdx];
@@ -47,7 +50,7 @@ const updatePriceMomentumIndicators = ({
     const currLineOpacity = d3.select(`#${getPMLineId(featureName)}`).attr("opacity");
     currCircle
       .transition()
-      .duration(50)
+      .duration(duration)
       .ease(d3.easeLinear)
       .attr("cx", xPos)
       .attr("cy", yPos);
@@ -60,6 +63,21 @@ const updatePriceMomentumIndicators = ({
     // update legend value
     updateTextValue(getPMLegendValueId(featureName), currFeature[featureName].toFixed(2));
   });
+  [...maBiasFeatures, ...upDayRatioFeatures, ...returnFeatures].forEach((featureName) => {
+    updateTextValue(
+      getPMLegendValueId(featureName),
+      digitToPercent(currFeature[featureName]),
+    );
+  });
+  returnFeatures.forEach((featureName) => {
+    const currColor = currFeature[featureName] >= 0 ? priceColors.up : priceColors.down;
+    const legendGroup = d3
+      .select(`#${getPMLegendId(featureName)}`)
+      .transition()
+      .duration(duration);
+    legendGroup.select("rect").attr("stroke", currColor);
+    legendGroup.select("text").attr("fill", currColor);
+  });
 };
 
 const resetPriceMomentumIndicators = ({
@@ -67,14 +85,26 @@ const resetPriceMomentumIndicators = ({
 }: {
   features: PriceMomentumFeature[];
 }) => {
+  const { duration } = animationConfig;
   const circleGroup = d3.select(`#${maCircleGroupID}`);
   circleGroup.attr("opacity", 0);
   if (!features.at(-1)) return;
-  maFeatures.forEach((featureName) =>
-    d3
-      .select(`#${getPMLegendValueId(featureName)}`)
-      .text(features.at(-1)![featureName].toFixed(2)),
-  );
+  [...maBiasFeatures, ...upDayRatioFeatures, ...returnFeatures].forEach((featureName) => {
+    updateTextValue(
+      getPMLegendValueId(featureName),
+      digitToPercent(features.at(-1)![featureName]),
+    );
+  });
+  returnFeatures.forEach((featureName) => {
+    const currColor =
+      features.at(-1)![featureName] >= 0 ? priceColors.up : priceColors.down;
+    const legendGroup = d3
+      .select(`#${getPMLegendId(featureName)}`)
+      .transition()
+      .duration(duration);
+    legendGroup.select("rect").attr("stroke", currColor);
+    legendGroup.select("text").attr("fill", currColor);
+  });
 };
 
 const toggleMALine = (featureName: (typeof maFeatures)[number]) => {
