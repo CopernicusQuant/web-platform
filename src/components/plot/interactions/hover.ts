@@ -15,14 +15,15 @@ const getHoverPlotFn = ({
   data,
   featureGroup,
   width,
+  height,
 }: {
   data: StockData<FeatureGroupOpt>;
   featureGroup: FeatureGroupOpt;
   width: number;
+  height: number;
 }) => {
   const { stock, features } = data;
-  const { pricePlotHeight, marginBottom, marginTop, marginLeft, marginRight } =
-    plotSizeConfig;
+  const { marginBottom, marginTop, marginLeft, marginRight } = plotSizeConfig;
 
   // x-axis mapper
   const x = d3
@@ -37,7 +38,7 @@ const getHoverPlotFn = ({
   const yPadding = (yMax - yMin) * 0.05 || 1;
   const y = d3.scaleLinear(
     [yMin - yPadding, yMax + yPadding],
-    [pricePlotHeight - marginBottom, marginTop],
+    [height - marginBottom, marginTop],
   );
 
   return (event: React.PointerEvent<SVGSVGElement>) => {
@@ -50,7 +51,7 @@ const getHoverPlotFn = ({
       pointerPos,
       xIdx,
       width,
-      height: pricePlotHeight,
+      height,
       marginRight,
       marginBottom,
       x,
@@ -66,7 +67,7 @@ const getHoverPlotFn = ({
         updatePriceMomentumIndicators({
           xIdx,
           features: features as PriceMomentumFeature[],
-          height: pricePlotHeight,
+          height,
           marginTop,
           marginBottom,
           x,
@@ -80,20 +81,23 @@ const getLeavePlotFn = ({
   data,
   featureGroup,
   width,
+  referenceHeight,
 }: {
   data: StockData<FeatureGroupOpt>;
   featureGroup: FeatureGroupOpt;
   width: number;
+  referenceHeight: number;
 }) => {
   const { stock, features } = data;
-  const { marginRight, pricePlotHeight, marginBottom, marginTop } = plotSizeConfig;
+  const { marginRight, marginBottom, marginTop } = plotSizeConfig;
+
   // y-axis mapper
   const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
   const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
   const yPadding = (yMax - yMin) * 0.05 || 1;
   const y = d3.scaleLinear(
     [yMin - yPadding, yMax + yPadding],
-    [pricePlotHeight - marginBottom, marginTop],
+    [referenceHeight - marginBottom, marginTop],
   );
   return () => {
     resetPriceTrendIndicators({ stock, width, marginRight, y });

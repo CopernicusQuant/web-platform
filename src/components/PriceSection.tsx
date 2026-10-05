@@ -1,5 +1,4 @@
-import { useRef, useLayoutEffect } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import {
   dataWindow,
   type DataWindowOpt,
@@ -7,7 +6,6 @@ import {
   type StockData,
 } from "@/apis/stock";
 import {
-  plotWidthAtom,
   priceChartTypeAtom,
   stockSelectionAtom,
   type PriceChartType,
@@ -22,41 +20,33 @@ import {
 import StockDataPlot from "@/components/plot/StockDataPlot";
 import CandleIcon from "@/components/icons/CandleIcon";
 import LineIcon from "@/components/icons/LineIcon";
-import { plotSizeConfig } from "@/components/plot/theme";
+import { usePlotSize } from "@/hooks/usePlotSize";
+import { plotConfigAtom } from "@/atoms/plot";
+import { useEffect } from "react";
 
 const priceChartTypes: PriceChartType[] = ["candle", "line"];
 
 type PriceChartProps = {
   stockData: StockData<FeatureGroupOpt> | undefined;
-};
+} & React.ComponentPropsWithoutRef<"div">;
 
-export default function PriceChart({ stockData }: PriceChartProps) {
-  const plotContainerRef = useRef<HTMLDivElement>(null);
-  const [plotWidth, setPlotWidth] = useAtom(plotWidthAtom);
+export default function PriceChart({ stockData, ...props }: PriceChartProps) {
   const [chartType, setChartType] = useAtom(priceChartTypeAtom);
 
   const [stockSelection, setStockSelection] = useAtom(stockSelectionAtom);
   const updateWindow = (newWindow: DataWindowOpt) => {
     setStockSelection((prev) => ({ ...prev, window: newWindow }));
   };
+  const { plotSize, plotContainerRef } = usePlotSize();
+  const setPlotConfig = useSetAtom(plotConfigAtom);
 
-  useLayoutEffect(() => {
-    const container = plotContainerRef.current;
-    if (!container) return;
-    if (plotWidth === 0) {
-      const width = Math.round(container.getBoundingClientRect().width);
-      setPlotWidth(width);
-    }
-    const observer = new ResizeObserver(([entry]) => {
-      const nextWidth = Math.round(entry.contentRect.width);
-      setPlotWidth((prev) => (prev === nextWidth ? prev : nextWidth));
-    });
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, [plotWidth, setPlotWidth]);
+  useEffect(
+    () => setPlotConfig((prev) => ({ ...prev, referenceHeight: plotSize.height })),
+    [plotSize.height, setPlotConfig],
+  );
 
   return (
-    <Section>
+    <Section {...props}>
       <Header title={"price trend"}>
         <Selections>
           {priceChartTypes.map((currType) => (
@@ -83,16 +73,14 @@ export default function PriceChart({ stockData }: PriceChartProps) {
           ))}
         </Selections>
       </Header>
-      <Content
-        ref={plotContainerRef}
-        style={{ height: plotSizeConfig.pricePlotHeight + 8 * 2 }}
-      >
+      <Content ref={plotContainerRef} className="flex-1">
         {stockData && (
           <StockDataPlot
             data={stockData}
             chartType={chartType}
             featureGroup={stockSelection.featureGroup}
-            width={plotWidth}
+            width={plotSize.width}
+            height={plotSize.height}
           />
         )}
       </Content>

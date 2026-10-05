@@ -6,25 +6,26 @@ import {
   Content,
   Button,
 } from "@/components/ui/PlotSection";
-import { useAtom, useAtomValue } from "jotai";
-import { plotWidthAtom, stockSelectionAtom } from "@/atoms/stocks";
+import { useAtom } from "jotai";
+import { stockSelectionAtom } from "@/atoms/stocks";
 import StockFeaturePlot from "@/components/plot/StockFeaturePlot";
-import { plotSizeConfig } from "@/components/plot/theme";
 import { pmPlotName } from "@/components/plot/price-momentum/config";
+import { usePlotSize } from "@/hooks/usePlotSize";
 
 type FeaturesSectionProps = {
   stockData: StockData<FeatureGroupOpt> | undefined;
-};
+} & React.ComponentPropsWithoutRef<"div">;
 
-export default function FeaturesSection({ stockData }: FeaturesSectionProps) {
+export default function FeaturesSection({ stockData, ...props }: FeaturesSectionProps) {
   const [stockSelection, updateStockSelection] = useAtom(stockSelectionAtom);
-  const plotWidth = useAtomValue(plotWidthAtom);
   const updateFeatureSubplot = (plotName: string) => {
     updateStockSelection((prev) => ({ ...prev, featureSubPlot: plotName }));
   };
 
+  const { plotSize, plotContainerRef } = usePlotSize();
+
   return (
-    <Section>
+    <Section {...props}>
       <Header title={"features"}>
         <Selections>
           {FeatureSubplots[stockSelection.featureGroup].map((subPlotName) => (
@@ -39,11 +40,12 @@ export default function FeaturesSection({ stockData }: FeaturesSectionProps) {
           ))}
         </Selections>
       </Header>
-      <Content style={{ height: plotSizeConfig.featurePlotHeight + 16 }}>
+      <Content ref={plotContainerRef} className="flex-1">
         {stockData && (
           <StockFeaturePlot
             data={stockData}
-            width={plotWidth}
+            width={plotSize.width}
+            height={plotSize.height}
             featureGroup={stockSelection.featureGroup}
           />
         )}

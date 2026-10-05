@@ -17,8 +17,6 @@ const legendConfig = {
 };
 
 const plotSizeConfig = {
-  pricePlotHeight: 600,
-  featurePlotHeight: 350,
   marginTop: 30,
   marginRight: 40,
   marginBottom: 45,

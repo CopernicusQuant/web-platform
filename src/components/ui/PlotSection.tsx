@@ -30,14 +30,15 @@ type BodyProps = {} & React.ComponentPropsWithRef<"div">;
 function Content({ children, className, ref, ...props }: BodyProps) {
   return (
     <div
-      ref={ref}
       className={cn(
         "border border-gray-300 rounded-md w-full bg-white px-6 py-2",
         className,
       )}
       {...props}
     >
-      {children}
+      <div ref={ref} className="w-full h-full">
+        {children}
+      </div>
     </div>
   );
 }

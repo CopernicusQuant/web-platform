@@ -13,17 +13,12 @@ import { digitToPercent } from "@/lib/utils";
 type UpDayRatioProps = {
   features: PriceMomentumFeature[];
   width: number;
+  height: number;
   x: d3.ScaleBand<string>;
 };
 
-export default function UpDayRatio({ features, width, x }: UpDayRatioProps) {
-  const {
-    marginTop,
-    marginRight,
-    marginBottom,
-    marginLeft,
-    featurePlotHeight: height,
-  } = plotSizeConfig;
+export default function UpDayRatio({ features, width, height, x }: UpDayRatioProps) {
+  const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
 
   const yPadding = 0.05;
   const y = d3.scaleLinear(

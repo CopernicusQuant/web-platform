@@ -11,16 +11,11 @@ type ReturnsProps = {
   features: PriceMomentumFeature[];
   x: d3.ScaleBand<string>;
   width: number;
+  height: number;
 };
 
-export default function Returns({ features, x, width }: ReturnsProps) {
-  const {
-    marginTop,
-    marginBottom,
-    marginLeft,
-    marginRight,
-    featurePlotHeight: height,
-  } = plotSizeConfig;
+export default function Returns({ features, x, width, height }: ReturnsProps) {
+  const { marginTop, marginBottom, marginLeft, marginRight } = plotSizeConfig;
   // y-axis mapper
   const [yMin, yMax] = useMemo(() => {
     let yMin = Infinity;
