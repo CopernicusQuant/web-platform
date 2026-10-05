@@ -15,12 +15,12 @@ const getHoverPlotFn = ({
   data,
   featureGroup,
   width,
-  height,
+  referenceHeight,
 }: {
   data: StockData<FeatureGroupOpt>;
   featureGroup: FeatureGroupOpt;
   width: number;
-  height: number;
+  referenceHeight: number;
 }) => {
   const { stock, features } = data;
   const { marginBottom, marginTop, marginLeft, marginRight } = plotSizeConfig;
@@ -38,7 +38,7 @@ const getHoverPlotFn = ({
   const yPadding = (yMax - yMin) * 0.05 || 1;
   const y = d3.scaleLinear(
     [yMin - yPadding, yMax + yPadding],
-    [height - marginBottom, marginTop],
+    [referenceHeight - marginBottom, marginTop],
   );
 
   return (event: React.PointerEvent<SVGSVGElement>) => {
@@ -51,7 +51,7 @@ const getHoverPlotFn = ({
       pointerPos,
       xIdx,
       width,
-      height,
+      height: referenceHeight,
       marginRight,
       marginBottom,
       x,
@@ -67,7 +67,7 @@ const getHoverPlotFn = ({
         updatePriceMomentumIndicators({
           xIdx,
           features: features as PriceMomentumFeature[],
-          height,
+          height: referenceHeight,
           marginTop,
           marginBottom,
           x,

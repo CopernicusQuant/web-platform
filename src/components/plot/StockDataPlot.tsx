@@ -59,7 +59,7 @@ export default function StockDataPlot({
     data,
     featureGroup,
     width,
-    height,
+    referenceHeight: plotConfig.referenceHeight,
   });
 
   const onPointerLeave = getLeavePlotFn({

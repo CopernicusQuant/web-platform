@@ -44,7 +44,7 @@ export default function StockFeaturePlot({
     data,
     featureGroup,
     width,
-    height,
+    referenceHeight,
   });
   const onPointerLeave = getLeavePlotFn({
     data,

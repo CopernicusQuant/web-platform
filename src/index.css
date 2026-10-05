@@ -114,10 +114,6 @@ code {
   background: var(--code-bg);
 } */
 
-#root * {
-  min-height: 0;
-}
-
 @keyframes slideUp {
   from {
     opacity: 0;
