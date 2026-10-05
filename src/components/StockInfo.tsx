@@ -7,10 +7,10 @@ import StockSelector from "@/components/StockSelector";
 
 const styles = {
   container: clsx(
-    "box-border w-full h-20 grid grid-cols-5 items-center border border-gray-300 rounded-md overflow-hidden bg-white",
+    "box-border w-full h-18 grid grid-cols-5 items-center border border-gray-300 rounded-md overflow-hidden bg-white",
   ),
   columnBasic: clsx(
-    "w-full h-full px-8 border-r border-gray-300 flex flex-col justify-center transition duration-100 text-sm",
+    "w-full h-full px-5 border-r border-gray-300 flex flex-col justify-center transition duration-100 text-sm",
   ),
   columnButton: clsx(
     "flex-1 hover:cursor-pointer px-4 hover:underline h-full hover:bg-gray-200 transition duration-150",

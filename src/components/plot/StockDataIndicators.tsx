@@ -10,6 +10,7 @@ type StockDataIndicatorsProps = {
   stock: StockPrice[];
   chartType: PriceChartType;
   width: number;
+  height: number;
   y: d3.ScaleLinear<number, number>;
 };
 
@@ -22,9 +23,10 @@ export default function StockDataIndicators({
   stock,
   chartType,
   width,
+  height,
   y,
 }: StockDataIndicatorsProps) {
-  const { pricePlotHeight: height, marginRight } = plotSizeConfig;
+  const { marginRight } = plotSizeConfig;
   const isUp = (stock.at(0)?.adjClose ?? 0) <= (stock.at(-1)?.adjClose ?? 0);
   return (
     <g>

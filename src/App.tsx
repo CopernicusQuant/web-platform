@@ -13,14 +13,17 @@ function App() {
     stockSelection.window,
     stockSelection.featureGroup,
   );
+
   return (
-    <div className="w-full flex flex-col items-center gap-2">
+    <div className="w-full h-full flex flex-col items-center gap-2 min-h-200 [&_div]:min-h-0">
       <Header />
-      <div className="w-full flex justify-center gap-2 px-4 max-w-[1800px]">
-        <div className="w-full flex-1 min-w-0 py-4 flex flex-col gap-3">
+      <div className="w-full flex-1 flex justify-center gap-2 px-4 max-w-[1800px]">
+        <div className="w-full flex-1 py-4 min-w-0 flex flex-col gap-3">
           <StockInfo />
-          <PriceSection stockData={data} />
-          <FeaturesSection stockData={data} />
+          <div className="flex-1 flex flex-col gap-3">
+            <PriceSection stockData={data} className="flex flex-col flex-3" />
+            <FeaturesSection stockData={data} className="flex flex-col flex-2" />
+          </div>
         </div>
         <div className="min-w-72 w-72 py-4">
           <div className="w-full h-full bg-white rounded-md border-gray-300 border"></div>

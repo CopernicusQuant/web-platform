@@ -10,12 +10,15 @@ import StockDataIndicators from "@/components/plot/StockDataIndicators";
 import MAIndicators from "@/components/plot/price-momentum/MAIndicators";
 import { getHoverPlotFn, getLeavePlotFn } from "./interactions/hover";
 import { plotSizeConfig } from "@/components/plot/theme";
+import { useAtomValue } from "jotai";
+import { plotConfigAtom } from "@/atoms/plot";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
   chartType: PriceChartType;
   featureGroup: FeatureGroupOpt;
   width: number;
+  height: number;
   maxXTickNum?: number;
 };
 
@@ -24,16 +27,12 @@ export default function StockDataPlot({
   chartType,
   featureGroup,
   width,
+  height,
   maxXTickNum = 30,
 }: StockDataPlotProps) {
   const { stock, features } = data;
-  const {
-    pricePlotHeight: height,
-    marginTop,
-    marginRight,
-    marginBottom,
-    marginLeft,
-  } = plotSizeConfig;
+  const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
+  const plotConfig = useAtomValue(plotConfigAtom);
 
   // x-axis mapper
   const x = d3
@@ -60,12 +59,14 @@ export default function StockDataPlot({
     data,
     featureGroup,
     width,
+    referenceHeight: plotConfig.referenceHeight,
   });
 
   const onPointerLeave = getLeavePlotFn({
     data,
     featureGroup,
     width,
+    referenceHeight: plotConfig.referenceHeight,
   });
 
   return (
@@ -100,7 +101,13 @@ export default function StockDataPlot({
       )}
       {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
       {chartType === "line" && <TrendLine prices={stock} x={x} y={y} />}
-      <StockDataIndicators stock={stock} chartType={chartType} width={width} y={y} />
+      <StockDataIndicators
+        stock={stock}
+        chartType={chartType}
+        width={width}
+        height={height}
+        y={y}
+      />
       {featureGroup === "priceMomentum" && (
         <MAIndicators
           features={features as FeatureByGroup["priceMomentum"][]}

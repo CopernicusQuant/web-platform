@@ -7,10 +7,12 @@ import { plotSizeConfig } from "@/components/plot/theme";
 import XAxis from "@/components/plot/XAxis";
 import StockFeatureIndicators from "@/components/plot/StockFeatureIndicators";
 import PMFeature from "@/components/plot/price-momentum/PMFeature";
+import { plotConfigAtom } from "@/atoms/plot";
 
 type StockFeaturePlotProps = {
   data: StockData<FeatureGroupOpt>;
   width: number;
+  height: number;
   featureGroup: FeatureGroupOpt;
   maxXTickNum?: number;
 };
@@ -18,16 +20,13 @@ type StockFeaturePlotProps = {
 export default function StockFeaturePlot({
   data,
   width,
+  height,
   featureGroup,
   maxXTickNum = 30,
 }: StockFeaturePlotProps) {
-  const {
-    featurePlotHeight: height,
-    marginRight,
-    marginBottom,
-    marginLeft,
-  } = plotSizeConfig;
+  const { marginRight, marginBottom, marginLeft } = plotSizeConfig;
   const { featureSubPlot } = useAtomValue(stockSelectionAtom);
+  const { referenceHeight } = useAtomValue(plotConfigAtom);
   const { features } = data;
   const x = d3
     .scaleBand(
@@ -45,11 +44,13 @@ export default function StockFeaturePlot({
     data,
     featureGroup,
     width,
+    referenceHeight,
   });
   const onPointerLeave = getLeavePlotFn({
     data,
     featureGroup,
     width,
+    referenceHeight,
   });
 
   return (
@@ -64,6 +65,8 @@ export default function StockFeaturePlot({
       {featureGroup === "priceMomentum" && (
         <PMFeature
           features={features as PriceMomentumFeature[]}
+          width={width}
+          height={height}
           x={x}
           subplotName={featureSubPlot}
         />

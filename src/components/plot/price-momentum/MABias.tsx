@@ -15,17 +15,12 @@ type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 type MABiasProps = {
   features: PriceMomentumFeature[];
   width: number;
+  height: number;
   x: d3.ScaleBand<string>;
 };
 
-export default function MABias({ features, width, x }: MABiasProps) {
-  const {
-    marginTop,
-    marginRight,
-    marginBottom,
-    marginLeft,
-    featurePlotHeight: height,
-  } = plotSizeConfig;
+export default function MABias({ features, width, height, x }: MABiasProps) {
+  const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
   // y-axis mapper
   let yMin = 1.0;
   let yMax = -1.0;
