@@ -30,7 +30,7 @@ const setFeatureGroupAtom = atom(null, (get, set, update: FeatureGroupOpt) => {
   set(stockSelectionAtom, (prev) => ({
     ...prev,
     featureGroup: update,
-    featureSubPlot: FeatureSubplots[featureGroup][0],
+    featureSubPlot: FeatureSubplots[update][0],
   }));
 });
 
