@@ -65,6 +65,22 @@ const PriceMomentumFeaturesSchema = z
     upRatio20d: input.up_ratio_20d,
   }));
 
+const MarketActivityFeaturesSchema = z
+  .object({
+    ts_code: z.string(),
+    trade_date: z.string(),
+    activity_score_60: z.float32(),
+    thin_trade_amplitude_score_60: z.float32(),
+    turnover_without_move_score_60: z.float32(),
+  })
+  .transform((input) => ({
+    ticker: input.ts_code,
+    tradeDate: input.trade_date,
+    tradingActivityScore: input.activity_score_60,
+    lowLiquidityVolatilityScore: input.thin_trade_amplitude_score_60,
+    stagnantTurnoverScore: input.turnover_without_move_score_60,
+  }));
+
 const VolumeMomentumFeaturesSchema = z
   .object({
     ts_code: z.string(),
@@ -75,20 +91,25 @@ const VolumeMomentumFeaturesSchema = z
     tradeDate: input.trade_date,
   }));
 
-type FeatureGroupOpt = "priceMomentum" | "volumeMomentum";
+type FeatureGroupOpt = "priceMomentum" | "volumeMomentum" | "marketActivity";
 type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
+type MarketActivityFeature = z.infer<typeof MarketActivityFeaturesSchema>;
+
 type FeatureByGroup = {
   priceMomentum: PriceMomentumFeature;
   volumeMomentum: z.infer<typeof VolumeMomentumFeaturesSchema>;
+  marketActivity: MarketActivityFeature;
 };
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
   volumeMomentum: VolumeMomentumFeaturesSchema,
+  marketActivity: MarketActivityFeaturesSchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   priceMomentum: ["maBias", "return", "upDayRatio"] as const,
   volumeMomentum: ["maBias"],
+  marketActivity: ["activityScores"],
 };
 
 const createStockSchema = <G extends FeatureGroupOpt>(group: G) =>
