@@ -3,7 +3,7 @@ import SearchIcon from "@/components/icons/SearchIcon";
 import { useGetStockListQuery } from "@/hooks/queries/useGetStockListQuery";
 import { useState } from "react";
 import { useSetAtom } from "jotai";
-import { stockSelectionAtom } from "@/atoms/stocks";
+import { setTickerAtom } from "@/atoms/stocks";
 import clsx from "clsx";
 
 const styles = {
@@ -17,7 +17,7 @@ export default function StockSelector({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [stockPrefix, setStockPrefix] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
-  const setStockSelection = useSetAtom(stockSelectionAtom);
+  const setTicker = useSetAtom(setTickerAtom);
   const { data: stockList } = useGetStockListQuery();
 
   const updateStockPrefix = (
@@ -48,7 +48,7 @@ export default function StockSelector({
                   key={stock.join("-")}
                   className="flex gap-2 items-center p-1 hover:cursor-pointer hover:bg-gray-100 w-full rounded-md"
                   onClick={() => {
-                    setStockSelection((prev) => ({ ...prev, ticker: stock[0] }));
+                    setTicker(stock[0]);
                     setOpen(false);
                   }}
                 >

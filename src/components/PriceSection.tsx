@@ -1,4 +1,4 @@
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   dataWindow,
   type DataWindowOpt,
@@ -7,6 +7,7 @@ import {
 } from "@/apis/stock";
 import {
   priceChartTypeAtom,
+  setStockWindowAtom,
   stockSelectionAtom,
   type PriceChartType,
 } from "@/atoms/stocks";
@@ -33,10 +34,9 @@ type PriceChartProps = {
 export default function PriceChart({ stockData, ...props }: PriceChartProps) {
   const [chartType, setChartType] = useAtom(priceChartTypeAtom);
 
-  const [stockSelection, setStockSelection] = useAtom(stockSelectionAtom);
-  const updateWindow = (newWindow: DataWindowOpt) => {
-    setStockSelection((prev) => ({ ...prev, window: newWindow }));
-  };
+  const { window, featureGroup } = useAtomValue(stockSelectionAtom);
+  const setStockWindow = useSetAtom(setStockWindowAtom);
+
   const { plotSize, plotContainerRef } = usePlotSize();
   const setPlotConfig = useSetAtom(plotConfigAtom);
 
@@ -64,9 +64,9 @@ export default function PriceChart({ stockData, ...props }: PriceChartProps) {
           {Object.entries(dataWindow).map(([key]) => (
             <Button
               key={`selector-button-${key}`}
-              active={key === stockSelection.window}
+              active={key === window}
               className={"w-11"}
-              onClick={() => updateWindow(key as DataWindowOpt)}
+              onClick={() => setStockWindow(key as DataWindowOpt)}
             >
               {key}
             </Button>
@@ -78,7 +78,7 @@ export default function PriceChart({ stockData, ...props }: PriceChartProps) {
           <StockDataPlot
             data={stockData}
             chartType={chartType}
-            featureGroup={stockSelection.featureGroup}
+            featureGroup={featureGroup}
             width={plotSize.width}
             height={plotSize.height}
           />

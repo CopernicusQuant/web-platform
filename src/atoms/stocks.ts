@@ -17,10 +17,44 @@ const initSelection: StockSelection = {
 
 const stockSelectionAtom = atom<StockSelection>(initSelection);
 
+// atomized update methods for the stockSelectionAtom
+const setTickerAtom = atom(null, (get, set, update: string) => {
+  const { ticker } = get(stockSelectionAtom);
+  if (update === ticker) return;
+  set(stockSelectionAtom, (prev) => ({ ...prev, ticker: update }));
+});
+
+const setFeatureGroupAtom = atom(null, (get, set, update: FeatureGroupOpt) => {
+  const { featureGroup } = get(stockSelectionAtom);
+  if (update === featureGroup) return;
+  set(stockSelectionAtom, (prev) => ({
+    ...prev,
+    featureGroup: update,
+    featureSubPlot: FeatureSubplots[featureGroup][0],
+  }));
+});
+
+const setFeatureSubplotAtom = atom(null, (get, set, update: string) => {
+  const { featureSubPlot } = get(stockSelectionAtom);
+  if (update === featureSubPlot) return;
+  set(stockSelectionAtom, (prev) => ({ ...prev, featureSubPlot: update }));
+});
+
+const setStockWindowAtom = atom(null, (get, set, update: DataWindowOpt) => {
+  const { window } = get(stockSelectionAtom);
+  if (window === update) return;
+  set(stockSelectionAtom, (prev) => ({ ...prev, window: update }));
+});
+
 type PriceChartType = "candle" | "line";
 const priceChartTypeAtom = atom<PriceChartType>("candle");
 
-const plotWidthAtom = atom<number>(0);
-
-export { stockSelectionAtom, priceChartTypeAtom, plotWidthAtom };
+export {
+  stockSelectionAtom,
+  priceChartTypeAtom,
+  setTickerAtom,
+  setFeatureGroupAtom,
+  setFeatureSubplotAtom,
+  setStockWindowAtom,
+};
 export type { PriceChartType };
