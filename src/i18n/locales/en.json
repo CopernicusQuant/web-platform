@@ -3,6 +3,14 @@
     "priceMomentum": "Price Momentum",
     "marketActivity": "Market Activity"
   },
+  "featureGroupBrief": {
+    "priceMomentum": "moving averages, deviations, returns, and up-day ratios.",
+    "marketActivity": ""
+  },
+  "featureGroupDescription": {
+    "priceMomentum": "This feature group measures price momentum using moving averages, deviations, returns, and up-day ratios to help predict future price movement from the direction, strength, and persistence of recent trends.",
+    "marketActivity": ""
+  },
   "subPlotName": {
     "maBias": "MA Bias",
     "return": "Return",

@@ -9,7 +9,6 @@ import {
 import { useAtomValue, useSetAtom } from "jotai";
 import { setFeatureSubplotAtom, stockSelectionAtom } from "@/atoms/stocks";
 import StockFeaturePlot from "@/components/plot/StockFeaturePlot";
-// import { pmPlotName, marketPlotName } from "@/components/plot/config";
 import { usePlotSize } from "@/hooks/usePlotSize";
 import { useTranslation } from "react-i18next";
 
