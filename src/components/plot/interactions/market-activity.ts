@@ -1,17 +1,11 @@
 import type { MarketActivityFeature } from "@/apis/stock";
-import { toggleElement, updateTextValue } from "./d3-utils";
+import { toggleElement, updateTextValue } from "@/components/plot/interactions/d3-utils";
 
 const activityScoreFeatures = [
   "tradingActivityScore",
   "lowLiquidityVolatilityScore",
   "stagnantTurnoverScore",
 ] as const;
-
-const activityFeatureNames = {
-  tradingActivityScore: "Trading Activity",
-  lowLiquidityVolatilityScore: "Low Liquidity Volatility",
-  stagnantTurnoverScore: "Stagnant Turnover",
-};
 
 const idPrefix = "market-activity";
 const getMarketLineID = (featureName: string) => `${idPrefix}-line-${featureName}`;
@@ -55,7 +49,6 @@ const resetMarketActivityIndicators = ({
 
 export {
   activityScoreFeatures,
-  activityFeatureNames,
   getMarketLineID,
   getMarketLegendID,
   getMarketLegendValueID,

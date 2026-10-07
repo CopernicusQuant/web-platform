@@ -1,0 +1,18 @@
+{
+  "featureGroupName": {
+    "priceMomentum": "Price Momentum",
+    "marketActivity": "Market Activity"
+  },
+  "subPlotName": {
+    "maBias": "MA Bias",
+    "return": "Return",
+    "upDayRatio": "Up-Day Ratio",
+
+    "activityScores": "Activity Scores"
+  },
+  "featureName": {
+    "tradingActivityScore": "Trading Activity",
+    "lowLiquidityVolatilityScore": "Low Liquidity Volatility",
+    "stagnantTurnoverScore": "Stagnant Turnover"
+  }
+}
