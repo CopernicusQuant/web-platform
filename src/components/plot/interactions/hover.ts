@@ -1,5 +1,10 @@
 import * as d3 from "d3";
-import type { StockData, FeatureGroupOpt, PriceMomentumFeature } from "@/apis/stock";
+import type {
+  StockData,
+  FeatureGroupOpt,
+  PriceMomentumFeature,
+  MarketActivityFeature,
+} from "@/apis/stock";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
   updateFeatureTrendIndicators,
@@ -10,6 +15,10 @@ import {
   resetPriceMomentumIndicators,
 } from "@/components/plot/interactions/price-momentum";
 import { plotSizeConfig } from "@/components/plot/theme";
+import {
+  resetMarketActivityIndicators,
+  updateMarketActivityIndicators,
+} from "./market-activity";
 
 const getHoverPlotFn = ({
   data,
@@ -73,6 +82,13 @@ const getHoverPlotFn = ({
           x,
           y,
         });
+        break;
+      case "marketActivity":
+        updateMarketActivityIndicators({
+          features: features as MarketActivityFeature[],
+          xIdx,
+        });
+        break;
     }
   };
 };
@@ -105,6 +121,10 @@ const getLeavePlotFn = ({
     switch (featureGroup) {
       case "priceMomentum":
         resetPriceMomentumIndicators({ features: features as PriceMomentumFeature[] });
+        break;
+      case "marketActivity":
+        resetMarketActivityIndicators({ features: features as MarketActivityFeature[] });
+        break;
     }
   };
 };

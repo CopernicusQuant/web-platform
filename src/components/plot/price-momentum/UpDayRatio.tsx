@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import type { PriceMomentumFeature } from "@/apis/stock";
 import {
   getPMLineId,
+  toggleFeature,
   upDayRatioFeatures,
 } from "@/components/plot/interactions/price-momentum";
 import YAxis from "@/components/plot/YAxis";
@@ -53,6 +54,7 @@ export default function UpDayRatio({ features, width, height, x }: UpDayRatioPro
       {Object.entries(paths).map(([key, value], i) => (
         <path
           key={getPMLineId(key)}
+          id={getPMLineId(key)}
           d={value}
           fill="none"
           strokeWidth={1.7}
@@ -73,6 +75,7 @@ export default function UpDayRatio({ features, width, height, x }: UpDayRatioPro
         features={features}
         valueFormatFn={digitToPercent}
         labels={legendLabels}
+        toggleFn={toggleFeature}
       />
     </>
   );

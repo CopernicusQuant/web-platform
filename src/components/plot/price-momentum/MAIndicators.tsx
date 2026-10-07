@@ -4,11 +4,12 @@ import {
   getPMCircleId,
   maCircleGroupID,
   maFeatures,
-  toggleMALine,
+  toggleFeature,
   getPMLegendId,
   getPMLegendValueId,
 } from "@/components/plot/interactions/price-momentum";
 import { colorPalette, legendConfig } from "@/components/plot/theme";
+import Legend from "@/components/ui/Legend";
 
 type MAIndicatorsProps = {
   features: FeatureByGroup["priceMomentum"][];
@@ -16,13 +17,6 @@ type MAIndicatorsProps = {
 };
 
 export default function MAIndicators({ features, chartType }: MAIndicatorsProps) {
-  const getTranslateX = (i: number) => {
-    return (
-      legendConfig.featureWidth * i +
-      legendConfig.featureWidth / 2 +
-      legendConfig.featureGap * i
-    );
-  };
   return (
     <>
       {/* Moving average lines */}
@@ -45,35 +39,15 @@ export default function MAIndicators({ features, chartType }: MAIndicatorsProps)
         {features.at(-1) &&
           maFeatures.map((featureName, i) => {
             return (
-              <g
+              <Legend
                 key={getPMLegendId(featureName)}
-                id={getPMLegendId(featureName)}
-                // make the legend 5 - 20 - 60
-                transform={`translate(${getTranslateX(i)} 0)`}
-                className="group hover:cursor-pointer"
-                onMouseDown={() => toggleMALine(featureName)}
-              >
-                <rect
-                  x={-legendConfig.featureWidth / 2}
-                  width={legendConfig.featureWidth}
-                  height={22}
-                  rx={4}
-                  fill={"transparent"}
-                  stroke={colorPalette[i]}
-                  className="group-hover:cursor-pointer select-none"
-                />
-                <text
-                  y={legendConfig.lineHeight}
-                  textAnchor="middle"
-                  fill={colorPalette[i]}
-                  className="group-hover:cursor-pointer select-none"
-                >
-                  <tspan fontWeight={"700"}>{featureName.toUpperCase()}</tspan>
-                  <tspan id={getPMLegendValueId(featureName)} dx={4}>
-                    {features.at(-1)![featureName].toFixed(2)}
-                  </tspan>
-                </text>
-              </g>
+                legendId={getPMLegendId(featureName)}
+                valueId={getPMLegendValueId(featureName)}
+                index={i}
+                value={features.at(-1)![featureName].toFixed(2)}
+                label={featureName.toUpperCase()}
+                onMouseDown={() => toggleFeature(featureName)}
+              />
             );
           })}
       </g>

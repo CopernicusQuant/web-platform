@@ -9,6 +9,7 @@ type LegendProps = {
   wider?: boolean;
   color?: string;
   opacity?: number;
+  onMouseDown?: () => void;
 };
 
 export default function Legend({
@@ -19,7 +20,8 @@ export default function Legend({
   value,
   color,
   opacity,
-  wider = false,
+  wider,
+  onMouseDown,
 }: LegendProps) {
   const {
     fontSize,
@@ -39,6 +41,8 @@ export default function Legend({
       id={legendId}
       transform={`translate(${getTranslateX(index)} 0)`}
       fontSize={fontSize}
+      className="hover:cursor-pointer select-none"
+      onMouseDown={onMouseDown}
     >
       <rect
         x={-width / 2}
