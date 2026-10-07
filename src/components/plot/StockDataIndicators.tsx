@@ -46,7 +46,7 @@ export default function StockDataIndicators({
             r={5}
             stroke="white"
             strokeWidth={2}
-            fill={"#3368A0"}
+            fill={isUp ? priceColors.up : priceColors.down}
             opacity={chartType === "line" ? 1 : 0}
           />
         )}
@@ -82,7 +82,7 @@ export default function StockDataIndicators({
             <text
               y={legendConfig.top + legendConfig.lineHeight}
               textAnchor="start"
-              fontSize={legendConfig.valueFontSize}
+              fontSize={legendConfig.fontSize}
               fill="gray"
             >
               <tspan>O</tspan>

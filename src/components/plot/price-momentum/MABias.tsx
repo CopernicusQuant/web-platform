@@ -3,10 +3,9 @@ import type { FeatureByGroup } from "@/apis/stock";
 import YAxis from "@/components/plot/YAxis";
 import {
   maBiasFeatures,
-  maColors,
   getPMLineId,
 } from "@/components/plot/interactions/price-momentum";
-import { plotSizeConfig } from "@/components/plot/theme";
+import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
 import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
 
@@ -69,7 +68,7 @@ export default function MABias({ features, width, height, x }: MABiasProps) {
           d={value}
           fill="none"
           strokeWidth={1.7}
-          stroke={maColors[i]}
+          stroke={colorPalette[i]}
         />
       ))}
       {/* 0% indicator */}

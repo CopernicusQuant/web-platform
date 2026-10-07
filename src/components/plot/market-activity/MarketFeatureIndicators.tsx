@@ -1,17 +1,17 @@
-import type { PriceMomentumFeature } from "@/apis/stock";
+import type { MarketActivityFeature } from "@/apis/stock";
+import Legend from "@/components/ui/Legend";
 import { legendConfig } from "@/components/plot/theme";
 import {
-  getPMLegendId,
-  getPMLegendValueId,
-} from "@/components/plot/interactions/price-momentum";
-import Legend from "@/components/ui/Legend";
+  getMarketLegendID,
+  getMarketLegendValueID,
+} from "@/components/plot/interactions/market-activity";
 
 type NumericFeatureName = {
-  [K in keyof PriceMomentumFeature]: PriceMomentumFeature[K] extends number ? K : never;
-}[keyof PriceMomentumFeature];
+  [K in keyof MarketActivityFeature]: MarketActivityFeature[K] extends number ? K : never;
+}[keyof MarketActivityFeature];
 
-type FeatureIndicatorsProps = {
-  features: PriceMomentumFeature[];
+type MarketFeatureIndicatorsProps = {
+  features: MarketActivityFeature[];
   featureNames: readonly NumericFeatureName[];
   labels?: string[];
   valueFormatFn?: (value: number) => string;
@@ -20,24 +20,25 @@ type FeatureIndicatorsProps = {
   wider?: boolean;
 };
 
-export default function FeatureIndicators({
+export default function MarketFeatureIndicators({
   features,
   featureNames,
-  valueFormatFn,
   labels,
+  valueFormatFn,
   colors,
   opacities,
   wider,
-}: FeatureIndicatorsProps) {
+}: MarketFeatureIndicatorsProps) {
+  const { fontSize, top } = legendConfig;
   return (
-    <g transform={`translate(0 ${legendConfig.top})`} fontSize={legendConfig.fontSize}>
+    <g transform={`translate(0 ${top})`} fontSize={fontSize}>
       {features.at(-1) &&
         featureNames.map((featureName, i) => {
           return (
             <Legend
-              key={getPMLegendId(featureName)}
-              legendId={getPMLegendId(featureName)}
-              valueId={getPMLegendValueId(featureName)}
+              key={getMarketLegendID(featureName)}
+              legendId={getMarketLegendID(featureName)}
+              valueId={getMarketLegendValueID(featureName)}
               index={i}
               label={labels ? labels[i] : featureName}
               value={

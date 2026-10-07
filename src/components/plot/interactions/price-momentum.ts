@@ -2,7 +2,7 @@ import * as d3 from "d3";
 
 import type { FeatureByGroup } from "@/apis/stock";
 import { animationConfig, priceColors } from "@/components/plot/theme";
-import { updateTextValue } from "./d3-utils";
+import { updateTextValue } from "@/components/plot/interactions/d3-utils";
 import { digitToPercent } from "@/lib/utils";
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
@@ -10,7 +10,6 @@ const maFeatures = ["ma5", "ma20", "ma60"] as const;
 const maBiasFeatures = ["ma5Bias", "ma20Bias", "ma60Bias"] as const;
 const returnFeatures = ["return5d", "return20d", "return60d"] as const;
 const upDayRatioFeatures = ["upRatio5d", "upRatio20d"] as const;
-const maColors = ["#C5B3D3", "#F38181", "#93BFCF", "#FCE38A"];
 
 const idPrefix = "price-momentum";
 const maCircleGroupID = `${idPrefix}-circle-group`;
@@ -136,7 +135,6 @@ const toggleMALine = (featureName: (typeof maFeatures)[number]) => {
 
 export {
   maCircleGroupID,
-  maColors,
   maFeatures,
   maBiasFeatures,
   returnFeatures,

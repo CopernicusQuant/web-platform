@@ -3,6 +3,8 @@ const priceColors = {
   down: "#F96E5B",
 };
 
+const colorPalette = ["#C5B3D3", "#F38181", "#93BFCF", "#FCE38A"];
+
 const animationConfig = {
   duration: 50,
 };
@@ -10,9 +12,11 @@ const animationConfig = {
 const legendConfig = {
   top: 4,
   lineHeight: 16,
-  valueFontSize: 13,
+  fontSize: 13,
   rectCorner: 4,
   featureWidth: 96,
+  featureWidthWider: 180,
+  featureHeight: 22,
   featureGap: 10,
 };
 
@@ -23,4 +27,4 @@ const plotSizeConfig = {
   marginLeft: 0,
 };
 
-export { priceColors, legendConfig, animationConfig, plotSizeConfig };
+export { priceColors, legendConfig, animationConfig, plotSizeConfig, colorPalette };

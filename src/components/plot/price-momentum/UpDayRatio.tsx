@@ -2,11 +2,10 @@ import * as d3 from "d3";
 import type { PriceMomentumFeature } from "@/apis/stock";
 import {
   getPMLineId,
-  maColors,
   upDayRatioFeatures,
 } from "@/components/plot/interactions/price-momentum";
 import YAxis from "@/components/plot/YAxis";
-import { plotSizeConfig } from "@/components/plot/theme";
+import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
 import FeatureIndicators from "./FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
 
@@ -57,7 +56,7 @@ export default function UpDayRatio({ features, width, height, x }: UpDayRatioPro
           d={value}
           fill="none"
           strokeWidth={1.7}
-          stroke={maColors[i]}
+          stroke={colorPalette[i]}
         />
       ))}
       <line

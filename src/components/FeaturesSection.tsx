@@ -9,7 +9,7 @@ import {
 import { useAtomValue, useSetAtom } from "jotai";
 import { setFeatureSubplotAtom, stockSelectionAtom } from "@/atoms/stocks";
 import StockFeaturePlot from "@/components/plot/StockFeaturePlot";
-import { pmPlotName } from "@/components/plot/price-momentum/config";
+import { pmPlotName, marketPlotName } from "@/components/plot/config";
 import { usePlotSize } from "@/hooks/usePlotSize";
 
 type FeaturesSectionProps = {
@@ -17,7 +17,7 @@ type FeaturesSectionProps = {
 } & React.ComponentPropsWithoutRef<"div">;
 
 export default function FeaturesSection({ stockData, ...props }: FeaturesSectionProps) {
-  const stockSelection = useAtomValue(stockSelectionAtom);
+  const { featureGroup, featureSubPlot } = useAtomValue(stockSelectionAtom);
   const setFeatureSubplot = useSetAtom(setFeatureSubplotAtom);
   const updateFeatureSubplot = (plotName: string) => {
     setFeatureSubplot(plotName);
@@ -29,14 +29,15 @@ export default function FeaturesSection({ stockData, ...props }: FeaturesSection
     <Section {...props}>
       <Header title={"features"}>
         <Selections>
-          {FeatureSubplots[stockSelection.featureGroup].map((subPlotName) => (
+          {FeatureSubplots[featureGroup].map((subPlotName) => (
             <Button
-              key={`${stockSelection.featureGroup}-${subPlotName}`}
-              active={subPlotName === stockSelection.featureSubPlot}
+              key={`${featureGroup}-${subPlotName}`}
+              active={subPlotName === featureSubPlot}
               className="min-w-28"
               onClick={() => updateFeatureSubplot(subPlotName)}
             >
-              {pmPlotName[subPlotName]}
+              {featureGroup === "priceMomentum" && pmPlotName[subPlotName]}
+              {featureGroup === "marketActivity" && marketPlotName[subPlotName]}
             </Button>
           ))}
         </Selections>
@@ -47,7 +48,7 @@ export default function FeaturesSection({ stockData, ...props }: FeaturesSection
             data={stockData}
             width={plotSize.width}
             height={plotSize.height}
-            featureGroup={stockSelection.featureGroup}
+            featureGroup={featureGroup}
           />
         )}
       </Content>
