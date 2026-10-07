@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import StockInfo from "@/components/StockInfo";
 import FeaturesSection from "@/components/FeaturesSection";
 import FeatureGroupSidebar from "@/components/FeatureGroupSidebar";
+import "@/i18n/i18n";
 
 function App() {
   const stockSelection = useAtomValue(stockSelectionAtom);

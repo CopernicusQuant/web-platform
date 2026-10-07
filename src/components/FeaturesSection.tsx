@@ -9,14 +9,15 @@ import {
 import { useAtomValue, useSetAtom } from "jotai";
 import { setFeatureSubplotAtom, stockSelectionAtom } from "@/atoms/stocks";
 import StockFeaturePlot from "@/components/plot/StockFeaturePlot";
-import { pmPlotName, marketPlotName } from "@/components/plot/config";
 import { usePlotSize } from "@/hooks/usePlotSize";
+import { useTranslation } from "react-i18next";
 
 type FeaturesSectionProps = {
   stockData: StockData<FeatureGroupOpt> | undefined;
 } & React.ComponentPropsWithoutRef<"div">;
 
 export default function FeaturesSection({ stockData, ...props }: FeaturesSectionProps) {
+  const { t } = useTranslation();
   const { featureGroup, featureSubPlot } = useAtomValue(stockSelectionAtom);
   const setFeatureSubplot = useSetAtom(setFeatureSubplotAtom);
   const updateFeatureSubplot = (plotName: string) => {
@@ -36,8 +37,7 @@ export default function FeaturesSection({ stockData, ...props }: FeaturesSection
               className="min-w-28"
               onClick={() => updateFeatureSubplot(subPlotName)}
             >
-              {featureGroup === "priceMomentum" && pmPlotName[subPlotName]}
-              {featureGroup === "marketActivity" && marketPlotName[subPlotName]}
+              {t(`subPlotName.${subPlotName}`)}
             </Button>
           ))}
         </Selections>

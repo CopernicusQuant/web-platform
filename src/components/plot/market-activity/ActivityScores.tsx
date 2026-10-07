@@ -1,7 +1,7 @@
 import * as d3 from "d3";
+import { useTranslation } from "react-i18next";
 import type { MarketActivityFeature } from "@/apis/stock";
 import {
-  activityFeatureNames,
   activityScoreFeatures,
   getMarketLineID,
   toggleFeature,
@@ -23,6 +23,7 @@ export default function ActivityScores({
   width,
   height,
 }: ActivityScoresProps) {
+  const { t } = useTranslation();
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   let [yMax, yMin] = [-Infinity, Infinity];
   features.forEach((feature) => {
@@ -71,8 +72,8 @@ export default function ActivityScores({
       <MarketFeatureIndicators
         featureNames={activityScoreFeatures}
         features={features}
-        labels={activityScoreFeatures.map(
-          (featureName) => activityFeatureNames[featureName],
+        labels={activityScoreFeatures.map((featureName) =>
+          t(`featureName.${featureName}`),
         )}
         wider={true}
         toggleFn={toggleFeature}
