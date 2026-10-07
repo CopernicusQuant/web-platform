@@ -8,11 +8,12 @@ type StockSelection = {
   featureSubPlot: string;
 };
 
+const defaultGroup: FeatureGroupOpt = "priceMomentum";
 const initSelection: StockSelection = {
   ticker: "AAPL",
   window: "60D",
-  featureGroup: "priceMomentum",
-  featureSubPlot: FeatureSubplots["priceMomentum"][0],
+  featureGroup: defaultGroup,
+  featureSubPlot: FeatureSubplots[defaultGroup][0],
 };
 
 const stockSelectionAtom = atom<StockSelection>(initSelection);

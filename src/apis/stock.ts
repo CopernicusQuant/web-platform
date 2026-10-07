@@ -3,7 +3,14 @@ import { z } from "zod";
 
 type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "5Y";
 
-const dataWindow: Record<DataWindowOpt, string> = {
+const FeatureGroups = ["priceMomentum", "marketActivity"] as const;
+type FeatureGroupOpt = (typeof FeatureGroups)[number];
+const featureGroupParam: Record<FeatureGroupOpt, string> = {
+  priceMomentum: "pricemomentum",
+  marketActivity: "marketactivity",
+};
+
+const dataWindowParam: Record<DataWindowOpt, string> = {
   "60D": "60days",
   "180D": "180days",
   "1Y": "1year",
@@ -81,35 +88,33 @@ const MarketActivityFeaturesSchema = z
     stagnantTurnoverScore: input.turnover_without_move_score_60,
   }));
 
-const VolumeMomentumFeaturesSchema = z
-  .object({
-    ts_code: z.string(),
-    trade_date: z.string(),
-  })
-  .transform((input) => ({
-    ticker: input.ts_code,
-    tradeDate: input.trade_date,
-  }));
+// const VolumeMomentumFeaturesSchema = z
+//   .object({
+//     ts_code: z.string(),
+//     trade_date: z.string(),
+//   })
+//   .transform((input) => ({
+//     ticker: input.ts_code,
+//     tradeDate: input.trade_date,
+//   }));
 
-type FeatureGroupOpt = "priceMomentum" | "volumeMomentum" | "marketActivity";
 type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
 type MarketActivityFeature = z.infer<typeof MarketActivityFeaturesSchema>;
 
 type FeatureByGroup = {
   priceMomentum: PriceMomentumFeature;
-  volumeMomentum: z.infer<typeof VolumeMomentumFeaturesSchema>;
+  // volumeMomentum: z.infer<typeof VolumeMomentumFeaturesSchema>;
   marketActivity: MarketActivityFeature;
 };
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
-  volumeMomentum: VolumeMomentumFeaturesSchema,
+  // volumeMomentum: VolumeMomentumFeaturesSchema,
   marketActivity: MarketActivityFeaturesSchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   priceMomentum: ["maBias", "return", "upDayRatio"] as const,
-  volumeMomentum: ["maBias"],
-  marketActivity: ["activityScores"],
+  marketActivity: ["activityScores"] as const,
 };
 
 const createStockSchema = <G extends FeatureGroupOpt>(group: G) =>
@@ -137,7 +142,10 @@ const getStockData = async (
   featureGroup: FeatureGroupOpt = "priceMomentum",
   signal?: AbortSignal,
 ) => {
-  const url = new URL(`stock/${ticker}?window=${dataWindow[window]}`, DATA_URL);
+  const url = new URL(
+    `stock/${ticker}?window=${dataWindowParam[window]}&group=${featureGroupParam[featureGroup]}`,
+    DATA_URL,
+  );
   const response = await fetch(url, {
     method: "GET",
     signal,
@@ -158,7 +166,13 @@ const getStockData = async (
   throw new Error(parsedResult.error.message);
 };
 
-export { getStockData, dataWindow, FeatureSubplots };
+export {
+  getStockData,
+  dataWindowParam,
+  featureGroupParam,
+  FeatureSubplots,
+  FeatureGroups,
+};
 export type {
   DataWindowOpt,
   StockPrice,
@@ -166,4 +180,5 @@ export type {
   FeatureGroupOpt,
   FeatureByGroup,
   PriceMomentumFeature,
+  MarketActivityFeature,
 };

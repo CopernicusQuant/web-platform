@@ -4,12 +4,11 @@ import {
   getPMCircleId,
   maCircleGroupID,
   maFeatures,
-  maColors,
   toggleMALine,
   getPMLegendId,
   getPMLegendValueId,
 } from "@/components/plot/interactions/price-momentum";
-import { legendConfig } from "@/components/plot/theme";
+import { colorPalette, legendConfig } from "@/components/plot/theme";
 
 type MAIndicatorsProps = {
   features: FeatureByGroup["priceMomentum"][];
@@ -34,7 +33,7 @@ export default function MAIndicators({ features, chartType }: MAIndicatorsProps)
               key={getPMCircleId(featureName)}
               id={getPMCircleId(featureName)}
               r={5}
-              fill={maColors[i]}
+              fill={colorPalette[i]}
               stroke="white"
               strokeWidth={2}
             />
@@ -42,10 +41,7 @@ export default function MAIndicators({ features, chartType }: MAIndicatorsProps)
         </g>
       )}
       {/* Moving average legends */}
-      <g
-        transform={`translate(0 ${legendConfig.top})`}
-        fontSize={legendConfig.valueFontSize}
-      >
+      <g transform={`translate(0 ${legendConfig.top})`} fontSize={legendConfig.fontSize}>
         {features.at(-1) &&
           maFeatures.map((featureName, i) => {
             return (
@@ -63,13 +59,13 @@ export default function MAIndicators({ features, chartType }: MAIndicatorsProps)
                   height={22}
                   rx={4}
                   fill={"transparent"}
-                  stroke={maColors[i]}
+                  stroke={colorPalette[i]}
                   className="group-hover:cursor-pointer select-none"
                 />
                 <text
                   y={legendConfig.lineHeight}
                   textAnchor="middle"
-                  fill={maColors[i]}
+                  fill={colorPalette[i]}
                   className="group-hover:cursor-pointer select-none"
                 >
                   <tspan fontWeight={"700"}>{featureName.toUpperCase()}</tspan>

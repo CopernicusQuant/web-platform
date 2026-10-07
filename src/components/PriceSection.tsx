@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
-  dataWindow,
+  dataWindowParam,
   type DataWindowOpt,
   type FeatureGroupOpt,
   type StockData,
@@ -61,7 +61,7 @@ export default function PriceChart({ stockData, ...props }: PriceChartProps) {
         </Selections>
         {/* Data window selector */}
         <Selections>
-          {Object.entries(dataWindow).map(([key]) => (
+          {Object.entries(dataWindowParam).map(([key]) => (
             <Button
               key={`selector-button-${key}`}
               active={key === window}
