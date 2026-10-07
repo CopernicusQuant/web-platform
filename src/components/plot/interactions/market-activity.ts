@@ -32,7 +32,7 @@ const updateMarketActivityIndicators = ({
   xIdx: number;
 }) => {
   const currFeature = features[xIdx];
-  activityScoreFeatures.forEach((featureName) => {
+  [...activityScoreFeatures].forEach((featureName) => {
     updateTextValue(
       getMarketLegendValueID(featureName),
       currFeature[featureName].toFixed(2),
@@ -45,7 +45,7 @@ const resetMarketActivityIndicators = ({
 }: {
   features: MarketActivityFeature[];
 }) => {
-  activityScoreFeatures.forEach((featureName) => {
+  [...activityScoreFeatures].forEach((featureName) => {
     updateTextValue(
       getMarketLegendValueID(featureName),
       features.at(-1)![featureName].toFixed(2),

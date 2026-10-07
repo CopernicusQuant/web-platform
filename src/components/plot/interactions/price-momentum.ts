@@ -116,7 +116,12 @@ const resetPriceMomentumIndicators = ({
 };
 
 const toggleFeature = (featureName: string) => {
-  toggleElement(getPMLineId(featureName));
+  // the MA lines' rendering opacity are 0.7
+  if (maFeatures.some((name) => name === featureName)) {
+    toggleElement(getPMLineId(featureName), 0.0, 0.7);
+  } else {
+    toggleElement(getPMLineId(featureName));
+  }
   toggleElement(getPMLegendId(featureName), 0.3, 1.0);
   toggleElement(getPMCircleId(featureName));
   toggleElement(getPMBarGroupId(featureName));
