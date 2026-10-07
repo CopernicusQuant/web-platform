@@ -2,7 +2,7 @@ import * as d3 from "d3";
 
 import type { FeatureByGroup } from "@/apis/stock";
 import { animationConfig, priceColors } from "@/components/plot/theme";
-import { updateTextValue } from "@/components/plot/interactions/d3-utils";
+import { toggleElement, updateTextValue } from "@/components/plot/interactions/d3-utils";
 import { digitToPercent } from "@/lib/utils";
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
@@ -15,6 +15,7 @@ const idPrefix = "price-momentum";
 const maCircleGroupID = `${idPrefix}-circle-group`;
 const getPMLineId = (featureName: string) => `${idPrefix}-line-${featureName}`;
 const getPMCircleId = (featureName: string) => `${idPrefix}-circle-${featureName}`;
+const getPMBarGroupId = (featureName: string) => `${idPrefix}-bars-${featureName}`;
 const getPMLegendId = (featureName: string) => `${idPrefix}-legend-${featureName}`;
 const getPMLegendValueId = (featureName: string) =>
   `${idPrefix}-legend-text-${featureName}`;
@@ -114,23 +115,16 @@ const resetPriceMomentumIndicators = ({
   });
 };
 
-const toggleMALine = (featureName: (typeof maFeatures)[number]) => {
-  const { duration } = animationConfig;
-  const maLineID = getPMLineId(featureName);
-  const maLegentID = getPMLegendId(featureName);
-  const maCircleID = getPMCircleId(featureName);
-  const currLine = d3.select(`#${maLineID}`);
-  const currLegend = d3.select(`#${maLegentID}`);
-  const currCircle = d3.select(`#${maCircleID}`);
-  if (currLine.attr("opacity") != "0") {
-    currLine.transition().duration(duration).attr("opacity", "0");
-    currCircle.transition().duration(duration).attr("opacity", "0");
-    currLegend.transition().duration(duration).attr("opacity", "0.3");
+const toggleFeature = (featureName: string) => {
+  // the MA lines' rendering opacity are 0.7
+  if (maFeatures.some((name) => name === featureName)) {
+    toggleElement(getPMLineId(featureName), 0.0, 0.7);
   } else {
-    currLine.transition().duration(duration).attr("opacity", "0.7");
-    currCircle.transition().duration(duration).attr("opacity", "1.0");
-    currLegend.transition().duration(duration).attr("opacity", "1.0");
+    toggleElement(getPMLineId(featureName));
   }
+  toggleElement(getPMLegendId(featureName), 0.3, 1.0);
+  toggleElement(getPMCircleId(featureName));
+  toggleElement(getPMBarGroupId(featureName));
 };
 
 export {
@@ -143,7 +137,8 @@ export {
   getPMLineId,
   getPMLegendId,
   getPMLegendValueId,
+  getPMBarGroupId,
   updatePriceMomentumIndicators,
   resetPriceMomentumIndicators,
-  toggleMALine,
+  toggleFeature,
 };

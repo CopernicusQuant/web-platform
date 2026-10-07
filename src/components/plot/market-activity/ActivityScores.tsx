@@ -4,6 +4,7 @@ import {
   activityFeatureNames,
   activityScoreFeatures,
   getMarketLineID,
+  toggleFeature,
 } from "../interactions/market-activity";
 import { colorPalette, plotSizeConfig } from "../theme";
 import YAxis from "../YAxis";
@@ -60,6 +61,7 @@ export default function ActivityScores({
       {Object.entries(paths).map(([key, value], i) => (
         <path
           key={getMarketLineID(key)}
+          id={getMarketLineID(key)}
           d={value}
           fill="none"
           strokeWidth={1.7}
@@ -73,6 +75,7 @@ export default function ActivityScores({
           (featureName) => activityFeatureNames[featureName],
         )}
         wider={true}
+        toggleFn={toggleFeature}
       />
     </>
   );

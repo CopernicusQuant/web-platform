@@ -14,20 +14,22 @@ type MarketFeatureIndicatorsProps = {
   features: MarketActivityFeature[];
   featureNames: readonly NumericFeatureName[];
   labels?: string[];
-  valueFormatFn?: (value: number) => string;
   colors?: string[];
   opacities?: number[];
   wider?: boolean;
+  valueFormatFn?: (value: number) => string;
+  toggleFn?: (featureName: string) => void;
 };
 
 export default function MarketFeatureIndicators({
   features,
   featureNames,
   labels,
-  valueFormatFn,
   colors,
   opacities,
   wider,
+  valueFormatFn,
+  toggleFn,
 }: MarketFeatureIndicatorsProps) {
   const { fontSize, top } = legendConfig;
   return (
@@ -49,6 +51,7 @@ export default function MarketFeatureIndicators({
               color={colors && colors[i]}
               opacity={opacities && opacities[i]}
               wider={wider}
+              onMouseDown={() => toggleFn && toggleFn(featureName)}
             />
           );
         })}

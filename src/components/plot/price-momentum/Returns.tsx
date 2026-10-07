@@ -2,7 +2,11 @@ import * as d3 from "d3";
 import { useMemo } from "react";
 import type { PriceMomentumFeature } from "@/apis/stock";
 import { digitToPercent } from "@/lib/utils";
-import { returnFeatures } from "@/components/plot/interactions/price-momentum";
+import {
+  getPMBarGroupId,
+  returnFeatures,
+  toggleFeature,
+} from "@/components/plot/interactions/price-momentum";
 import { plotSizeConfig, priceColors } from "@/components/plot/theme";
 import YAxis from "@/components/plot/YAxis";
 import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
@@ -52,20 +56,24 @@ export default function Returns({ features, x, width, height }: ReturnsProps) {
         labelFormatter={(value: number) => (value * 100).toFixed(1)}
       />
       {returnFeatures.map((featureName, i) => {
-        return features.map((feature) => {
-          const val = feature[featureName];
-          return (
-            <rect
-              key={`pm-${feature.tradeDate}-${featureName}`}
-              x={x(feature.tradeDate)}
-              y={val >= 0 ? y(val) : y(0)}
-              width={x.bandwidth()}
-              height={Math.abs(y(val) - y(0))}
-              opacity={opacities[i]}
-              fill={val >= 0 ? priceColors.up : priceColors.down}
-            />
-          );
-        });
+        return (
+          <g key={getPMBarGroupId(featureName)} id={getPMBarGroupId(featureName)}>
+            {features.map((feature) => {
+              const val = feature[featureName];
+              return (
+                <rect
+                  key={`pm-${feature.tradeDate}-${featureName}`}
+                  x={x(feature.tradeDate)}
+                  y={val >= 0 ? y(val) : y(0)}
+                  width={x.bandwidth()}
+                  height={Math.abs(y(val) - y(0))}
+                  opacity={opacities[i]}
+                  fill={val >= 0 ? priceColors.up : priceColors.down}
+                />
+              );
+            })}
+          </g>
+        );
       })}
       <FeatureIndicators
         featureNames={returnFeatures}
@@ -74,6 +82,7 @@ export default function Returns({ features, x, width, height }: ReturnsProps) {
         labels={legendLabels}
         colors={initialColors}
         opacities={opacities}
+        toggleFn={toggleFeature}
       />
     </g>
   );

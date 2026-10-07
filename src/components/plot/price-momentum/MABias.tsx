@@ -4,6 +4,7 @@ import YAxis from "@/components/plot/YAxis";
 import {
   maBiasFeatures,
   getPMLineId,
+  toggleFeature,
 } from "@/components/plot/interactions/price-momentum";
 import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
 import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
@@ -65,6 +66,7 @@ export default function MABias({ features, width, height, x }: MABiasProps) {
       {Object.entries(paths).map(([featureName, value], i) => (
         <path
           key={`${getPMLineId(featureName)}`}
+          id={`${getPMLineId(featureName)}`}
           d={value}
           fill="none"
           strokeWidth={1.7}
@@ -86,6 +88,7 @@ export default function MABias({ features, width, height, x }: MABiasProps) {
         features={features}
         valueFormatFn={digitToPercent}
         labels={legendLabels}
+        toggleFn={toggleFeature}
       />
     </>
   );

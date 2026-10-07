@@ -14,20 +14,22 @@ type FeatureIndicatorsProps = {
   features: PriceMomentumFeature[];
   featureNames: readonly NumericFeatureName[];
   labels?: string[];
-  valueFormatFn?: (value: number) => string;
   colors?: string[];
   opacities?: number[];
   wider?: boolean;
+  valueFormatFn?: (value: number) => string;
+  toggleFn?: (featureName: string) => void;
 };
 
 export default function FeatureIndicators({
   features,
   featureNames,
-  valueFormatFn,
   labels,
   colors,
   opacities,
   wider,
+  valueFormatFn,
+  toggleFn,
 }: FeatureIndicatorsProps) {
   return (
     <g transform={`translate(0 ${legendConfig.top})`} fontSize={legendConfig.fontSize}>
@@ -48,6 +50,7 @@ export default function FeatureIndicators({
               color={colors && colors[i]}
               opacity={opacities && opacities[i]}
               wider={wider}
+              onMouseDown={() => toggleFn && toggleFn(featureName)}
             />
           );
         })}
