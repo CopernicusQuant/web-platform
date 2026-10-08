@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { colorPalette, plotSizeConfig } from "../theme";
+import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
 import type { MarketActivityFeature } from "@/apis/stock";
 import {
   getMarketLineID,

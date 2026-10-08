@@ -4,8 +4,8 @@ import {
   getMarketBarGroupID,
   getMarketLegendID,
   getMarketLegendValueID,
-} from "../interactions/market-activity";
-import { colorPalette } from "../theme";
+} from "@/components/plot/interactions/market-activity";
+import { colorPalette } from "@/components/plot/theme";
 import Legend from "@/components/ui/Legend";
 
 type TurnoverBarsProps = {
@@ -19,7 +19,10 @@ export default function TurnoverBars({ stock, x, y }: TurnoverBarsProps) {
   const yMin = d3.min(stock, (d) => d.turnover) ?? 0;
   const [yLow] = y.range();
   const yPadding = (yMax - yMin) * 0.05 || 1;
-  const subY = d3.scaleLinear([yMin - yPadding, yMax + yPadding], [0, yLow / 2]);
+  const subY = d3.scaleLinear(
+    [yMin === 0 ? 0 : yMin - yPadding, yMax + yPadding],
+    [0, yLow / 2],
+  );
   return (
     <>
       <g id={getMarketBarGroupID("turnover")}>
