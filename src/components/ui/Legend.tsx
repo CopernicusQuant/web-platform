@@ -30,6 +30,7 @@ export default function Legend({
     featureWidthWider,
     rectCorner,
     featureGap,
+    top,
   } = legendConfig;
   const width = wider ? featureWidthWider : featureWidth;
   const getTranslateX = (i: number) => {
@@ -39,7 +40,7 @@ export default function Legend({
   return (
     <g
       id={legendId}
-      transform={`translate(${getTranslateX(index)} 0)`}
+      transform={`translate(${getTranslateX(index)} ${top})`}
       fontSize={fontSize}
       className="hover:cursor-pointer select-none"
       onMouseDown={onMouseDown}

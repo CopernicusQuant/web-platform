@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { parseVolume, computePriceChange } from "@/lib/utils";
-import type { StockPrice } from "@/apis/stock";
+import type { StockValues } from "@/apis/stock";
 import { priceColors } from "../theme";
 import { updateDateLine } from "./date-line";
 import { updateTextValue } from "./d3-utils";
@@ -31,7 +31,7 @@ const updatePriceTrendIndicators = ({
   x,
   y,
 }: {
-  stock: StockPrice[];
+  stock: StockValues[];
   pointerPos: number;
   xIdx: number;
   width: number;
@@ -88,7 +88,7 @@ const resetPriceTrendIndicators = ({
   marginRight,
   y,
 }: {
-  stock: StockPrice[];
+  stock: StockValues[];
   width: number;
   marginRight: number;
   y: d3.ScaleLinear<number, number>;

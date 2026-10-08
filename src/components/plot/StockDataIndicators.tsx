@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import type { StockPrice } from "@/apis/stock";
+import type { StockValues } from "@/apis/stock";
 import { plotSizeConfig, priceColors, legendConfig } from "@/components/plot/theme";
 import type { PriceChartType } from "@/atoms/stocks";
 import { parseVolume, computePriceChange } from "@/lib/utils";
@@ -7,7 +7,7 @@ import { priceElementIds } from "@/components/plot/interactions/price-trend";
 import DateLine from "./DateLine";
 
 type StockDataIndicatorsProps = {
-  stock: StockPrice[];
+  stock: StockValues[];
   chartType: PriceChartType;
   width: number;
   height: number;

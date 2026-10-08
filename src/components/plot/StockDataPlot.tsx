@@ -12,6 +12,7 @@ import { getHoverPlotFn, getLeavePlotFn } from "./interactions/hover";
 import { plotSizeConfig } from "@/components/plot/theme";
 import { useAtomValue } from "jotai";
 import { plotConfigAtom } from "@/atoms/plot";
+import TurnoverBars from "./market-activity/TurnoverBars";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -99,6 +100,7 @@ export default function StockDataPlot({
           yAxisMax={height - marginBottom}
         />
       )}
+      {featureGroup === "marketActivity" && <TurnoverBars stock={stock} x={x} y={y} />}
       {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
       {chartType === "line" && <TrendLine prices={stock} x={x} y={y} />}
       <StockDataIndicators

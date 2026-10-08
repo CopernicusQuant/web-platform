@@ -8,7 +8,7 @@ import {
   getPMLegendId,
   getPMLegendValueId,
 } from "@/components/plot/interactions/price-momentum";
-import { colorPalette, legendConfig } from "@/components/plot/theme";
+import { colorPalette } from "@/components/plot/theme";
 import Legend from "@/components/ui/Legend";
 
 type MAIndicatorsProps = {
@@ -35,7 +35,7 @@ export default function MAIndicators({ features, chartType }: MAIndicatorsProps)
         </g>
       )}
       {/* Moving average legends */}
-      <g transform={`translate(0 ${legendConfig.top})`} fontSize={legendConfig.fontSize}>
+      <g>
         {features.at(-1) &&
           maFeatures.map((featureName, i) => {
             return (
