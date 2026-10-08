@@ -12,7 +12,7 @@ i18n
   .init({
     lng: "en",
     fallbackLng: "en",
-    debug: import.meta.env.MODE === "development",
+    // debug: import.meta.env.MODE === "development",
     interpolation: { escapeValue: false },
   });
 

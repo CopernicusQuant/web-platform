@@ -11,7 +11,7 @@ const LINE_HEIGHT = 16;
 
 export default function XAxis({ labels, x, xPos, yPos }: XAxisProps) {
   return (
-    <g transform={`translate(${xPos}, ${yPos})`} fontSize={12}>
+    <g transform={`translate(${xPos}, ${yPos})`} fontSize={12} className="select-none">
       {labels.map((d, i) => {
         let [showYear, showMonth] = [false, false];
         const [year, month, day] = parseDate(d);

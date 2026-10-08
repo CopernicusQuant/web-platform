@@ -20,7 +20,7 @@ export default function YAxis({
   labelFormatter,
 }: YAxisProps) {
   return (
-    <g transform={`translate(${xPos}, ${yPos})`} fontSize={12}>
+    <g transform={`translate(${xPos}, ${yPos})`} fontSize={12} className="select-none">
       {y.ticks(5).map((tick) => (
         <g key={`stock-${tick}`}>
           <line
