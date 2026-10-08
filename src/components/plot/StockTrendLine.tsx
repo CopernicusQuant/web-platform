@@ -11,14 +11,44 @@ type StockTrendLineProps = {
 export default function StockTrendLine({ prices, x, y }: StockTrendLineProps) {
   const path = d3
     .line<StockPrice>()
-    .defined((price) => x(price.tradeDate) !== undefined)
     .x((price) => (x(price.tradeDate) ?? 0) + x.bandwidth() / 2)
     .y((price) => y(price.adjClose))(prices);
-  if (!path || path.length === 0) {
+
+  const strokeColor =
+    prices.at(-1)!.adjClose >= prices.at(0)!.adjClose ? priceColors.up : priceColors.down;
+
+  const [chartBottom, chartTop] = y.range();
+
+  const area = d3
+    .area<StockPrice>()
+    .x((price) => (x(price.tradeDate) ?? 0) + x.bandwidth() / 2)
+    .y0(chartBottom)
+    .y1((price) => y(price.adjClose))(prices);
+
+  if (!path || path.length === 0 || !area) {
     console.error("Failed to create price trend path");
     return <></>;
   }
-  const strokeColor =
-    prices.at(-1)!.adjClose >= prices.at(0)!.adjClose ? priceColors.up : priceColors.down;
-  return <path d={path} fill="none" stroke={strokeColor} strokeWidth={2.0} />;
+
+  const linearGradientID = "stock-trend-gradient";
+
+  return (
+    <>
+      <defs>
+        <linearGradient
+          id={linearGradientID}
+          x1="0"
+          x2="0"
+          y1={chartTop}
+          y2={chartBottom}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor={strokeColor} stopOpacity={0.2} />
+          <stop offset="100%" stopColor={strokeColor} stopOpacity={0.0} />
+        </linearGradient>
+      </defs>
+      <path d={area} fill={`url(#${linearGradientID})`} />;
+      <path d={path} fill="none" stroke={strokeColor} strokeWidth={2.0} />;
+    </>
+  );
 }
