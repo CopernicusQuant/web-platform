@@ -41,10 +41,18 @@ const updateMarketActivityIndicators = ({
     getMarketLegendValueID("turnover"),
     currStockValues["turnover"].toFixed(2),
   );
-  [...activityScoreFeatures, ...priceAndTurnoverFeatures].forEach((featureName) => {
+  [...activityScoreFeatures, ...priceAndTurnoverFeatures, ...amplitudeFeatures].forEach(
+    (featureName) => {
+      updateTextValue(
+        getMarketLegendValueID(featureName),
+        currFeature[featureName].toFixed(2),
+      );
+    },
+  );
+  amplitudeFeatures.forEach((featureName) => {
     updateTextValue(
       getMarketLegendValueID(featureName),
-      currFeature[featureName].toFixed(2),
+      `${(currFeature[featureName] * 100).toFixed(2)}%`,
     );
   });
 };
@@ -64,6 +72,12 @@ const resetMarketActivityIndicators = ({
     updateTextValue(
       getMarketLegendValueID(featureName),
       features.at(-1)![featureName].toFixed(2),
+    );
+  });
+  amplitudeFeatures.forEach((featureName) => {
+    updateTextValue(
+      getMarketLegendValueID(featureName),
+      `${(features.at(-1)![featureName] * 100).toFixed(2)}%`,
     );
   });
 };
