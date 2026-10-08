@@ -78,6 +78,9 @@ const MarketActivityFeaturesSchema = z
   .object({
     ts_code: z.string(),
     trade_date: z.string(),
+    amplitude: z.float32(),
+    amplitude_ma_5: z.float32(),
+    amplitude_ma_20: z.float32(),
     activity_score_60: z.float32(),
     thin_trade_amplitude_score_60: z.float32(),
     turnover_without_move_score_60: z.float32(),
@@ -87,6 +90,9 @@ const MarketActivityFeaturesSchema = z
   .transform((input) => ({
     ticker: input.ts_code,
     tradeDate: input.trade_date,
+    amplitude: input.amplitude,
+    amplitudeMa5: input.amplitude_ma_5,
+    amplitudeMa20: input.amplitude_ma_20,
     tradingActivityScore: input.activity_score_60,
     lowLiquidityVolatilityScore: input.thin_trade_amplitude_score_60,
     stagnantTurnoverScore: input.turnover_without_move_score_60,
@@ -120,7 +126,7 @@ const FeatureSchemas = {
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   priceMomentum: ["maBias", "return", "upDayRatio"] as const,
-  marketActivity: ["activityScores", "priceAndTurnover"] as const,
+  marketActivity: ["activityScores", "priceAndTurnover", "amplitude"] as const,
 };
 
 const createStockSchema = <G extends FeatureGroupOpt>(group: G) =>
