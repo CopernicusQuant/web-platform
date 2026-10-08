@@ -1,15 +1,11 @@
-import type { PriceMomentumFeature } from "@/apis/stock";
 import MABias from "@/components/plot/price-momentum/MABias";
 import Returns from "@/components/plot/price-momentum/Returns";
 import UpDayRatio from "@/components/plot/price-momentum/UpDayRatio";
+import type { PMSubplotProps } from "./shared";
 
-type PMFeature = {
-  features: PriceMomentumFeature[];
-  width: number;
-  height: number;
-  x: d3.ScaleBand<string>;
+type PMFeatureProps = {
   subplotName: string;
-};
+} & PMSubplotProps;
 
 export default function PMFeature({
   features,
@@ -17,15 +13,22 @@ export default function PMFeature({
   height,
   x,
   subplotName,
-}: PMFeature) {
+}: PMFeatureProps) {
+  const props: PMSubplotProps = {
+    features,
+    x,
+    width,
+    height,
+  };
+
   if (!features) return <></>;
   switch (subplotName) {
     case "maBias":
-      return <MABias features={features} x={x} width={width} height={height} />;
+      return <MABias {...props} />;
     case "return":
-      return <Returns features={features} x={x} width={width} height={height} />;
+      return <Returns {...props} />;
     case "upDayRatio":
-      return <UpDayRatio features={features} x={x} width={width} height={height} />;
+      return <UpDayRatio {...props} />;
     default:
       return <></>;
   }

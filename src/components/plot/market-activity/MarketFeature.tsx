@@ -1,15 +1,11 @@
-import * as d3 from "d3";
-import type { MarketActivityFeature } from "@/apis/stock";
 import ActivityScores from "./ActivityScores";
+import Amplitude from "./Amplitude";
 import PriceAndTurnover from "./PriceAndTurnover";
+import type { MarketSubplotProps } from "./shares";
 
 type MarketFeature = {
-  features: MarketActivityFeature[];
-  width: number;
-  height: number;
-  x: d3.ScaleBand<string>;
   subplotName: string;
-};
+} & MarketSubplotProps;
 
 export default function MarketFeature({
   features,
@@ -18,12 +14,20 @@ export default function MarketFeature({
   height,
   x,
 }: MarketFeature) {
+  const props: MarketSubplotProps = {
+    features,
+    x,
+    width,
+    height,
+  };
   if (!features) return <></>;
   switch (subplotName) {
     case "activityScores":
-      return <ActivityScores features={features} x={x} width={width} height={height} />;
+      return <ActivityScores {...props} />;
     case "priceAndTurnover":
-      return <PriceAndTurnover features={features} x={x} width={width} height={height} />;
+      return <PriceAndTurnover {...props} />;
+    case "amplitude":
+      return <Amplitude {...props} />;
     default:
       return <></>;
   }

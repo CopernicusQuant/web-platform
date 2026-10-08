@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import { useMemo } from "react";
-import type { PriceMomentumFeature } from "@/apis/stock";
 import { digitToPercent } from "@/lib/utils";
 import {
   getPMBarGroupId,
@@ -10,15 +9,9 @@ import {
 import { plotSizeConfig, priceColors } from "@/components/plot/theme";
 import YAxis from "@/components/plot/YAxis";
 import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
+import type { PMSubplotProps } from "./shared";
 
-type ReturnsProps = {
-  features: PriceMomentumFeature[];
-  x: d3.ScaleBand<string>;
-  width: number;
-  height: number;
-};
-
-export default function Returns({ features, x, width, height }: ReturnsProps) {
+export default function Returns({ features, x, width, height }: PMSubplotProps) {
   const { marginTop, marginBottom, marginLeft, marginRight } = plotSizeConfig;
   // y-axis mapper
   const [yMin, yMax] = useMemo(() => {

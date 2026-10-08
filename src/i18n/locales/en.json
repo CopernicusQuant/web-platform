@@ -5,11 +5,11 @@
   },
   "featureGroupBrief": {
     "priceMomentum": "moving averages, deviations, returns, and up-day ratios.",
-    "marketActivity": ""
+    "marketActivity": "trading activity, turnover, liquidity, and price volatility."
   },
   "featureGroupDescription": {
     "priceMomentum": "measures price momentum using moving averages, deviations, returns, and up-day ratios to help predict future price movement from the direction, strength, and persistence of recent trends.",
-    "marketActivity": ""
+    "marketActivity": "measures market activity through trading intensity, turnover, liquidity conditions, and price volatility to identify active trading, thin liquidity, and stagnant capital flows."
   },
   "subPlotName": {
     "maBias": "MA Bias",
@@ -17,13 +17,17 @@
     "upDayRatio": "Up-Day Ratio",
 
     "activityScores": "Activity Scores",
-    "priceAndTurnover": "Price & Turnover"
+    "priceAndTurnover": "Price & Turnover",
+    "amplitude": "Amplitude"
   },
   "featureName": {
     "tradingActivityScore": "Trading Activity",
     "lowLiquidityVolatilityScore": "Low Liquidity Volatility",
     "stagnantTurnoverScore": "Stagnant Turnover",
     "turnoverQuantile": "Turnover Quantile",
-    "amplitudeQuantile": "Amplitude Quantile"
+    "amplitudeQuantile": "Amplitude Quantile",
+    "amplitude": "Amplitude",
+    "amplitudeMa5": "Amplitude MA5",
+    "amplitudeMa20": "Amplitude MA20"
   }
 }

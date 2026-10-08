@@ -9,20 +9,14 @@ import {
 import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
 import YAxis from "@/components/plot/YAxis";
 import MarketFeatureIndicators from "@/components/plot/market-activity/MarketFeatureIndicators";
-
-type ActivityScoresProps = {
-  features: MarketActivityFeature[];
-  x: d3.ScaleBand<string>;
-  width: number;
-  height: number;
-};
+import type { MarketSubplotProps } from "./shares";
 
 export default function ActivityScores({
   features,
   x,
   width,
   height,
-}: ActivityScoresProps) {
+}: MarketSubplotProps) {
   const { t } = useTranslation();
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   let [yMax, yMin] = [-Infinity, Infinity];

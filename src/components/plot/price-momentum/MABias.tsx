@@ -9,17 +9,11 @@ import {
 import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
 import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
+import type { PMSubplotProps } from "./shared";
 
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
-type MABiasProps = {
-  features: PriceMomentumFeature[];
-  width: number;
-  height: number;
-  x: d3.ScaleBand<string>;
-};
-
-export default function MABias({ features, width, height, x }: MABiasProps) {
+export default function MABias({ features, width, height, x }: PMSubplotProps) {
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
   // y-axis mapper
   let yMin = 1.0;

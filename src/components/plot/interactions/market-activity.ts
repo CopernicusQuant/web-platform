@@ -8,6 +8,7 @@ const activityScoreFeatures = [
 ] as const;
 
 const priceAndTurnoverFeatures = ["amplitudeQuantile", "turnoverQuantile"] as const;
+const amplitudeFeatures = ["amplitude", "amplitudeMa5", "amplitudeMa20"] as const;
 
 const idPrefix = "market-activity";
 const getMarketLineID = (featureName: string) => `${idPrefix}-line-${featureName}`;
@@ -15,10 +16,14 @@ const getMarketLegendID = (featureName: string) => `${idPrefix}-legend-${feature
 const getMarketLegendValueID = (featureName: string) =>
   `${idPrefix}-legend-text-${featureName}`;
 const getMarketBarGroupID = (featureName: string) => `${idPrefix}-bars-${featureName}`;
+const getMarketCircleGroupID = (featureName: string) =>
+  `${idPrefix}-circles-${featureName}`;
 
 const toggleFeature = (featureName: string) => {
   toggleElement(getMarketLineID(featureName));
   toggleElement(getMarketLegendID(featureName), 0.3, 1.0);
+  toggleElement(getMarketBarGroupID(featureName));
+  toggleElement(getMarketCircleGroupID(featureName));
 };
 
 const updateMarketActivityIndicators = ({
@@ -36,10 +41,18 @@ const updateMarketActivityIndicators = ({
     getMarketLegendValueID("turnover"),
     currStockValues["turnover"].toFixed(2),
   );
-  [...activityScoreFeatures, ...priceAndTurnoverFeatures].forEach((featureName) => {
+  [...activityScoreFeatures, ...priceAndTurnoverFeatures, ...amplitudeFeatures].forEach(
+    (featureName) => {
+      updateTextValue(
+        getMarketLegendValueID(featureName),
+        currFeature[featureName].toFixed(2),
+      );
+    },
+  );
+  amplitudeFeatures.forEach((featureName) => {
     updateTextValue(
       getMarketLegendValueID(featureName),
-      currFeature[featureName].toFixed(2),
+      `${(currFeature[featureName] * 100).toFixed(2)}%`,
     );
   });
 };
@@ -61,15 +74,23 @@ const resetMarketActivityIndicators = ({
       features.at(-1)![featureName].toFixed(2),
     );
   });
+  amplitudeFeatures.forEach((featureName) => {
+    updateTextValue(
+      getMarketLegendValueID(featureName),
+      `${(features.at(-1)![featureName] * 100).toFixed(2)}%`,
+    );
+  });
 };
 
 export {
   activityScoreFeatures,
   priceAndTurnoverFeatures,
+  amplitudeFeatures,
   getMarketLineID,
   getMarketLegendID,
   getMarketLegendValueID,
   getMarketBarGroupID,
+  getMarketCircleGroupID,
   toggleFeature,
   updateMarketActivityIndicators,
   resetMarketActivityIndicators,

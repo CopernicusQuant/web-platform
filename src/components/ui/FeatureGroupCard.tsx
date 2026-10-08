@@ -19,7 +19,7 @@ export default function FeatureGroupCard({
     <div
       className={cn(
         "hover:cursor-pointer border-b hover:bg-gray-200 px-4 transition-all duration-100 border-gray-300 flex flex-col gap-1",
-        active ? "h-50" : "h-28",
+        active ? "h-46" : "h-28",
       )}
       onClick={() => setFeatureGroup(featureGroup)}
     >
