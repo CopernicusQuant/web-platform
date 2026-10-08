@@ -1,8 +1,8 @@
-import type { StockPrice } from "@/apis/stock";
+import type { StockValues } from "@/apis/stock";
 import { priceColors } from "@/components/plot/theme";
 
 type CandleStickProps = {
-  prices: StockPrice[];
+  prices: StockValues[];
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 };

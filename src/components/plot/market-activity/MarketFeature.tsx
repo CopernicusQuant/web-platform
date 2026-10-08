@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import type { MarketActivityFeature } from "@/apis/stock";
 import ActivityScores from "./ActivityScores";
+import PriceAndTurnover from "./PriceAndTurnover";
 
 type MarketFeature = {
   features: MarketActivityFeature[];
@@ -21,6 +22,8 @@ export default function MarketFeature({
   switch (subplotName) {
     case "activityScores":
       return <ActivityScores features={features} x={x} width={width} height={height} />;
+    case "priceAndTurnover":
+      return <PriceAndTurnover features={features} x={x} width={width} height={height} />;
     default:
       return <></>;
   }

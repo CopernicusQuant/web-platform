@@ -1,5 +1,4 @@
 import type { PriceMomentumFeature } from "@/apis/stock";
-import { legendConfig } from "@/components/plot/theme";
 import {
   getPMLegendId,
   getPMLegendValueId,
@@ -32,7 +31,7 @@ export default function FeatureIndicators({
   toggleFn,
 }: FeatureIndicatorsProps) {
   return (
-    <g transform={`translate(0 ${legendConfig.top})`} fontSize={legendConfig.fontSize}>
+    <g>
       {features.at(-1) &&
         featureNames.map((featureName, i) => {
           return (

@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { updateDateLine } from "@/components/plot/interactions/date-line";
-import type { StockPrice } from "@/apis/stock";
+import type { StockValues } from "@/apis/stock";
 
 const featureElementIds = {
   indicatorGroup: "features-indicator-group",
@@ -14,7 +14,7 @@ const updateFeatureTrendIndicators = ({
   xIdx,
   x,
 }: {
-  stock: StockPrice[];
+  stock: StockValues[];
   xIdx: number;
   x: d3.ScaleBand<string>;
 }) => {

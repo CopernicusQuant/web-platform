@@ -16,11 +16,14 @@
     "return": "Return",
     "upDayRatio": "Up-Day Ratio",
 
-    "activityScores": "Activity Scores"
+    "activityScores": "Activity Scores",
+    "priceAndTurnover": "Price & Turnover"
   },
   "featureName": {
     "tradingActivityScore": "Trading Activity",
     "lowLiquidityVolatilityScore": "Low Liquidity Volatility",
-    "stagnantTurnoverScore": "Stagnant Turnover"
+    "stagnantTurnoverScore": "Stagnant Turnover",
+    "turnoverQuantile": "Turnover Quantile",
+    "amplitudeQuantile": "Amplitude Quantile"
   }
 }

@@ -18,7 +18,7 @@ const dataWindowParam: Record<DataWindowOpt, string> = {
   "5Y": "5years",
 };
 
-const StockPriceSchema = z
+const StockValuesSchema = z
   .object({
     ts_code: z.string(),
     trade_date: z.string(),
@@ -27,6 +27,7 @@ const StockPriceSchema = z
     adj_high: z.float32(),
     adj_low: z.float32(),
     adj_vol: z.float32(),
+    turnover: z.float32(),
   })
   .transform((input) => ({
     ticker: input.ts_code,
@@ -36,6 +37,7 @@ const StockPriceSchema = z
     adjHigh: input.adj_high,
     adjLow: input.adj_low,
     adjVol: input.adj_vol,
+    turnover: input.turnover,
   }));
 
 const PriceMomentumFeaturesSchema = z
@@ -79,6 +81,8 @@ const MarketActivityFeaturesSchema = z
     activity_score_60: z.float32(),
     thin_trade_amplitude_score_60: z.float32(),
     turnover_without_move_score_60: z.float32(),
+    amplitude_quantile_60: z.float32(),
+    turnover_quantile_60: z.float32(),
   })
   .transform((input) => ({
     ticker: input.ts_code,
@@ -86,6 +90,8 @@ const MarketActivityFeaturesSchema = z
     tradingActivityScore: input.activity_score_60,
     lowLiquidityVolatilityScore: input.thin_trade_amplitude_score_60,
     stagnantTurnoverScore: input.turnover_without_move_score_60,
+    amplitudeQuantile: input.amplitude_quantile_60,
+    turnoverQuantile: input.turnover_quantile_60,
   }));
 
 // const VolumeMomentumFeaturesSchema = z
@@ -114,14 +120,14 @@ const FeatureSchemas = {
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   priceMomentum: ["maBias", "return", "upDayRatio"] as const,
-  marketActivity: ["activityScores"] as const,
+  marketActivity: ["activityScores", "priceAndTurnover"] as const,
 };
 
 const createStockSchema = <G extends FeatureGroupOpt>(group: G) =>
   z
     .object({
       ts_code: z.string(),
-      stock: z.array(StockPriceSchema),
+      stock: z.array(StockValuesSchema),
       features: z.array(FeatureSchemas[group]),
     })
     .transform(({ ts_code, ...data }) => ({
@@ -129,10 +135,10 @@ const createStockSchema = <G extends FeatureGroupOpt>(group: G) =>
       ...data,
     }));
 
-type StockPrice = z.infer<typeof StockPriceSchema>;
+type StockValues = z.infer<typeof StockValuesSchema>;
 type StockData<G extends FeatureGroupOpt> = {
   ticker: string;
-  stock: StockPrice[];
+  stock: StockValues[];
   features: FeatureByGroup[G][];
 };
 
@@ -175,7 +181,7 @@ export {
 };
 export type {
   DataWindowOpt,
-  StockPrice,
+  StockValues,
   StockData,
   FeatureGroupOpt,
   FeatureByGroup,

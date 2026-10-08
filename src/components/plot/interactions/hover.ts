@@ -85,6 +85,7 @@ const getHoverPlotFn = ({
         break;
       case "marketActivity":
         updateMarketActivityIndicators({
+          stock,
           features: features as MarketActivityFeature[],
           xIdx,
         });
@@ -123,7 +124,10 @@ const getLeavePlotFn = ({
         resetPriceMomentumIndicators({ features: features as PriceMomentumFeature[] });
         break;
       case "marketActivity":
-        resetMarketActivityIndicators({ features: features as MarketActivityFeature[] });
+        resetMarketActivityIndicators({
+          stock,
+          features: features as MarketActivityFeature[],
+        });
         break;
     }
   };

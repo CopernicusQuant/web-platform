@@ -1,6 +1,5 @@
 import type { MarketActivityFeature } from "@/apis/stock";
 import Legend from "@/components/ui/Legend";
-import { legendConfig } from "@/components/plot/theme";
 import {
   getMarketLegendID,
   getMarketLegendValueID,
@@ -31,9 +30,8 @@ export default function MarketFeatureIndicators({
   valueFormatFn,
   toggleFn,
 }: MarketFeatureIndicatorsProps) {
-  const { fontSize, top } = legendConfig;
   return (
-    <g transform={`translate(0 ${top})`} fontSize={fontSize}>
+    <g>
       {features.at(-1) &&
         featureNames.map((featureName, i) => {
           return (
