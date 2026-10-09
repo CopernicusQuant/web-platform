@@ -35,22 +35,20 @@ export default function MAIndicators({ features, chartType }: MAIndicatorsProps)
         </g>
       )}
       {/* Moving average legends */}
-      <g>
-        {features.at(-1) &&
-          maFeatures.map((featureName, i) => {
-            return (
-              <Legend
-                key={getPMLegendId(featureName)}
-                legendId={getPMLegendId(featureName)}
-                valueId={getPMLegendValueId(featureName)}
-                index={i}
-                value={features.at(-1)![featureName].toFixed(2)}
-                label={featureName.toUpperCase()}
-                onMouseDown={() => toggleFeature(featureName)}
-              />
-            );
-          })}
-      </g>
+      {features.at(-1) &&
+        maFeatures.map((featureName, i) => {
+          return (
+            <Legend
+              key={getPMLegendId(featureName)}
+              legendId={getPMLegendId(featureName)}
+              valueId={getPMLegendValueId(featureName)}
+              index={i}
+              value={features.at(-1)![featureName].toFixed(2)}
+              label={featureName.toUpperCase()}
+              onMouseDown={() => toggleFeature(featureName)}
+            />
+          );
+        })}
     </>
   );
 }

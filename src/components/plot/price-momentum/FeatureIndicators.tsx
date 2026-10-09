@@ -15,7 +15,6 @@ type FeatureIndicatorsProps = {
   labels?: string[];
   colors?: string[];
   opacities?: number[];
-  wider?: boolean;
   valueFormatFn?: (value: number) => string;
   toggleFn?: (featureName: string) => void;
 };
@@ -26,7 +25,6 @@ export default function FeatureIndicators({
   labels,
   colors,
   opacities,
-  wider,
   valueFormatFn,
   toggleFn,
 }: FeatureIndicatorsProps) {
@@ -48,7 +46,6 @@ export default function FeatureIndicators({
               }
               color={colors && colors[i]}
               opacity={opacities && opacities[i]}
-              wider={wider}
               onMouseDown={() => toggleFn && toggleFn(featureName)}
             />
           );

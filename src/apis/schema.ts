@@ -2,17 +2,19 @@ import { z } from "zod";
 
 type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "5Y";
 
-const FeatureGroups = ["priceMomentum", "marketActivity"] as const;
+const FeatureGroups = ["priceMomentum", "marketActivity", "macd"] as const;
 type FeatureGroupOpt = (typeof FeatureGroups)[number];
 
 const featureGroupParam: Record<FeatureGroupOpt, string> = {
   priceMomentum: "pricemomentum",
   marketActivity: "marketactivity",
+  macd: "macd",
 };
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   priceMomentum: ["maBias", "return", "upDayRatio"] as const,
   marketActivity: ["activityScores", "priceAndTurnover", "amplitude"] as const,
+  macd: ["trendSignals"] as const,
 };
 
 const dataWindowParam: Record<DataWindowOpt, string> = {
@@ -47,7 +49,6 @@ const StockValuesSchema = z
 
 const PriceMomentumFeaturesSchema = z
   .object({
-    ts_code: z.string(),
     trade_date: z.string(),
     ma_5: z.float32(),
     // ma_10: z.float32(),
@@ -63,7 +64,6 @@ const PriceMomentumFeaturesSchema = z
     up_ratio_20d: z.float32(),
   })
   .transform((input) => ({
-    ticker: input.ts_code,
     tradeDate: input.trade_date,
     ma5: input.ma_5,
     // ma10: input.ma_10,
@@ -81,7 +81,6 @@ const PriceMomentumFeaturesSchema = z
 
 const MarketActivityFeaturesSchema = z
   .object({
-    ts_code: z.string(),
     trade_date: z.string(),
     amplitude: z.float32(),
     amplitude_ma_5: z.float32(),
@@ -93,7 +92,6 @@ const MarketActivityFeaturesSchema = z
     turnover_quantile_60: z.float32(),
   })
   .transform((input) => ({
-    ticker: input.ts_code,
     tradeDate: input.trade_date,
     amplitude: input.amplitude,
     amplitudeMa5: input.amplitude_ma_5,
@@ -105,22 +103,47 @@ const MarketActivityFeaturesSchema = z
     turnoverQuantile: input.turnover_quantile_60,
   }));
 
+const MACDFeatureSchema = z
+  .object({
+    trade_date: z.string(),
+    macd_ema_slow: z.float32(),
+    macd_ema_fast: z.float32(),
+    macd_diff: z.float32(),
+    macd_dea: z.float32(),
+    macd_hist: z.float32(),
+    macd_gold: z.int32(),
+    macd_dead: z.int32(),
+  })
+  .transform((input) => ({
+    tradeDate: input.trade_date,
+    emaSlow: input.macd_ema_slow,
+    emaFast: input.macd_ema_fast,
+    diff: input.macd_diff,
+    hist: input.macd_hist,
+    dea: input.macd_dea,
+    gold: input.macd_gold,
+    dead: input.macd_dead,
+  }));
+
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
   marketActivity: MarketActivityFeaturesSchema,
+  macd: MACDFeatureSchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
 type StockValues = z.infer<typeof StockValuesSchema>;
+type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
+type MarketActivityFeature = z.infer<typeof MarketActivityFeaturesSchema>;
+type MACDFeature = z.infer<typeof MACDFeatureSchema>;
+type FeatureByGroup = {
+  priceMomentum: PriceMomentumFeature;
+  marketActivity: MarketActivityFeature;
+  macd: MACDFeature;
+};
 type StockData<G extends FeatureGroupOpt> = {
   ticker: string;
   stock: StockValues[];
   features: FeatureByGroup[G][];
-};
-type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
-type MarketActivityFeature = z.infer<typeof MarketActivityFeaturesSchema>;
-type FeatureByGroup = {
-  priceMomentum: PriceMomentumFeature;
-  marketActivity: MarketActivityFeature;
 };
 
 export {
@@ -139,6 +162,7 @@ export type {
   StockValues,
   FeatureGroupOpt,
   FeatureByGroup,
+  MACDFeature,
   PriceMomentumFeature,
   MarketActivityFeature,
 };

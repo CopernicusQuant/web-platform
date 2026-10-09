@@ -74,7 +74,7 @@ export default function Amplitude({ features, x, width, height }: MarketSubplotP
         featureNames={amplitudeFeatures}
         features={features}
         labels={amplitudeFeatures.map((featureName) => t(`featureName.${featureName}`))}
-        wider={true}
+        wide={true}
         toggleFn={toggleFeature}
         valueFormatFn={(value) => `${(value * 100).toFixed(1)}%`}
       />

@@ -15,7 +15,7 @@ type MarketFeatureIndicatorsProps = {
   labels?: string[];
   colors?: string[];
   opacities?: number[];
-  wider?: boolean;
+  wide?: boolean;
   valueFormatFn?: (value: number) => string;
   toggleFn?: (featureName: string) => void;
 };
@@ -26,7 +26,7 @@ export default function MarketFeatureIndicators({
   labels,
   colors,
   opacities,
-  wider,
+  wide,
   valueFormatFn,
   toggleFn,
 }: MarketFeatureIndicatorsProps) {
@@ -48,7 +48,7 @@ export default function MarketFeatureIndicators({
               }
               color={colors && colors[i]}
               opacity={opacities && opacities[i]}
-              wider={wider}
+              size={wide ? "widest" : "base"}
               onMouseDown={() => toggleFn && toggleFn(featureName)}
             />
           );

@@ -83,7 +83,7 @@ export default function PriceAndTurnover({
         labels={priceAndTurnoverFeatures.map((featureName) =>
           t(`featureName.${featureName}`),
         )}
-        wider={true}
+        wide={true}
         toggleFn={toggleFeature}
       />
     </>

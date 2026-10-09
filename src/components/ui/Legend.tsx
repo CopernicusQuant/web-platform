@@ -5,10 +5,10 @@ type LegendProps = {
   valueId: string;
   index: number;
   label: string;
-  value: string;
-  wider?: boolean;
+  value?: string;
   color?: string;
   opacity?: number;
+  size?: "wider" | "widest" | "tighter" | "base";
   onMouseDown?: () => void;
 };
 
@@ -20,19 +20,25 @@ export default function Legend({
   value,
   color,
   opacity,
-  wider,
+  size = "base",
   onMouseDown,
 }: LegendProps) {
   const {
     fontSize,
     featureWidth,
     featureHeight,
+    featureWidthTighter,
     featureWidthWider,
+    featureWidthWidest,
     rectCorner,
     featureGap,
     top,
   } = legendConfig;
-  const width = wider ? featureWidthWider : featureWidth;
+  let width = featureWidth;
+  if (size === "wider") width = featureWidthWider;
+  if (size === "widest") width = featureWidthWidest;
+  if (size === "tighter") width = featureWidthTighter;
+
   const getTranslateX = (i: number) => {
     return width * i + width / 2 + featureGap * i;
   };
@@ -60,9 +66,11 @@ export default function Legend({
         fill={color ? color : colorPalette[index]}
       >
         <tspan fontWeight={"700"}>{label}</tspan>
-        <tspan dx={4} id={valueId}>
-          {value}
-        </tspan>
+        {value !== undefined && (
+          <tspan dx={4} id={valueId}>
+            {value}
+          </tspan>
+        )}
       </text>
     </g>
   );

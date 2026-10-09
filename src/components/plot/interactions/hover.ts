@@ -4,6 +4,7 @@ import type {
   FeatureGroupOpt,
   PriceMomentumFeature,
   MarketActivityFeature,
+  MACDFeature,
 } from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
@@ -19,6 +20,7 @@ import {
   resetMarketActivityIndicators,
   updateMarketActivityIndicators,
 } from "./market-activity";
+import { resetMACDIndicators, updateMACDIndicators } from "./macd";
 
 const getHoverPlotFn = ({
   data,
@@ -90,6 +92,17 @@ const getHoverPlotFn = ({
           xIdx,
         });
         break;
+      case "macd":
+        updateMACDIndicators({
+          xIdx,
+          features: features as MACDFeature[],
+          height: referenceHeight,
+          marginTop,
+          marginBottom,
+          x,
+          y,
+        });
+        break;
     }
   };
 };
@@ -129,6 +142,8 @@ const getLeavePlotFn = ({
           features: features as MarketActivityFeature[],
         });
         break;
+      case "macd":
+        resetMACDIndicators({ features: features as MACDFeature[] });
     }
   };
 };

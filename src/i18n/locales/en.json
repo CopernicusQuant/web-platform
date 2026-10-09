@@ -1,15 +1,18 @@
 {
   "featureGroupName": {
     "priceMomentum": "Price Momentum",
-    "marketActivity": "Market Activity"
+    "marketActivity": "Market Activity",
+    "macd": "MACD"
   },
   "featureGroupBrief": {
     "priceMomentum": "moving averages, deviations, returns, and up-day ratios.",
-    "marketActivity": "trading activity, turnover, liquidity, and price volatility."
+    "marketActivity": "trading activity, turnover, liquidity, and price volatility.",
+    "macd":"moving average convergence divergence, with crossover signals."
   },
   "featureGroupDescription": {
     "priceMomentum": "measures price momentum using moving averages, deviations, returns, and up-day ratios to help predict future price movement from the direction, strength, and persistence of recent trends.",
-    "marketActivity": "measures market activity through trading intensity, turnover, liquidity conditions, and price volatility to identify active trading, thin liquidity, and stagnant capital flows."
+    "marketActivity": "measures market activity through trading intensity, turnover, liquidity conditions, and price volatility to identify active trading, thin liquidity, and stagnant capital flows.",
+    "macd": "measures trend momentum through fast and slow exponential moving averages, their difference and signal lines, histogram values, and bullish or bearish crossover signals."
   },
   "subPlotName": {
     "maBias": "MA Bias",
@@ -18,16 +21,22 @@
 
     "activityScores": "Activity Scores",
     "priceAndTurnover": "Price & Turnover",
-    "amplitude": "Amplitude"
+    "amplitude": "Amplitude",
+
+    "trendSignals": "Trend Signals"
   },
   "featureName": {
     "tradingActivityScore": "Trading Activity",
     "lowLiquidityVolatilityScore": "Low Liquidity Volatility",
     "stagnantTurnoverScore": "Stagnant Turnover",
     "turnoverQuantile": "Turnover Quantile",
+
     "amplitudeQuantile": "Amplitude Quantile",
     "amplitude": "Amplitude",
     "amplitudeMa5": "Amplitude MA5",
-    "amplitudeMa20": "Amplitude MA20"
+    "amplitudeMa20": "Amplitude MA20",
+
+    "emaFast": "EMA Fast",
+    "emaSlow": "EMA Slow"
   }
 }

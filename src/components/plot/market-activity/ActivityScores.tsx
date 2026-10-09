@@ -69,7 +69,7 @@ export default function ActivityScores({
         labels={activityScoreFeatures.map((featureName) =>
           t(`featureName.${featureName}`),
         )}
-        wider={true}
+        wide={true}
         toggleFn={toggleFeature}
       />
       {/* 0.8 indicator */}

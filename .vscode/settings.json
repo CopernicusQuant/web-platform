@@ -9,5 +9,6 @@
     ".vscode",
     ".vscode-insiders",
     "*.css"
-  ]
+  ],
+  "cSpell.words": ["macd"]
 }
