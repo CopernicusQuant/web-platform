@@ -1,18 +1,18 @@
 import * as d3 from "d3";
-import type { FeatureByGroup, FeatureGroupOpt, StockData } from "@/apis/stock";
+import { useAtomValue } from "jotai";
+import type { FeatureByGroup, FeatureGroupOpt, StockData } from "@/apis";
 import type { PriceChartType } from "@/atoms/stocks";
+import { plotConfigAtom } from "@/atoms/plot";
 import CandleStick from "@/components/plot/CandleSticks";
-import XAxis from "@/components/plot/XAxis";
-import YAxis from "@/components/plot/YAxis";
+import XAxis from "@/components/ui/XAxis";
+import YAxis from "@/components/ui/YAxis";
 import TrendLine from "@/components/plot/StockTrendLine";
 import MALines from "@/components/plot/price-momentum/MALines";
 import StockDataIndicators from "@/components/plot/StockDataIndicators";
 import MAIndicators from "@/components/plot/price-momentum/MAIndicators";
-import { getHoverPlotFn, getLeavePlotFn } from "./interactions/hover";
+import { getHoverPlotFn, getLeavePlotFn } from "@/components/plot/interactions/hover";
 import { plotSizeConfig } from "@/components/plot/theme";
-import { useAtomValue } from "jotai";
-import { plotConfigAtom } from "@/atoms/plot";
-import TurnoverBars from "./market-activity/TurnoverBars";
+import TurnoverBars from "@/components/plot/market-activity/TurnoverBars";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;

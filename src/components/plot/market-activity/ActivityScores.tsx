@@ -1,15 +1,15 @@
 import * as d3 from "d3";
 import { useTranslation } from "react-i18next";
-import type { MarketActivityFeature } from "@/apis/stock";
+import type { MarketActivityFeature } from "@/apis";
 import {
   activityScoreFeatures,
   getMarketLineID,
   toggleFeature,
 } from "@/components/plot/interactions/market-activity";
 import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
-import YAxis from "@/components/plot/YAxis";
+import YAxis from "@/components/ui/YAxis";
 import MarketFeatureIndicators from "@/components/plot/market-activity/MarketFeatureIndicators";
-import type { MarketSubplotProps } from "./shares";
+import type { MarketSubplotProps } from "./shared";
 
 export default function ActivityScores({
   features,

@@ -1,4 +1,4 @@
-import { getStockList } from "@/apis/stock_list";
+import { getStockList } from "@/apis";
 import { useQuery } from "@tanstack/react-query";
 
 const useGetStockListQuery = () => {

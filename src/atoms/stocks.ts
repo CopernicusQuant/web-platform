@@ -1,4 +1,4 @@
-import { FeatureSubplots, type DataWindowOpt, type FeatureGroupOpt } from "@/apis/stock";
+import { FeatureSubplots, type DataWindowOpt, type FeatureGroupOpt } from "@/apis";
 import { atom } from "jotai";
 
 type StockSelection = {

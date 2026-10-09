@@ -1,6 +1,6 @@
 import * as d3 from "d3";
-import type { FeatureByGroup } from "@/apis/stock";
-import YAxis from "@/components/plot/YAxis";
+import type { FeatureByGroup } from "@/apis";
+import YAxis from "@/components/ui/YAxis";
 import {
   maBiasFeatures,
   getPMLineId,

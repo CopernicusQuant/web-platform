@@ -1,4 +1,4 @@
-import type { FeatureByGroup } from "@/apis/stock";
+import type { FeatureByGroup } from "@/apis";
 import type { PriceChartType } from "@/atoms/stocks";
 import {
   getPMCircleId,

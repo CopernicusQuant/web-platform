@@ -1,4 +1,4 @@
-import type { StockValues } from "@/apis/stock";
+import type { StockValues } from "@/apis";
 import * as d3 from "d3";
 import { priceColors } from "./theme";
 

@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import type { FeatureByGroup } from "@/apis/stock";
+import type { FeatureByGroup } from "@/apis";
 import { getPMLineId, maFeatures } from "@/components/plot/interactions/price-momentum";
 import { colorPalette } from "../theme";
 

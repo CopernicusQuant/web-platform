@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { parseVolume, computePriceChange } from "@/lib/utils";
-import type { StockValues } from "@/apis/stock";
+import type { StockValues } from "@/apis";
 import { priceColors } from "../theme";
 import { updateDateLine } from "./date-line";
 import { updateTextValue } from "./d3-utils";

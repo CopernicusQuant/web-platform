@@ -1,4 +1,4 @@
-import type { FeatureGroupOpt } from "@/apis/stock";
+import type { FeatureGroupOpt } from "@/apis";
 import { setFeatureGroupAtom } from "@/atoms/stocks";
 import { useSetAtom } from "jotai";
 import { useTranslation } from "react-i18next";
@@ -23,10 +23,10 @@ export default function FeatureGroupCard({
       )}
       onClick={() => setFeatureGroup(featureGroup)}
     >
-      <h2 className="font-medium h-12 flex items-end">
+      <h2 className="font-medium h-12 flex items-end overflow-clip">
         {t(`featureGroupName.${featureGroup}`)}
       </h2>
-      <div className="relative flex-1 leading-tight text-sm opacity-40">
+      <div className="relative flex-1 leading-tight text-sm opacity-40 overflow-clip">
         <p className="absolute top-0">
           {active
             ? t(`featureGroupDescription.${featureGroup}`)

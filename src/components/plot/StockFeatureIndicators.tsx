@@ -1,5 +1,5 @@
 import { featureElementIds } from "@/components/plot/interactions/feature-trend";
-import DateLine from "@/components/plot/DateLine";
+import DateLine from "@/components/ui/DateLine";
 
 type StockFeatureIndicatorsProps = {
   height: number;

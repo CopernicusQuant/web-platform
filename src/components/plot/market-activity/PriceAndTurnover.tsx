@@ -4,11 +4,11 @@ import {
   getMarketCircleGroupID,
   priceAndTurnoverFeatures,
 } from "@/components/plot/interactions/market-activity";
-import YAxis from "@/components/plot/YAxis";
+import YAxis from "@/components/ui/YAxis";
 import MarketFeatureIndicators from "@/components/plot/market-activity/MarketFeatureIndicators";
 import { toggleFeature } from "@/components/plot/interactions/market-activity";
 import { useTranslation } from "react-i18next";
-import type { MarketSubplotProps } from "./shares";
+import type { MarketSubplotProps } from "./shared";
 
 export default function PriceAndTurnover({
   features,

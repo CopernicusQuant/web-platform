@@ -7,7 +7,7 @@ import {
   toggleFeature,
 } from "@/components/plot/interactions/price-momentum";
 import { plotSizeConfig, priceColors } from "@/components/plot/theme";
-import YAxis from "@/components/plot/YAxis";
+import YAxis from "@/components/ui/YAxis";
 import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
 import type { PMSubplotProps } from "./shared";
 
