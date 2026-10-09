@@ -1,11 +1,11 @@
 import * as d3 from "d3";
-import type { PriceMomentumFeature } from "@/apis/stock";
+import type { PriceMomentumFeature } from "@/apis";
 import {
   getPMLineId,
   toggleFeature,
   upDayRatioFeatures,
 } from "@/components/plot/interactions/price-momentum";
-import YAxis from "@/components/plot/YAxis";
+import YAxis from "@/components/ui/YAxis";
 import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
 import FeatureIndicators from "./FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";

@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { updateDateLine } from "@/components/plot/interactions/date-line";
-import type { StockValues } from "@/apis/stock";
+import type { StockValues } from "@/apis";
 
 const featureElementIds = {
   indicatorGroup: "features-indicator-group",

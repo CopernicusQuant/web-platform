@@ -5,11 +5,11 @@ import type {
   StockData,
   PriceMomentumFeature,
   MarketActivityFeature,
-} from "@/apis/stock";
+} from "@/apis";
 import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@/components/plot/interactions/hover";
 import { plotSizeConfig } from "@/components/plot/theme";
-import XAxis from "@/components/plot/XAxis";
+import XAxis from "@/components/ui/XAxis";
 import StockFeatureIndicators from "@/components/plot/StockFeatureIndicators";
 import PMFeature from "@/components/plot/price-momentum/PMFeature";
 import { plotConfigAtom } from "@/atoms/plot";

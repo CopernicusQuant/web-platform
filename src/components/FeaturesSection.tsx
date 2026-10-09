@@ -1,4 +1,4 @@
-import { FeatureSubplots, type FeatureGroupOpt, type StockData } from "@/apis/stock";
+import { FeatureSubplots, type FeatureGroupOpt, type StockData } from "@/apis";
 import {
   Section,
   Header,

@@ -4,10 +4,10 @@ import {
   getMarketBarGroupID,
   getMarketLineID,
 } from "../interactions/market-activity";
-import type { MarketSubplotProps } from "./shares";
+import type { MarketSubplotProps } from "./shared";
 import { colorPalette, plotSizeConfig } from "../theme";
-import YAxis from "../YAxis";
-import type { MarketActivityFeature } from "@/apis/stock";
+import YAxis from "../../ui/YAxis";
+import type { MarketActivityFeature } from "@/apis";
 import MarketFeatureIndicators from "./MarketFeatureIndicators";
 import { toggleFeature } from "../interactions/market-activity";
 import { useTranslation } from "react-i18next";

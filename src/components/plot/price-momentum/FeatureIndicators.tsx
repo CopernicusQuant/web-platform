@@ -1,4 +1,4 @@
-import type { PriceMomentumFeature } from "@/apis/stock";
+import type { PriceMomentumFeature } from "@/apis";
 import {
   getPMLegendId,
   getPMLegendValueId,

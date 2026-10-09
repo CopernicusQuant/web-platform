@@ -1,4 +1,4 @@
-import type { StockValues } from "@/apis/stock";
+import type { StockValues } from "@/apis";
 import { priceColors } from "@/components/plot/theme";
 
 type CandleStickProps = {

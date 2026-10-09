@@ -1,5 +1,5 @@
-import { FeatureGroups } from "@/apis/stock";
-import FeatureGroupCard from "./ui/FeatureGroupCard";
+import { FeatureGroups } from "@/apis";
+import FeatureGroupCard from "@/components/ui/FeatureGroupCard";
 import { useAtomValue } from "jotai";
 import { stockSelectionAtom } from "@/atoms/stocks";
 

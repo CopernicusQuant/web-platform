@@ -1,16 +1,19 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useEffect } from "react";
 import {
   dataWindowParam,
   type DataWindowOpt,
   type FeatureGroupOpt,
   type StockData,
-} from "@/apis/stock";
+} from "@/apis";
 import {
   priceChartTypeAtom,
   setStockWindowAtom,
   stockSelectionAtom,
   type PriceChartType,
 } from "@/atoms/stocks";
+import { plotConfigAtom } from "@/atoms/plot";
+import { usePlotSize } from "@/hooks/usePlotSize";
 import {
   Section,
   Content,
@@ -21,9 +24,6 @@ import {
 import StockDataPlot from "@/components/plot/StockDataPlot";
 import CandleIcon from "@/components/icons/CandleIcon";
 import LineIcon from "@/components/icons/LineIcon";
-import { usePlotSize } from "@/hooks/usePlotSize";
-import { plotConfigAtom } from "@/atoms/plot";
-import { useEffect } from "react";
 
 const priceChartTypes: PriceChartType[] = ["candle", "line"];
 

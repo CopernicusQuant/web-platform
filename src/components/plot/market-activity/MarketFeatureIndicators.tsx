@@ -1,4 +1,4 @@
-import type { MarketActivityFeature } from "@/apis/stock";
+import type { MarketActivityFeature } from "@/apis";
 import Legend from "@/components/ui/Legend";
 import {
   getMarketLegendID,

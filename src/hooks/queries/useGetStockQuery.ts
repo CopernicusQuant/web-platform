@@ -1,4 +1,4 @@
-import { getStockData, type DataWindowOpt, type FeatureGroupOpt } from "@/apis/stock";
+import { getStockData, type DataWindowOpt, type FeatureGroupOpt } from "@/apis";
 import { useQuery } from "@tanstack/react-query";
 
 const useGetStockQuery = (

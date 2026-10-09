@@ -4,7 +4,7 @@ import type {
   FeatureGroupOpt,
   PriceMomentumFeature,
   MarketActivityFeature,
-} from "@/apis/stock";
+} from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
   updateFeatureTrendIndicators,
