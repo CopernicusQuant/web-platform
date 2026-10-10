@@ -1,10 +1,11 @@
 import * as d3 from "d3";
 import type { MACDFeature } from "@/apis";
 import { toggleElement, updateTextValue } from "./d3-utils";
-import { animationConfig } from "../theme";
+import { animationConfig, priceColors } from "../theme";
 
 const crossSignalFeatures = ["gold", "dead"] as const;
 const emaFeatures = ["emaFast", "emaSlow"] as const;
+const accelerationFeatures = ["diff", "dea"] as const;
 
 const idPrefix = "macd";
 const getMACDLineID = (featureName: string) => `${idPrefix}-line-${featureName}`;
@@ -15,12 +16,15 @@ const getMACDLegendValueID = (featureName: string) =>
   `${idPrefix}-legend-text-${featureName}`;
 const getMACDCirclesGroupID = () => `${idPrefix}-ema-circles`;
 const getMACDCircleID = (featureName: string) => `${idPrefix}-circle-${featureName}`;
+const getMACDBarGroupID = (featureName: string) => `${idPrefix}-bars-${featureName}`;
 
 const toggleMACDFeature = (featureName: string) => {
   toggleElement(getMACDLineID(featureName));
-  toggleElement(getMACDCrossLinesID(featureName));
+  toggleElement(getMACDCrossLinesID(`${featureName}-price`));
+  toggleElement(getMACDCrossLinesID(`${featureName}-feature`));
   toggleElement(getMACDLegendID(featureName), 0.3, 1.0);
   toggleElement(getMACDCircleID(featureName));
+  toggleElement(getMACDBarGroupID(featureName));
 };
 
 const updateMACDIndicators = ({
@@ -59,6 +63,21 @@ const updateMACDIndicators = ({
       currFeature[featureName].toFixed(2),
     );
   });
+  [...accelerationFeatures].forEach((featureName) => {
+    updateTextValue(
+      getMACDLegendValueID(featureName),
+      currFeature[featureName].toFixed(3),
+    );
+  });
+  const histValue = currFeature["hist"];
+  updateTextValue(getMACDLegendValueID("hist"), histValue.toFixed(3));
+  const histLegend = d3.select(`#${getMACDLegendID("hist")}`);
+  histLegend
+    .select("rect")
+    .attr("stroke", histValue >= 0 ? priceColors.up : priceColors.down);
+  histLegend
+    .select("text")
+    .attr("fill", histValue >= 0 ? priceColors.up : priceColors.down);
 };
 
 const resetMACDIndicators = ({ features }: { features: MACDFeature[] }) => {
@@ -69,17 +88,35 @@ const resetMACDIndicators = ({ features }: { features: MACDFeature[] }) => {
       features.at(-1)![featureName].toFixed(2),
     );
   });
+  [...accelerationFeatures].forEach((featureName) => {
+    updateTextValue(
+      getMACDLegendValueID(featureName),
+      features.at(-1)![featureName].toFixed(3),
+    );
+  });
+
+  const histValue = features.at(-1)!["hist"];
+  updateTextValue(getMACDLegendValueID("hist"), histValue.toFixed(3));
+  const histLegend = d3.select(`#${getMACDLegendID("hist")}`);
+  histLegend
+    .select("rect")
+    .attr("stroke", histValue >= 0 ? priceColors.up : priceColors.down);
+  histLegend
+    .select("text")
+    .attr("fill", histValue >= 0 ? priceColors.up : priceColors.down);
 };
 
 export {
   crossSignalFeatures,
   emaFeatures,
+  accelerationFeatures,
   getMACDLineID,
   getMACDCrossLinesID,
   getMACDLegendID,
   getMACDLegendValueID,
   getMACDCirclesGroupID,
   getMACDCircleID,
+  getMACDBarGroupID,
   toggleMACDFeature,
   updateMACDIndicators,
   resetMACDIndicators,

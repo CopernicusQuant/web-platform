@@ -5,6 +5,7 @@ import type {
   StockData,
   PriceMomentumFeature,
   MarketActivityFeature,
+  MACDFeature,
 } from "@/apis";
 import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@/components/plot/interactions/hover";
@@ -13,6 +14,7 @@ import XAxis from "@/components/ui/XAxis";
 import StockFeatureIndicators from "@/components/plot/StockFeatureIndicators";
 import PMFeature from "@/components/plot/price-momentum/PMFeature";
 import { plotConfigAtom } from "@/atoms/plot";
+import MACDFeaturePlot from "./macd/MACDFeaturePlot";
 import MarketFeature from "./market-activity/MarketFeature";
 
 type StockFeaturePlotProps = {
@@ -84,6 +86,14 @@ export default function StockFeaturePlot({
           height={height}
           x={x}
           subplotName={featureSubPlot}
+        />
+      )}
+      {featureGroup === "macd" && (
+        <MACDFeaturePlot
+          features={features as MACDFeature[]}
+          width={width}
+          height={height}
+          x={x}
         />
       )}
       <StockFeatureIndicators height={height} />

@@ -3,13 +3,13 @@ import {
   amplitudeFeatures,
   getMarketBarGroupID,
   getMarketLineID,
-} from "../interactions/market-activity";
+} from "@/components/plot/interactions/market-activity";
 import type { MarketSubplotProps } from "./shared";
 import { colorPalette, plotSizeConfig } from "../theme";
-import YAxis from "../../ui/YAxis";
+import YAxis from "@/components/ui/YAxis";
 import type { MarketActivityFeature } from "@/apis";
-import MarketFeatureIndicators from "./MarketFeatureIndicators";
-import { toggleFeature } from "../interactions/market-activity";
+import MarketFeatureIndicators from "@/components/plot/market-activity/MarketFeatureIndicators";
+import { toggleFeature } from "@/components/plot/interactions/market-activity";
 import { useTranslation } from "react-i18next";
 
 export default function Amplitude({ features, x, width, height }: MarketSubplotProps) {
