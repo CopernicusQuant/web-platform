@@ -26,9 +26,9 @@ const toggleMACDFeature = (featureName: string) => {
 const updateMACDIndicators = ({
   features,
   xIdx,
-  // height,
-  // marginTop,
-  // marginBottom,
+  height,
+  marginTop,
+  marginBottom,
   x,
   y,
 }: {
@@ -52,7 +52,8 @@ const updateMACDIndicators = ({
       .duration(duration)
       .ease(d3.easeLinear)
       .attr("cx", xPos)
-      .attr("cy", yPos);
+      .attr("cy", yPos)
+      .attr("opacity", yPos <= height - marginBottom && yPos >= marginTop ? 1 : 0);
     updateTextValue(
       getMACDLegendValueID(featureName),
       currFeature[featureName].toFixed(2),
