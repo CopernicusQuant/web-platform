@@ -1,6 +1,11 @@
 import * as d3 from "d3";
 import { useAtomValue } from "jotai";
-import type { FeatureByGroup, FeatureGroupOpt, StockData } from "@/apis";
+import type {
+  FeatureGroupOpt,
+  MACDFeature,
+  PriceMomentumFeature,
+  StockData,
+} from "@/apis";
 import type { PriceChartType } from "@/atoms/stocks";
 import { plotConfigAtom } from "@/atoms/plot";
 import CandleStick from "@/components/plot/CandleSticks";
@@ -13,6 +18,9 @@ import MAIndicators from "@/components/plot/price-momentum/MAIndicators";
 import { getHoverPlotFn, getLeavePlotFn } from "@/components/plot/interactions/hover";
 import { plotSizeConfig } from "@/components/plot/theme";
 import TurnoverBars from "@/components/plot/market-activity/TurnoverBars";
+import CrossoverSignals from "./macd/CrossoverSignals";
+import EMALines from "./macd/EMALines";
+import MACDIndicators from "./macd/MACDIndicators";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -93,7 +101,7 @@ export default function StockDataPlot({
       {/* price trend */}
       {featureGroup === "priceMomentum" && (
         <MALines
-          features={features as FeatureByGroup["priceMomentum"][]}
+          features={features as PriceMomentumFeature[]}
           x={x}
           y={y}
           yAxisMin={marginTop}
@@ -101,6 +109,12 @@ export default function StockDataPlot({
         />
       )}
       {featureGroup === "marketActivity" && <TurnoverBars stock={stock} x={x} y={y} />}
+      {featureGroup === "macd" && (
+        <>
+          <EMALines features={features as MACDFeature[]} x={x} y={y} />
+          <CrossoverSignals features={features as MACDFeature[]} x={x} y={y} />
+        </>
+      )}
       {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
       {chartType === "line" && <TrendLine prices={stock} x={x} y={y} />}
       <StockDataIndicators
@@ -112,9 +126,12 @@ export default function StockDataPlot({
       />
       {featureGroup === "priceMomentum" && (
         <MAIndicators
-          features={features as FeatureByGroup["priceMomentum"][]}
+          features={features as PriceMomentumFeature[]}
           chartType={chartType}
         />
+      )}
+      {featureGroup === "macd" && (
+        <MACDIndicators features={features as MACDFeature[]} chartType={chartType} />
       )}
     </svg>
   );

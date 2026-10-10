@@ -15,7 +15,9 @@ const legendConfig = {
   fontSize: 13,
   rectCorner: 4,
   featureWidth: 96,
-  featureWidthWider: 180,
+  featureWidthTighter: 50,
+  featureWidthWider: 126,
+  featureWidthWidest: 180,
   featureHeight: 22,
   featureGap: 10,
 };
