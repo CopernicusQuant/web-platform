@@ -7,8 +7,8 @@ import {
   toggleFeature,
   getPMLegendId,
   getPMLegendValueId,
-} from "@/components/plot/interactions/price-momentum";
-import { colorPalette } from "@/components/plot/theme";
+} from "@plot/interactions/price-momentum";
+import { colorPalette } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
 
 type MAIndicatorsProps = {

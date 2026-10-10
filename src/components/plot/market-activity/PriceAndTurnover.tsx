@@ -1,14 +1,14 @@
 import * as d3 from "d3";
-import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
+import { colorPalette, plotSizeConfig } from "@plot/theme";
+import { useTranslation } from "react-i18next";
+import YAxis from "@/components/ui/YAxis";
 import {
   getMarketCircleGroupID,
   priceAndTurnoverFeatures,
-} from "@/components/plot/interactions/market-activity";
-import YAxis from "@/components/ui/YAxis";
-import MarketFeatureIndicators from "@/components/plot/market-activity/MarketFeatureIndicators";
-import { toggleFeature } from "@/components/plot/interactions/market-activity";
-import { useTranslation } from "react-i18next";
-import type { MarketSubplotProps } from "./shared";
+} from "@plot/interactions/market-activity";
+import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
+import type { MarketSubplotProps } from "@plot/market-activity/shared";
+import { toggleFeature } from "@plot/interactions/market-activity";
 
 export default function PriceAndTurnover({
   features,

@@ -1,8 +1,8 @@
 import * as d3 from "d3";
 
 import type { FeatureByGroup } from "@/apis";
-import { animationConfig, priceColors } from "@/components/plot/theme";
-import { toggleElement, updateTextValue } from "@/components/plot/interactions/d3-utils";
+import { animationConfig, priceColors } from "@plot/theme";
+import { toggleElement, updateTextValue } from "@plot/interactions/d3-utils";
 import { digitToPercent } from "@/lib/utils";
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 

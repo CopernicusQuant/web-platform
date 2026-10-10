@@ -9,6 +9,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), analyzer({ analyzerMode: "static" })],
   resolve: {
     alias: {
+      "@plot": path.resolve(import.meta.dirname, "./src/components/plot"),
       "@": path.resolve(import.meta.dirname, "./src"),
     },
   },

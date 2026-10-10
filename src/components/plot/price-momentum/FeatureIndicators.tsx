@@ -1,8 +1,5 @@
 import type { PriceMomentumFeature } from "@/apis";
-import {
-  getPMLegendId,
-  getPMLegendValueId,
-} from "@/components/plot/interactions/price-momentum";
+import { getPMLegendId, getPMLegendValueId } from "@plot/interactions/price-momentum";
 import Legend from "@/components/ui/Legend";
 
 type NumericFeatureName = {

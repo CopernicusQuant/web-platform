@@ -1,14 +1,14 @@
 import * as d3 from "d3";
 
 import type { MACDFeature } from "@/apis";
-import { colorPalette, plotSizeConfig, priceColors } from "@/components/plot/theme";
+import { colorPalette, plotSizeConfig, priceColors } from "@plot/theme";
 import { useTranslation } from "react-i18next";
 import {
   getMACDBarGroupID,
   getMACDLineID,
   accelerationFeatures,
   toggleMACDFeature,
-} from "@/components/plot/interactions/macd";
+} from "@plot/interactions/macd";
 import YAxis from "@/components/ui/YAxis";
 import type { MACDSubplotProps } from "./shared";
 import CrossoverSignals from "./CrossoverSignals";

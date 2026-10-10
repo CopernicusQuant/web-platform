@@ -1,16 +1,16 @@
 import * as d3 from "d3";
+import { useTranslation } from "react-i18next";
+import type { MarketActivityFeature } from "@/apis";
 import {
   amplitudeFeatures,
   getMarketBarGroupID,
   getMarketLineID,
-} from "@/components/plot/interactions/market-activity";
-import type { MarketSubplotProps } from "./shared";
-import { colorPalette, plotSizeConfig } from "../theme";
+} from "@plot/interactions/market-activity";
+import { colorPalette, plotSizeConfig } from "@plot/theme";
+import type { MarketSubplotProps } from "@plot/market-activity/shared";
+import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
+import { toggleFeature } from "@plot/interactions/market-activity";
 import YAxis from "@/components/ui/YAxis";
-import type { MarketActivityFeature } from "@/apis";
-import MarketFeatureIndicators from "@/components/plot/market-activity/MarketFeatureIndicators";
-import { toggleFeature } from "@/components/plot/interactions/market-activity";
-import { useTranslation } from "react-i18next";
 
 export default function Amplitude({ features, x, width, height }: MarketSubplotProps) {
   const { t } = useTranslation();

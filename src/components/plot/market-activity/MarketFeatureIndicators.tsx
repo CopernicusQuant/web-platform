@@ -3,7 +3,7 @@ import Legend from "@/components/ui/Legend";
 import {
   getMarketLegendID,
   getMarketLegendValueID,
-} from "@/components/plot/interactions/market-activity";
+} from "@plot/interactions/market-activity";
 
 type NumericFeatureName = {
   [K in keyof MarketActivityFeature]: MarketActivityFeature[K] extends number ? K : never;

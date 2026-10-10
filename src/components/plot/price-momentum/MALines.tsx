@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import type { FeatureByGroup } from "@/apis";
-import { getPMLineId, maFeatures } from "@/components/plot/interactions/price-momentum";
+import { getPMLineId, maFeatures } from "@plot/interactions/price-momentum";
 import { colorPalette } from "../theme";
 
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];

@@ -5,10 +5,10 @@ import {
   getPMBarGroupId,
   returnFeatures,
   toggleFeature,
-} from "@/components/plot/interactions/price-momentum";
-import { plotSizeConfig, priceColors } from "@/components/plot/theme";
+} from "@plot/interactions/price-momentum";
+import { plotSizeConfig, priceColors } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
-import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
+import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
 import type { PMSubplotProps } from "./shared";
 
 export default function Returns({ features, x, width, height }: PMSubplotProps) {

@@ -8,11 +8,11 @@ import type {
   MACDFeature,
 } from "@/apis";
 import { stockSelectionAtom } from "@/atoms/stocks";
-import { getHoverPlotFn, getLeavePlotFn } from "@/components/plot/interactions/hover";
-import { plotSizeConfig } from "@/components/plot/theme";
+import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
+import { plotSizeConfig } from "@plot/theme";
 import XAxis from "@/components/ui/XAxis";
-import StockFeatureIndicators from "@/components/plot/StockFeatureIndicators";
-import PMFeature from "@/components/plot/price-momentum/PMFeature";
+import StockFeatureIndicators from "@plot/StockFeatureIndicators";
+import PMFeature from "@plot/price-momentum/PMFeature";
 import { plotConfigAtom } from "@/atoms/plot";
 import MACDFeaturePlot from "./macd/MACDFeaturePlot";
 import MarketFeature from "./market-activity/MarketFeature";

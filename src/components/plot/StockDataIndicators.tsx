@@ -1,9 +1,9 @@
 import * as d3 from "d3";
 import type { StockValues } from "@/apis";
-import { plotSizeConfig, priceColors, legendConfig } from "@/components/plot/theme";
+import { plotSizeConfig, priceColors, legendConfig } from "@plot/theme";
 import type { PriceChartType } from "@/atoms/stocks";
 import { parseVolume, computePriceChange } from "@/lib/utils";
-import { priceElementIds } from "@/components/plot/interactions/price-trend";
+import { priceElementIds } from "@plot/interactions/price-trend";
 import DateLine from "../ui/DateLine";
 
 type StockDataIndicatorsProps = {
