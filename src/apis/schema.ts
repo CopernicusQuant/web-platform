@@ -14,7 +14,7 @@ const featureGroupParam: Record<FeatureGroupOpt, string> = {
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   priceMomentum: ["maBias", "return", "upDayRatio"] as const,
   marketActivity: ["activityScores", "priceAndTurnover", "amplitude"] as const,
-  macd: ["trendSignals"] as const,
+  macd: ["acceleration"] as const,
 };
 
 const dataWindowParam: Record<DataWindowOpt, string> = {

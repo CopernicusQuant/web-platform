@@ -23,7 +23,7 @@
     "priceAndTurnover": "Price & Turnover",
     "amplitude": "Amplitude",
 
-    "trendSignals": "Trend Signals"
+    "acceleration": "Acceleration"
   },
   "featureName": {
     "tradingActivityScore": "Trading Activity",
@@ -37,6 +37,9 @@
     "amplitudeMa20": "Amplitude MA20",
 
     "emaFast": "EMA Fast",
-    "emaSlow": "EMA Slow"
+    "emaSlow": "EMA Slow",
+    "dea": "DEA",
+    "diff": "DIFF",
+    "hist": "HIST"
   }
 }

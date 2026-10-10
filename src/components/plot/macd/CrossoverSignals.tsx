@@ -8,9 +8,15 @@ type CrossoverSignalsProps = {
   features: MACDFeature[];
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
+  currPlot?: "price" | "feature";
 };
 
-export default function CrossoverSignals({ features, x, y }: CrossoverSignalsProps) {
+export default function CrossoverSignals({
+  features,
+  x,
+  y,
+  currPlot = "price",
+}: CrossoverSignalsProps) {
   const goldDays: string[] = [];
   const deadDays: string[] = [];
   features.forEach((feature) => {
@@ -35,10 +41,10 @@ export default function CrossoverSignals({ features, x, y }: CrossoverSignalsPro
 
   return (
     <g opacity={0.4}>
-      <g id={getMACDCrossLinesID("gold")}>
+      <g id={getMACDCrossLinesID(`gold-${currPlot}`)}>
         {goldDays.map((date) => drawLine(date, priceColors.up))}
       </g>
-      <g id={getMACDCrossLinesID("dead")}>
+      <g id={getMACDCrossLinesID(`dead-${currPlot}`)}>
         {deadDays.map((date) => drawLine(date, priceColors.down))}
       </g>
     </g>
