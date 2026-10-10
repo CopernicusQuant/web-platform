@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Legend from "@/components/ui/Legend";
 import {
   emaFeatures,
@@ -6,10 +7,9 @@ import {
   getMACDLegendID,
   getMACDLegendValueID,
   toggleMACDFeature,
-} from "../interactions/macd";
-import { colorPalette, legendConfig, priceColors } from "../theme";
+} from "@plot/interactions/macd";
+import { colorPalette, legendConfig, priceColors } from "@plot/theme";
 import type { MACDFeature } from "@/apis";
-import { useTranslation } from "react-i18next";
 import type { PriceChartType } from "@/atoms/stocks";
 
 type MACDIndicatorsProps = {

@@ -10,12 +10,12 @@ import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-t
 import {
   updateFeatureTrendIndicators,
   resetFeatureTrendIndicators,
-} from "@/components/plot/interactions/feature-trend";
+} from "@plot/interactions/feature-trend";
 import {
   updatePriceMomentumIndicators,
   resetPriceMomentumIndicators,
-} from "@/components/plot/interactions/price-momentum";
-import { plotSizeConfig } from "@/components/plot/theme";
+} from "@plot/interactions/price-momentum";
+import { plotSizeConfig } from "@plot/theme";
 import {
   resetMarketActivityIndicators,
   updateMarketActivityIndicators,

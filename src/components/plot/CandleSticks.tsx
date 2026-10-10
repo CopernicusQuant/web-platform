@@ -1,5 +1,5 @@
 import type { StockValues } from "@/apis";
-import { priceColors } from "@/components/plot/theme";
+import { priceColors } from "@plot/theme";
 
 type CandleStickProps = {
   prices: StockValues[];

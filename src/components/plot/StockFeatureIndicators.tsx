@@ -1,4 +1,4 @@
-import { featureElementIds } from "@/components/plot/interactions/feature-trend";
+import { featureElementIds } from "@plot/interactions/feature-trend";
 import DateLine from "@/components/ui/DateLine";
 
 type StockFeatureIndicatorsProps = {

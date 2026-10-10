@@ -5,11 +5,11 @@ import {
   activityScoreFeatures,
   getMarketLineID,
   toggleFeature,
-} from "@/components/plot/interactions/market-activity";
-import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
+} from "@plot/interactions/market-activity";
+import { colorPalette, plotSizeConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
-import MarketFeatureIndicators from "@/components/plot/market-activity/MarketFeatureIndicators";
-import type { MarketSubplotProps } from "./shared";
+import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
+import type { MarketSubplotProps } from "@plot/market-activity/shared";
 
 export default function ActivityScores({
   features,

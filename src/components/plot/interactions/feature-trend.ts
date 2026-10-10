@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { updateDateLine } from "@/components/plot/interactions/date-line";
+import { updateDateLine } from "@plot/interactions/date-line";
 import type { StockValues } from "@/apis";
 
 const featureElementIds = {

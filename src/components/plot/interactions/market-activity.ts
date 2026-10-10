@@ -1,5 +1,5 @@
 import type { MarketActivityFeature, StockValues } from "@/apis";
-import { toggleElement, updateTextValue } from "@/components/plot/interactions/d3-utils";
+import { toggleElement, updateTextValue } from "@plot/interactions/d3-utils";
 
 const activityScoreFeatures = [
   "tradingActivityScore",

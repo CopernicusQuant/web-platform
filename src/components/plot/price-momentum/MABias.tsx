@@ -5,9 +5,9 @@ import {
   maBiasFeatures,
   getPMLineId,
   toggleFeature,
-} from "@/components/plot/interactions/price-momentum";
-import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
-import FeatureIndicators from "@/components/plot/price-momentum/FeatureIndicators";
+} from "@plot/interactions/price-momentum";
+import { colorPalette, plotSizeConfig } from "@plot/theme";
+import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
 import type { PMSubplotProps } from "./shared";
 

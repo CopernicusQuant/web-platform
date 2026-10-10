@@ -4,9 +4,9 @@ import {
   getPMLineId,
   toggleFeature,
   upDayRatioFeatures,
-} from "@/components/plot/interactions/price-momentum";
+} from "@plot/interactions/price-momentum";
 import YAxis from "@/components/ui/YAxis";
-import { colorPalette, plotSizeConfig } from "@/components/plot/theme";
+import { colorPalette, plotSizeConfig } from "@plot/theme";
 import FeatureIndicators from "./FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
 import type { PMSubplotProps } from "./shared";

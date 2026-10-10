@@ -12,7 +12,7 @@
   "featureGroupDescription": {
     "priceMomentum": "measures price momentum using moving averages, deviations, returns, and up-day ratios to help predict future price movement from the direction, strength, and persistence of recent trends.",
     "marketActivity": "measures market activity through trading intensity, turnover, liquidity conditions, and price volatility to identify active trading, thin liquidity, and stagnant capital flows.",
-    "macd": "measures trend momentum through fast and slow exponential moving averages, their difference and signal lines, histogram values, and bullish or bearish crossover signals."
+    "macd": "tracks changes in trend momentum through fast and slow exponential moving averages, DIFF, DEA, and the histogram. Crossovers indicate shifts in momentum relative to its smoothed trend."
   },
   "subPlotName": {
     "maBias": "MA Bias",

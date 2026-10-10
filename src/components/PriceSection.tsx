@@ -21,7 +21,7 @@ import {
   Selections,
   Button,
 } from "@/components/ui/PlotSection";
-import StockDataPlot from "@/components/plot/StockDataPlot";
+import StockDataPlot from "@plot/StockDataPlot";
 import CandleIcon from "@/components/icons/CandleIcon";
 import LineIcon from "@/components/icons/LineIcon";
 

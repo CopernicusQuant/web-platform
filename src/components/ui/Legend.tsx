@@ -1,4 +1,4 @@
-import { colorPalette, legendConfig } from "@/components/plot/theme";
+import { colorPalette, legendConfig } from "@plot/theme";
 
 type LegendProps = {
   legendId: string;

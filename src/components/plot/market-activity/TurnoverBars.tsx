@@ -4,8 +4,8 @@ import {
   getMarketBarGroupID,
   getMarketLegendID,
   getMarketLegendValueID,
-} from "@/components/plot/interactions/market-activity";
-import { colorPalette } from "@/components/plot/theme";
+} from "@plot/interactions/market-activity";
+import { colorPalette } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
 
 type TurnoverBarsProps = {
