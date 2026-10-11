@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import type { MACDFeature } from "@/apis";
-import { emaFeatures, getMACDLineID } from "../interactions/macd";
-import { colorPalette } from "../theme";
+import { emaFeatures, getMACDLineID } from "@plot/interactions/macd";
+import { colorPalette } from "@plot/theme";
 
 type EMALinesProps = {
   features: MACDFeature[];

@@ -5,6 +5,7 @@ import type {
   PriceMomentumFeature,
   MarketActivityFeature,
   MACDFeature,
+  BollingerBandsFeature,
 } from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
@@ -21,6 +22,7 @@ import {
   updateMarketActivityIndicators,
 } from "./market-activity";
 import { resetMACDIndicators, updateMACDIndicators } from "./macd";
+import { resetBBIndicators, updateBBIndicators } from "./bollinger-bands";
 
 const getHoverPlotFn = ({
   data,
@@ -103,6 +105,17 @@ const getHoverPlotFn = ({
           y,
         });
         break;
+      case "bollingerBands":
+        updateBBIndicators({
+          xIdx,
+          features: features as BollingerBandsFeature[],
+          height: referenceHeight,
+          marginTop,
+          marginBottom,
+          x,
+          y,
+        });
+        break;
     }
   };
 };
@@ -144,6 +157,10 @@ const getLeavePlotFn = ({
         break;
       case "macd":
         resetMACDIndicators({ features: features as MACDFeature[] });
+        break;
+      case "bollingerBands":
+        resetBBIndicators({ features: features as BollingerBandsFeature[] });
+        break;
     }
   };
 };

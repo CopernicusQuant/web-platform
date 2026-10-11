@@ -6,9 +6,15 @@ type StockTrendLineProps = {
   prices: StockValues[];
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
+  showArea?: boolean;
 };
 
-export default function StockTrendLine({ prices, x, y }: StockTrendLineProps) {
+export default function StockTrendLine({
+  prices,
+  x,
+  y,
+  showArea = true,
+}: StockTrendLineProps) {
   const path = d3
     .line<StockValues>()
     .x((price) => (x(price.tradeDate) ?? 0) + x.bandwidth() / 2)
@@ -47,8 +53,8 @@ export default function StockTrendLine({ prices, x, y }: StockTrendLineProps) {
           <stop offset="100%" stopColor={strokeColor} stopOpacity={0.0} />
         </linearGradient>
       </defs>
-      <path d={area} fill={`url(#${linearGradientID})`} />;
-      <path d={path} fill="none" stroke={strokeColor} strokeWidth={2.0} />;
+      {showArea && <path d={area} fill={`url(#${linearGradientID})`} />}
+      <path d={path} fill="none" stroke={strokeColor} strokeWidth={2.0} />
     </>
   );
 }
