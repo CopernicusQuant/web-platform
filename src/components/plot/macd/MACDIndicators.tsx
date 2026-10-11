@@ -3,7 +3,6 @@ import Legend from "@/components/ui/Legend";
 import {
   emaFeatures,
   getMACDCircleID,
-  getMACDCirclesGroupID,
   getMACDLegendID,
   getMACDLegendValueID,
   toggleMACDFeature,
@@ -24,7 +23,7 @@ export default function MACDIndicators({ features, chartType }: MACDIndicatorsPr
     <>
       {/* EMA circles */}
       {chartType === "line" && (
-        <g id={getMACDCirclesGroupID()} opacity={0}>
+        <g>
           {emaFeatures.map((featureName, i) => (
             <circle
               key={getMACDCircleID(featureName)}

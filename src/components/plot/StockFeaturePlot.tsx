@@ -6,6 +6,7 @@ import type {
   PriceMomentumFeature,
   MarketActivityFeature,
   MACDFeature,
+  BollingerBandsFeature,
 } from "@/apis";
 import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
@@ -14,8 +15,9 @@ import XAxis from "@/components/ui/XAxis";
 import StockFeatureIndicators from "@plot/StockFeatureIndicators";
 import PMFeature from "@plot/price-momentum/PMFeature";
 import { plotConfigAtom } from "@/atoms/plot";
-import MACDFeaturePlot from "./macd/MACDFeaturePlot";
-import MarketFeature from "./market-activity/MarketFeature";
+import MACDFeaturePlot from "@plot/macd/MACDFeaturePlot";
+import MarketFeature from "@plot/market-activity/MarketFeature";
+import BBFeaturePlot from "./bollinger-bands/BBFeaturePlot";
 
 type StockFeaturePlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -61,6 +63,52 @@ export default function StockFeaturePlot({
     referenceHeight,
   });
 
+  const getFeaturePlot = () => {
+    switch (featureGroup) {
+      case "priceMomentum":
+        return (
+          <PMFeature
+            features={features as PriceMomentumFeature[]}
+            width={width}
+            height={height}
+            x={x}
+            subplotName={featureSubPlot}
+          />
+        );
+      case "marketActivity":
+        return (
+          <MarketFeature
+            features={features as MarketActivityFeature[]}
+            width={width}
+            height={height}
+            x={x}
+            subplotName={featureSubPlot}
+          />
+        );
+      case "macd":
+        return (
+          <MACDFeaturePlot
+            features={features as MACDFeature[]}
+            width={width}
+            height={height}
+            x={x}
+          />
+        );
+      case "bollingerBands":
+        return (
+          <BBFeaturePlot
+            features={features as BollingerBandsFeature[]}
+            subplotName={featureSubPlot}
+            width={width}
+            height={height}
+            x={x}
+          />
+        );
+      default:
+        return <></>;
+    }
+  };
+
   return (
     <svg
       width={width}
@@ -70,32 +118,7 @@ export default function StockFeaturePlot({
       onPointerLeave={onPointerLeave}
     >
       <XAxis labels={xLabels} x={x} xPos={0} yPos={height - marginBottom} />
-      {featureGroup === "priceMomentum" && (
-        <PMFeature
-          features={features as PriceMomentumFeature[]}
-          width={width}
-          height={height}
-          x={x}
-          subplotName={featureSubPlot}
-        />
-      )}
-      {featureGroup === "marketActivity" && (
-        <MarketFeature
-          features={features as MarketActivityFeature[]}
-          width={width}
-          height={height}
-          x={x}
-          subplotName={featureSubPlot}
-        />
-      )}
-      {featureGroup === "macd" && (
-        <MACDFeaturePlot
-          features={features as MACDFeature[]}
-          width={width}
-          height={height}
-          x={x}
-        />
-      )}
+      {getFeaturePlot()}
       <StockFeatureIndicators height={height} />
     </svg>
   );

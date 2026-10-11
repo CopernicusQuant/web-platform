@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { useAtomValue } from "jotai";
 import type {
+  BollingerBandsFeature,
   FeatureGroupOpt,
   MACDFeature,
   PriceMomentumFeature,
@@ -18,9 +19,10 @@ import MAIndicators from "@plot/price-momentum/MAIndicators";
 import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
 import { plotSizeConfig } from "@plot/theme";
 import TurnoverBars from "@plot/market-activity/TurnoverBars";
-import CrossoverSignals from "./macd/CrossoverSignals";
-import EMALines from "./macd/EMALines";
-import MACDIndicators from "./macd/MACDIndicators";
+import CrossoverSignals from "@plot/macd/CrossoverSignals";
+import EMALines from "@plot/macd/EMALines";
+import MACDIndicators from "@plot/macd/MACDIndicators";
+import BollingerBands from "@plot/bollinger-bands/BollingerBands";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -78,6 +80,59 @@ export default function StockDataPlot({
     referenceHeight: plotConfig.referenceHeight,
   });
 
+  const getPriceTrendPlot = () => {
+    switch (featureGroup) {
+      case "priceMomentum":
+        return (
+          <MALines
+            features={features as PriceMomentumFeature[]}
+            x={x}
+            y={y}
+            yAxisMin={marginTop}
+            yAxisMax={height - marginBottom}
+          />
+        );
+      case "marketActivity":
+        return <TurnoverBars stock={stock} x={x} y={y} />;
+      case "macd":
+        return (
+          <>
+            <EMALines features={features as MACDFeature[]} x={x} y={y} />
+            <CrossoverSignals features={features as MACDFeature[]} x={x} y={y} />
+          </>
+        );
+      case "bollingerBands":
+        return (
+          <BollingerBands
+            features={features as BollingerBandsFeature[]}
+            x={x}
+            y={y}
+            chartType={chartType}
+          />
+        );
+      default:
+        return <></>;
+    }
+  };
+
+  const getIndicators = () => {
+    switch (featureGroup) {
+      case "priceMomentum":
+        return (
+          <MAIndicators
+            features={features as PriceMomentumFeature[]}
+            chartType={chartType}
+          />
+        );
+      case "macd":
+        return (
+          <MACDIndicators features={features as MACDFeature[]} chartType={chartType} />
+        );
+      default:
+        return <></>;
+    }
+  };
+
   return (
     <svg
       width={width}
@@ -99,24 +154,17 @@ export default function StockDataPlot({
       {/* x axis marks */}
       <XAxis labels={xLabels} x={x} xPos={0} yPos={height - marginBottom} />
       {/* price trend */}
-      {featureGroup === "priceMomentum" && (
-        <MALines
-          features={features as PriceMomentumFeature[]}
+      {getPriceTrendPlot()}
+      {getIndicators()}
+      {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
+      {chartType === "line" && (
+        <TrendLine
+          prices={stock}
           x={x}
           y={y}
-          yAxisMin={marginTop}
-          yAxisMax={height - marginBottom}
+          showArea={featureGroup !== "bollingerBands"}
         />
       )}
-      {featureGroup === "marketActivity" && <TurnoverBars stock={stock} x={x} y={y} />}
-      {featureGroup === "macd" && (
-        <>
-          <EMALines features={features as MACDFeature[]} x={x} y={y} />
-          <CrossoverSignals features={features as MACDFeature[]} x={x} y={y} />
-        </>
-      )}
-      {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
-      {chartType === "line" && <TrendLine prices={stock} x={x} y={y} />}
       <StockDataIndicators
         stock={stock}
         chartType={chartType}
@@ -124,15 +172,6 @@ export default function StockDataPlot({
         height={height}
         y={y}
       />
-      {featureGroup === "priceMomentum" && (
-        <MAIndicators
-          features={features as PriceMomentumFeature[]}
-          chartType={chartType}
-        />
-      )}
-      {featureGroup === "macd" && (
-        <MACDIndicators features={features as MACDFeature[]} chartType={chartType} />
-      )}
     </svg>
   );
 }

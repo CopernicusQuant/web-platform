@@ -2,19 +2,26 @@ import { z } from "zod";
 
 type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "5Y";
 
-const FeatureGroups = ["priceMomentum", "marketActivity", "macd"] as const;
+const FeatureGroups = [
+  "priceMomentum",
+  "marketActivity",
+  "macd",
+  "bollingerBands",
+] as const;
 type FeatureGroupOpt = (typeof FeatureGroups)[number];
 
 const featureGroupParam: Record<FeatureGroupOpt, string> = {
   priceMomentum: "pricemomentum",
   marketActivity: "marketactivity",
   macd: "macd",
+  bollingerBands: "bollingerbands",
 };
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   priceMomentum: ["maBias", "return", "upDayRatio"] as const,
   marketActivity: ["activityScores", "priceAndTurnover", "amplitude"] as const,
   macd: ["acceleration"] as const,
+  bollingerBands: ["position", "width"] as const,
 };
 
 const dataWindowParam: Record<DataWindowOpt, string> = {
@@ -125,20 +132,41 @@ const MACDFeatureSchema = z
     dead: input.macd_dead,
   }));
 
+const BollingerBandsFeaturesSchema = z
+  .object({
+    trade_date: z.string(),
+    bb_upper: z.float32(),
+    bb_lower: z.float32(),
+    bb_mid: z.float32(),
+    bb_width: z.float32(),
+    bb_position: z.float32(),
+  })
+  .transform((input) => ({
+    tradeDate: input.trade_date,
+    bbUpper: input.bb_upper,
+    bbLower: input.bb_lower,
+    bbMid: input.bb_mid,
+    bbWidth: input.bb_width,
+    bbPos: input.bb_position,
+  }));
+
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
   marketActivity: MarketActivityFeaturesSchema,
   macd: MACDFeatureSchema,
+  bollingerBands: BollingerBandsFeaturesSchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
 type StockValues = z.infer<typeof StockValuesSchema>;
 type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
 type MarketActivityFeature = z.infer<typeof MarketActivityFeaturesSchema>;
 type MACDFeature = z.infer<typeof MACDFeatureSchema>;
+type BollingerBandsFeature = z.infer<typeof BollingerBandsFeaturesSchema>;
 type FeatureByGroup = {
   priceMomentum: PriceMomentumFeature;
   marketActivity: MarketActivityFeature;
   macd: MACDFeature;
+  bollingerBands: BollingerBandsFeature;
 };
 type StockData<G extends FeatureGroupOpt> = {
   ticker: string;
@@ -153,6 +181,7 @@ export {
   StockValuesSchema,
   MarketActivityFeaturesSchema,
   PriceMomentumFeaturesSchema,
+  BollingerBandsFeaturesSchema,
   FeatureSchemas,
   FeatureSubplots,
 };
@@ -165,4 +194,5 @@ export type {
   MACDFeature,
   PriceMomentumFeature,
   MarketActivityFeature,
+  BollingerBandsFeature,
 };

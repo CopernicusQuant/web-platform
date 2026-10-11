@@ -2,17 +2,20 @@
   "featureGroupName": {
     "priceMomentum": "Price Momentum",
     "marketActivity": "Market Activity",
-    "macd": "MACD"
+    "macd": "MACD",
+    "bollingerBands": "Bollinger Bands"
   },
   "featureGroupBrief": {
     "priceMomentum": "moving averages, deviations, returns, and up-day ratios.",
     "marketActivity": "trading activity, turnover, liquidity, and price volatility.",
-    "macd":"moving average convergence divergence, with crossover signals."
+    "macd":"moving average convergence divergence, with crossover signals.",
+    "bollingerBands": "price position and volatility relative to a moving-average band."
   },
   "featureGroupDescription": {
     "priceMomentum": "measures price momentum using moving averages, deviations, returns, and up-day ratios to help predict future price movement from the direction, strength, and persistence of recent trends.",
     "marketActivity": "measures market activity through trading intensity, turnover, liquidity conditions, and price volatility to identify active trading, thin liquidity, and stagnant capital flows.",
-    "macd": "tracks changes in trend momentum through fast and slow exponential moving averages, DIFF, DEA, and the histogram. Crossovers indicate shifts in momentum relative to its smoothed trend."
+    "macd": "tracks changes in trend momentum through fast and slow exponential moving averages, DIFF, DEA, and the histogram. Crossovers indicate shifts in momentum relative to its smoothed trend.",
+    "bollingerBands": "measures price volatility and relative position using moving-average bands to identify expanding or contracting volatility and unusually strong moves near the upper or lower band."
   },
   "subPlotName": {
     "maBias": "MA Bias",
@@ -23,7 +26,10 @@
     "priceAndTurnover": "Price & Turnover",
     "amplitude": "Amplitude",
 
-    "acceleration": "Acceleration"
+    "acceleration": "Acceleration",
+
+    "width": "Width",
+    "position": "Position"
   },
   "featureName": {
     "tradingActivityScore": "Trading Activity",
@@ -40,6 +46,9 @@
     "emaSlow": "EMA Slow",
     "dea": "DEA",
     "diff": "DIFF",
-    "hist": "HIST"
+    "hist": "HIST",
+
+    "bbPos": "Position",
+    "bbWidth": "Bandwidth"
   }
 }
