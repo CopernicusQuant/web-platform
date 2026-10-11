@@ -21,7 +21,7 @@ export default function YAxis({
 }: YAxisProps) {
   return (
     <g transform={`translate(${xPos}, ${yPos})`} fontSize={12} className="select-none">
-      {y.ticks(5).map((tick) => (
+      {y.ticks(6).map((tick) => (
         <g key={`stock-${tick}`}>
           <line
             x1={0}
