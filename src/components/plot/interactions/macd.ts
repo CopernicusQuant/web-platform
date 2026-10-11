@@ -47,17 +47,22 @@ const updateMACDIndicators = ({
   const { duration } = animationConfig;
   const currFeature = features[xIdx];
   // show dots on the curve
-  d3.select(`#${getMACDCirclesGroupID()}`).attr("opacity", 1);
   [...emaFeatures].forEach((featureName) => {
     const xPos = (x(currFeature.tradeDate) ?? 0) + x.bandwidth() / 2;
     const yPos = y(currFeature[featureName]) ?? 0;
-    d3.select(`#${getMACDCircleID(featureName)}`)
+    const currCircle = d3.select(`#${getMACDCircleID(featureName)}`);
+    currCircle
       .transition()
       .duration(duration)
       .ease(d3.easeLinear)
       .attr("cx", xPos)
-      .attr("cy", yPos)
-      .attr("opacity", yPos <= height - marginBottom && yPos >= marginTop ? 1 : 0);
+      .attr("cy", yPos);
+    if (currCircle.attr("data-on") !== "off") {
+      d3.select(`#${getMACDCircleID(featureName)}`).attr(
+        "opacity",
+        yPos <= height - marginBottom && yPos >= marginTop ? 1 : 0,
+      );
+    }
     updateTextValue(
       getMACDLegendValueID(featureName),
       currFeature[featureName].toFixed(2),
@@ -81,8 +86,8 @@ const updateMACDIndicators = ({
 };
 
 const resetMACDIndicators = ({ features }: { features: MACDFeature[] }) => {
-  d3.select(`#${getMACDCirclesGroupID()}`).attr("opacity", 0);
   [...emaFeatures].forEach((featureName) => {
+    d3.select(`#${getMACDCircleID(featureName)}`).attr("opacity", 0);
     updateTextValue(
       getMACDLegendValueID(featureName),
       features.at(-1)![featureName].toFixed(2),

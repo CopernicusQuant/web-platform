@@ -25,6 +25,7 @@ const toggleBand = () => {
 const toggleBBFeature = (featureName: string) => {
   toggleElement(getBBLineID(featureName));
   toggleElement(getBBLegendID(featureName), 0.3, 1.0);
+  toggleElement(getBBCircleGroupID("bbMid"));
 };
 
 const updateBBIndicators = ({
@@ -51,7 +52,10 @@ const updateBBIndicators = ({
     updateTextValue(getBBLegendValueID(featureName), currFeature[featureName].toFixed(2));
   });
   // update circle position
-  d3.select(`#${getBBCircleGroupID("bbMid")}`).attr("opacity", 1);
+  const circleGroup = d3.select(`#${getBBCircleGroupID("bbMid")}`);
+  if (circleGroup.attr("data-on") !== "off") {
+    d3.select(`#${getBBCircleGroupID("bbMid")}`).attr("opacity", 1);
+  }
   d3.select(`#${getBBCircleID("bbMid")}`)
     .transition()
     .duration(duration)
