@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
-import type { BBSubplotProps } from "./shared";
+import type { SubplotProps } from "@plot/shared";
 import {
   bbIDPrefix,
   toggleBBFeature,
@@ -12,7 +12,12 @@ import Legend from "@/components/ui/Legend";
 import { useTranslation } from "react-i18next";
 import { getLegendID, getLegendValueID, getLineID } from "@plot/interactions/d3-utils";
 
-export default function BBWidth({ features, width, height, x }: BBSubplotProps) {
+export default function BBWidth({
+  features,
+  width,
+  height,
+  x,
+}: SubplotProps<"bollingerBands">) {
   const { t } = useTranslation();
   let yMax = 0;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;

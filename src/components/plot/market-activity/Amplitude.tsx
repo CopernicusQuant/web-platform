@@ -3,13 +3,18 @@ import { useTranslation } from "react-i18next";
 import type { MarketActivityFeature } from "@/apis";
 import { amplitudeFeatures, marketIDPrefix } from "@plot/interactions/market-activity";
 import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
-import type { MarketSubplotProps } from "@plot/market-activity/shared";
+import type { SubplotProps } from "@plot/shared";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
 import { toggleFeature } from "@plot/interactions/market-activity";
 import YAxis from "@/components/ui/YAxis";
 import { getBarGroupID, getLineID } from "@plot/interactions/d3-utils";
 
-export default function Amplitude({ features, x, width, height }: MarketSubplotProps) {
+export default function Amplitude({
+  features,
+  x,
+  width,
+  height,
+}: SubplotProps<"marketActivity">) {
   const { t } = useTranslation();
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   let [yMax, yMin] = [-Infinity, Infinity];

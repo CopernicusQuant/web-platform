@@ -5,7 +5,6 @@ import { animationConfig, priceColors } from "@plot/theme";
 import {
   getBarGroupID,
   getCircleID,
-  getCirclesGroupID,
   getLegendID,
   getLegendValueID,
   getLineID,
@@ -40,14 +39,12 @@ const updatePriceMomentumIndicators = ({
   y: d3.ScaleLinear<number, number>;
 }) => {
   const { duration } = animationConfig;
-  const circleGroup = d3.select(`#${getCirclesGroupID(pmIDPrefix)}`);
-  circleGroup.attr("opacity", 1);
   const currFeature = features[xIdx];
   maFeatures.forEach((featureName) => {
     // update circle visibility and position
     const xPos = (x(currFeature.tradeDate) ?? 0) + x.bandwidth() / 2;
     const yPos = y(currFeature[featureName]) ?? 0;
-    const currCircle = circleGroup.select(`#${getCircleID(pmIDPrefix, featureName)}`);
+    const currCircle = d3.select(`#${getCircleID(pmIDPrefix, featureName)}`);
     const currLineOpacity = d3
       .select(`#${getLineID(pmIDPrefix, featureName)}`)
       .attr("opacity");
@@ -92,8 +89,6 @@ const resetPriceMomentumIndicators = ({
   features: PriceMomentumFeature[];
 }) => {
   const { duration } = animationConfig;
-  const circleGroup = d3.select(`#${getCirclesGroupID(pmIDPrefix)}`);
-  circleGroup.attr("opacity", 0);
   if (!features.at(-1)) return;
 
   [...maBiasFeatures, ...upDayRatioFeatures, ...returnFeatures].forEach((featureName) => {
@@ -104,6 +99,7 @@ const resetPriceMomentumIndicators = ({
   });
 
   maFeatures.forEach((featureName) => {
+    d3.select(`#${getCircleID(pmIDPrefix, featureName)}`).attr("opacity", 0);
     updateTextValue(
       getLegendValueID(pmIDPrefix, featureName),
       features.at(-1)![featureName].toFixed(2),

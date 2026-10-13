@@ -9,10 +9,15 @@ import {
 import { plotSizeConfig, priceColors } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
-import type { PMSubplotProps } from "./shared";
+import type { SubplotProps } from "@plot/shared";
 import { getBarGroupID } from "@plot/interactions/d3-utils";
 
-export default function Returns({ features, x, width, height }: PMSubplotProps) {
+export default function Returns({
+  features,
+  x,
+  width,
+  height,
+}: SubplotProps<"priceMomentum">) {
   const { marginTop, marginBottom, marginLeft, marginRight } = plotSizeConfig;
   // y-axis mapper
   const [yMin, yMax] = useMemo(() => {

@@ -19,20 +19,19 @@ export default function MAIndicators({ features, chartType }: MAIndicatorsProps)
   return (
     <>
       {/* Moving average lines */}
-      {chartType === "line" && (
-        <g id={getCirclesGroupID(pmIDPrefix)} opacity={0}>
-          {maFeatures.map((featureName, i) => (
-            <circle
-              key={getCircleID(pmIDPrefix, featureName)}
-              id={getCircleID(pmIDPrefix, featureName)}
-              r={5}
-              fill={colorPalette[i]}
-              stroke="white"
-              strokeWidth={2}
-            />
-          ))}
-        </g>
-      )}
+      <g id={getCirclesGroupID(pmIDPrefix)} opacity={chartType === "line" ? 1 : 0}>
+        {maFeatures.map((featureName, i) => (
+          <circle
+            key={getCircleID(pmIDPrefix, featureName)}
+            id={getCircleID(pmIDPrefix, featureName)}
+            r={5}
+            fill={colorPalette[i]}
+            stroke="white"
+            strokeWidth={2}
+            opacity={0}
+          />
+        ))}
+      </g>
       {/* Moving average legends */}
       {features.at(-1) &&
         maFeatures.map((featureName, i) => {

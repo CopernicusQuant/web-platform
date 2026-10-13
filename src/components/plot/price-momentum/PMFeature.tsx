@@ -1,11 +1,11 @@
 import MABias from "@plot/price-momentum/MABias";
 import Returns from "@plot/price-momentum/Returns";
 import UpDayRatio from "@plot/price-momentum/UpDayRatio";
-import type { PMSubplotProps } from "./shared";
+import type { SubplotProps } from "@plot/shared";
 
 type PMFeatureProps = {
   subplotName: string;
-} & PMSubplotProps;
+} & SubplotProps<"priceMomentum">;
 
 export default function PMFeature({
   features,
@@ -14,7 +14,7 @@ export default function PMFeature({
   x,
   subplotName,
 }: PMFeatureProps) {
-  const props: PMSubplotProps = {
+  const props: SubplotProps<"priceMomentum"> = {
     features,
     x,
     width,

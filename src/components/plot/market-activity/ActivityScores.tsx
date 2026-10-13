@@ -9,7 +9,7 @@ import {
 import { colorPalette, plotSizeConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
-import type { MarketSubplotProps } from "@plot/market-activity/shared";
+import type { SubplotProps } from "@plot/shared";
 import { getLineID } from "@plot/interactions/d3-utils";
 
 export default function ActivityScores({
@@ -17,7 +17,7 @@ export default function ActivityScores({
   x,
   width,
   height,
-}: MarketSubplotProps) {
+}: SubplotProps<"marketActivity">) {
   const { t } = useTranslation();
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   let [yMax, yMin] = [-Infinity, Infinity];

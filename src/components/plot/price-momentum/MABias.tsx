@@ -10,11 +10,16 @@ import { getLineID } from "@plot/interactions/d3-utils";
 import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
 import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
-import type { PMSubplotProps } from "./shared";
+import type { SubplotProps } from "@plot/shared";
 
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
-export default function MABias({ features, width, height, x }: PMSubplotProps) {
+export default function MABias({
+  features,
+  width,
+  height,
+  x,
+}: SubplotProps<"priceMomentum">) {
   const { markStrokeDasharray, markStrokeWidth, strokeWidth } = svgPathConfig;
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
   // y-axis mapper

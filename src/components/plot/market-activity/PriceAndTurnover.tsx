@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import YAxis from "@/components/ui/YAxis";
 import { priceAndTurnoverFeatures } from "@plot/interactions/market-activity";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
-import type { MarketSubplotProps } from "@plot/market-activity/shared";
+import type { SubplotProps } from "@plot/shared";
 import { toggleFeature } from "@plot/interactions/market-activity";
 import { getCirclesGroupID } from "@plot/interactions/d3-utils";
 
@@ -13,7 +13,7 @@ export default function PriceAndTurnover({
   x,
   width,
   height,
-}: MarketSubplotProps) {
+}: SubplotProps<"marketActivity">) {
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const { t } = useTranslation();
   const y = d3.scaleLinear([-0.05, 1.05], [height - marginBottom, marginTop]);
