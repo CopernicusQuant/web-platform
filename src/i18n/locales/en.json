@@ -1,6 +1,7 @@
 {
   "featureGroupName": {
     "priceMomentum": "Price Momentum",
+    "volumeMomentum": "Volume Momentum",
     "marketActivity": "Market Activity",
     "macd": "MACD",
     "bollingerBands": "Bollinger Bands",
@@ -8,6 +9,7 @@
   },
   "featureGroupBrief": {
     "priceMomentum": "moving averages, deviations, returns, and up-day ratios.",
+    "volumeMomentum": "volume averages, deviations, changes, and short- versus long-term ratios.",
     "marketActivity": "trading activity, turnover, liquidity, and price volatility.",
     "macd":"moving average convergence divergence, with crossover signals.",
     "bollingerBands": "price position and volatility relative to a moving-average band.",
@@ -15,6 +17,7 @@
   },
   "featureGroupDescription": {
     "priceMomentum": "measures price momentum using moving averages, deviations, returns, and up-day ratios to help predict future price movement from the direction, strength, and persistence of recent trends.",
+    "volumeMomentum": "measures volume momentum using moving averages, deviations, changes, and short- versus long-term ratios to identify strengthening or weakening trading participation and shifts in market interest.",
     "marketActivity": "measures market activity through trading intensity, turnover, liquidity conditions, and price volatility to identify active trading, thin liquidity, and stagnant capital flows.",
     "macd": "tracks changes in trend momentum through fast and slow exponential moving averages, DIFF, DEA, and the histogram. Crossovers indicate shifts in momentum relative to its smoothed trend.",
     "bollingerBands": "measures price volatility and relative position using moving-average bands to identify expanding or contracting volatility and unusually strong moves near the upper or lower band.",
@@ -23,7 +26,11 @@
   "subPlotName": {
     "maBias": "MA Bias",
     "return": "Return",
-    "upDayRatio": "Up-Day Ratio",
+    "upDayRatio": "Up-Day Ratio", 
+
+    "volumeBias": "Vol Bias",
+    "volumeChanges": "Vol Changes",
+    "volumeMARatio": "MA Ratio",
 
     "activityScores": "Activity Scores",
     "priceAndTurnover": "Price & Turnover",

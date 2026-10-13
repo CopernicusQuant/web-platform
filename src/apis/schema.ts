@@ -4,6 +4,7 @@ type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "5Y";
 
 const FeatureGroups = [
   "priceMomentum",
+  "volumeMomentum",
   "marketActivity",
   "bollingerBands",
   "macd",
@@ -13,6 +14,7 @@ type FeatureGroupOpt = (typeof FeatureGroups)[number];
 
 const featureGroupParam: Record<FeatureGroupOpt, string> = {
   priceMomentum: "pricemomentum",
+  volumeMomentum: "volumemomentum",
   marketActivity: "marketactivity",
   bollingerBands: "bollingerbands",
   macd: "macd",
@@ -21,6 +23,7 @@ const featureGroupParam: Record<FeatureGroupOpt, string> = {
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   priceMomentum: ["maBias", "return", "upDayRatio"] as const,
+  volumeMomentum: ["volumeBias", "volumeChanges", "volumeMARatio"] as const,
   marketActivity: ["activityScores", "priceAndTurnover", "amplitude"] as const,
   macd: ["acceleration"] as const,
   bollingerBands: ["position", "width"] as const,
@@ -61,7 +64,6 @@ const PriceMomentumFeaturesSchema = z
   .object({
     trade_date: z.string(),
     ma_5: z.float32(),
-    // ma_10: z.float32(),
     ma_20: z.float32(),
     ma_60: z.float32(),
     ma_5_bias: z.float32(),
@@ -76,7 +78,6 @@ const PriceMomentumFeaturesSchema = z
   .transform((input) => ({
     tradeDate: input.trade_date,
     ma5: input.ma_5,
-    // ma10: input.ma_10,
     ma20: input.ma_20,
     ma60: input.ma_60,
     ma5Bias: input.ma_5_bias,
@@ -87,6 +88,44 @@ const PriceMomentumFeaturesSchema = z
     return60d: input.return_60d,
     upRatio5d: input.up_ratio_5d,
     upRatio20d: input.up_ratio_20d,
+  }));
+
+const VolumeMomentumFeatureSchema = z
+  .object({
+    trade_date: z.string(),
+    vol_ma_5: z.float32(),
+    vol_ma_5_bias: z.float32(),
+    vol_change_5d: z.float32(),
+    vol_ma_10: z.float32(),
+    vol_ma_10_bias: z.float32(),
+    vol_change_10d: z.float32(),
+    vol_ma_20: z.float32(),
+    vol_ma_20_bias: z.float32(),
+    vol_change_20d: z.float32(),
+    vol_ma_60: z.float32(),
+    vol_ma_60_bias: z.float32(),
+    vol_change_60d: z.float32(),
+    vol_ma_5_10_ratio: z.float32(),
+    vol_ma_10_20_ratio: z.float32(),
+    vol_ma_20_60_ratio: z.float32(),
+  })
+  .transform((input) => ({
+    tradeDate: input.trade_date,
+    volMa5: input.vol_ma_5,
+    vol5Bias: input.vol_ma_5_bias,
+    vol5Change: input.vol_change_5d,
+    volMa10: input.vol_ma_10,
+    vol10Bias: input.vol_ma_10_bias,
+    vol10Change: input.vol_change_10d,
+    volMa20: input.vol_ma_20,
+    vol20Bias: input.vol_ma_20_bias,
+    vol20Change: input.vol_change_20d,
+    volMa60: input.vol_ma_60,
+    vol60Bias: input.vol_ma_60_bias,
+    vol60Change: input.vol_change_60d,
+    volMARatio510: input.vol_ma_5_10_ratio,
+    volMARatio1020: input.vol_ma_10_20_ratio,
+    volMARation2060: input.vol_ma_20_60_ratio,
   }));
 
 const MarketActivityFeaturesSchema = z
@@ -181,6 +220,7 @@ const DEMAFeaturesSchema = z
 
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
+  volumeMomentum: VolumeMomentumFeatureSchema,
   marketActivity: MarketActivityFeaturesSchema,
   macd: MACDFeatureSchema,
   bollingerBands: BollingerBandsFeaturesSchema,
@@ -189,12 +229,14 @@ const FeatureSchemas = {
 
 type StockValues = z.infer<typeof StockValuesSchema>;
 type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
+type VolumeMomentumFeature = z.infer<typeof VolumeMomentumFeatureSchema>;
 type MarketActivityFeature = z.infer<typeof MarketActivityFeaturesSchema>;
 type MACDFeature = z.infer<typeof MACDFeatureSchema>;
 type BollingerBandsFeature = z.infer<typeof BollingerBandsFeaturesSchema>;
 type DEMAFeature = z.infer<typeof DEMAFeaturesSchema>;
 type FeatureByGroup = {
   priceMomentum: PriceMomentumFeature;
+  volumeMomentum: VolumeMomentumFeature;
   marketActivity: MarketActivityFeature;
   macd: MACDFeature;
   bollingerBands: BollingerBandsFeature;
@@ -213,6 +255,7 @@ export {
   StockValuesSchema,
   MarketActivityFeaturesSchema,
   PriceMomentumFeaturesSchema,
+  VolumeMomentumFeatureSchema,
   BollingerBandsFeaturesSchema,
   DEMAFeaturesSchema,
   DEMAPeriods,
@@ -229,6 +272,7 @@ export type {
   FeatureByGroup,
   MACDFeature,
   PriceMomentumFeature,
+  VolumeMomentumFeature,
   MarketActivityFeature,
   BollingerBandsFeature,
 };
