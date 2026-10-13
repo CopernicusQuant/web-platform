@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import { useAtomValue } from "jotai";
 import type {
   BollingerBandsFeature,
+  DEMAFeature,
   FeatureGroupOpt,
   MACDFeature,
   PriceMomentumFeature,
@@ -23,6 +24,9 @@ import CrossoverSignals from "@plot/macd/CrossoverSignals";
 import EMALines from "@plot/macd/EMALines";
 import MACDIndicators from "@plot/macd/MACDIndicators";
 import BollingerBands from "@plot/bollinger-bands/BollingerBands";
+import DEMATrendLines from "@plot/dema/DEMATrendLines";
+import DEMASignals from "@plot/dema/DEMASignals";
+import DEMAIndicators from "./dema/DEMAIndicators";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -110,6 +114,18 @@ export default function StockDataPlot({
             chartType={chartType}
           />
         );
+      case "dema":
+        return (
+          <>
+            <DEMATrendLines
+              features={features as DEMAFeature[]}
+              x={x}
+              y={y}
+              chartType={chartType}
+            />
+            <DEMASignals features={features as DEMAFeature[]} x={x} y={y} />
+          </>
+        );
       default:
         return <></>;
     }
@@ -127,6 +143,10 @@ export default function StockDataPlot({
       case "macd":
         return (
           <MACDIndicators features={features as MACDFeature[]} chartType={chartType} />
+        );
+      case "dema":
+        return (
+          <DEMAIndicators features={features as DEMAFeature[]} chartType={chartType} />
         );
       default:
         return <></>;

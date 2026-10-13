@@ -3,10 +3,11 @@ import type { FeatureByGroup } from "@/apis";
 import YAxis from "@/components/ui/YAxis";
 import {
   maBiasFeatures,
-  getPMLineId,
+  pmIDPrefix,
   toggleFeature,
 } from "@plot/interactions/price-momentum";
-import { colorPalette, plotSizeConfig } from "@plot/theme";
+import { getLineID } from "@plot/interactions/d3-utils";
+import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
 import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
 import type { PMSubplotProps } from "./shared";
@@ -14,6 +15,7 @@ import type { PMSubplotProps } from "./shared";
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
 export default function MABias({ features, width, height, x }: PMSubplotProps) {
+  const { markStrokeDasharray, markStrokeWidth, strokeWidth } = svgPathConfig;
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
   // y-axis mapper
   let yMin = 1.0;
@@ -59,11 +61,11 @@ export default function MABias({ features, width, height, x }: PMSubplotProps) {
       />
       {Object.entries(paths).map(([featureName, value], i) => (
         <path
-          key={`${getPMLineId(featureName)}`}
-          id={`${getPMLineId(featureName)}`}
+          key={`${getLineID(pmIDPrefix, featureName)}`}
+          id={`${getLineID(pmIDPrefix, featureName)}`}
           d={value}
           fill="none"
-          strokeWidth={1.7}
+          strokeWidth={strokeWidth}
           stroke={colorPalette[i]}
         />
       ))}
@@ -74,8 +76,8 @@ export default function MABias({ features, width, height, x }: PMSubplotProps) {
         y1={y(0.0)}
         y2={y(0.0)}
         stroke="black"
-        strokeWidth={1.4}
-        strokeDasharray={"6 4"}
+        strokeWidth={markStrokeWidth}
+        strokeDasharray={markStrokeDasharray}
       />
       <FeatureIndicators
         featureNames={maBiasFeatures}

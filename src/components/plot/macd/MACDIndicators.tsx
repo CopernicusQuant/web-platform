@@ -1,12 +1,7 @@
 import { useTranslation } from "react-i18next";
 import Legend from "@/components/ui/Legend";
-import {
-  emaFeatures,
-  getMACDCircleID,
-  getMACDLegendID,
-  getMACDLegendValueID,
-  toggleMACDFeature,
-} from "@plot/interactions/macd";
+import { getCircleID, getLegendID, getLegendValueID } from "@plot/interactions/d3-utils";
+import { emaFeatures, macdIDPrefix, toggleMACDFeature } from "@plot/interactions/macd";
 import { colorPalette, legendConfig, priceColors } from "@plot/theme";
 import type { MACDFeature } from "@/apis";
 import type { PriceChartType } from "@/atoms/stocks";
@@ -22,25 +17,26 @@ export default function MACDIndicators({ features, chartType }: MACDIndicatorsPr
   return (
     <>
       {/* EMA circles */}
-      {chartType === "line" && (
-        <g>
-          {emaFeatures.map((featureName, i) => (
-            <circle
-              key={getMACDCircleID(featureName)}
-              id={getMACDCircleID(featureName)}
-              r={5}
-              fill={colorPalette[i]}
-              stroke="white"
-              strokeWidth={2}
-            />
-          ))}
-        </g>
-      )}
+      {/* {chartType === "line" && ( */}
+      <g opacity={chartType === "line" ? 1 : 0}>
+        {emaFeatures.map((featureName, i) => (
+          <circle
+            key={getCircleID(macdIDPrefix, featureName)}
+            id={getCircleID(macdIDPrefix, featureName)}
+            r={5}
+            fill={colorPalette[i]}
+            stroke="white"
+            strokeWidth={2}
+            opacity={0}
+          />
+        ))}
+      </g>
+      {/* )} */}
 
       {/* MACD Gold and Dead crosses */}
       <Legend
-        legendId={getMACDLegendID("gold")}
-        valueId={getMACDLegendValueID("gold")}
+        legendId={getLegendID(macdIDPrefix, "gold")}
+        valueId={getLegendValueID(macdIDPrefix, "gold")}
         index={0}
         value={""}
         label={"Gold"}
@@ -49,8 +45,8 @@ export default function MACDIndicators({ features, chartType }: MACDIndicatorsPr
         size="tighter"
       />
       <Legend
-        legendId={getMACDLegendID("dead")}
-        valueId={getMACDLegendValueID("dead")}
+        legendId={getLegendID(macdIDPrefix, "dead")}
+        valueId={getLegendValueID(macdIDPrefix, "dead")}
         index={1}
         value={""}
         label={"Dead"}
@@ -62,9 +58,9 @@ export default function MACDIndicators({ features, chartType }: MACDIndicatorsPr
       <g transform={`translate(${(featureWidthTighter + featureGap) * 2} 0)`}>
         {emaFeatures.map((featureName, i) => (
           <Legend
-            key={getMACDLegendID(featureName)}
-            legendId={getMACDLegendID(featureName)}
-            valueId={getMACDLegendValueID(featureName)}
+            key={getLegendID(macdIDPrefix, featureName)}
+            legendId={getLegendID(macdIDPrefix, featureName)}
+            valueId={getLegendValueID(macdIDPrefix, featureName)}
             index={i}
             label={t(`featureName.${featureName}`)}
             value={features.at(-1)![featureName].toFixed(2)}

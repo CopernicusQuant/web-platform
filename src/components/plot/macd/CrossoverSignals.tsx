@@ -2,7 +2,9 @@ import * as d3 from "d3";
 
 import type { MACDFeature } from "@/apis";
 import { priceColors } from "../theme";
-import { getMACDCrossLinesID } from "../interactions/macd";
+
+import { getCrossLinesID } from "@plot/interactions/d3-utils";
+import { macdIDPrefix } from "@plot/interactions/macd";
 
 type CrossoverSignalsProps = {
   features: MACDFeature[];
@@ -41,10 +43,10 @@ export default function CrossoverSignals({
 
   return (
     <g opacity={0.4}>
-      <g id={getMACDCrossLinesID(`gold-${currPlot}`)}>
+      <g id={getCrossLinesID(macdIDPrefix, `gold-${currPlot}`)}>
         {goldDays.map((date) => drawLine(date, priceColors.up))}
       </g>
-      <g id={getMACDCrossLinesID(`dead-${currPlot}`)}>
+      <g id={getCrossLinesID(macdIDPrefix, `dead-${currPlot}`)}>
         {deadDays.map((date) => drawLine(date, priceColors.down))}
       </g>
     </g>

@@ -5,16 +5,18 @@ type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "5Y";
 const FeatureGroups = [
   "priceMomentum",
   "marketActivity",
-  "macd",
   "bollingerBands",
+  "macd",
+  "dema",
 ] as const;
 type FeatureGroupOpt = (typeof FeatureGroups)[number];
 
 const featureGroupParam: Record<FeatureGroupOpt, string> = {
   priceMomentum: "pricemomentum",
   marketActivity: "marketactivity",
-  macd: "macd",
   bollingerBands: "bollingerbands",
+  macd: "macd",
+  dema: "dema",
 };
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
@@ -22,6 +24,7 @@ const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   marketActivity: ["activityScores", "priceAndTurnover", "amplitude"] as const,
   macd: ["acceleration"] as const,
   bollingerBands: ["position", "width"] as const,
+  dema: ["spread"] as const,
 };
 
 const dataWindowParam: Record<DataWindowOpt, string> = {
@@ -150,11 +153,38 @@ const BollingerBandsFeaturesSchema = z
     bbPos: input.bb_position,
   }));
 
+const DEMAPeriods = ["5_10", "10_20", "20_60"] as const;
+type DEMAPeriodOpt = (typeof DEMAPeriods)[number];
+const DEMAFeaturesSchema = z
+  .object({
+    trade_date: z.string(),
+    dema_5_10_fast: z.float32(),
+    dema_10_20_fast: z.float32(),
+    dema_20_60_fast: z.float32(),
+    dema_5_10_slow: z.float32(),
+    dema_10_20_slow: z.float32(),
+    dema_20_60_slow: z.float32(),
+    dema_5_10_spread: z.float32(),
+    dema_10_20_spread: z.float32(),
+    dema_20_60_spread: z.float32(),
+    dema_5_10_gold: z.int(),
+    dema_10_20_gold: z.int(),
+    dema_20_60_gold: z.int(),
+    dema_5_10_dead: z.int(),
+    dema_10_20_dead: z.int(),
+    dema_20_60_dead: z.int(),
+  })
+  .transform(({ trade_date, ...input }) => ({
+    tradeDate: trade_date,
+    ...input,
+  }));
+
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
   marketActivity: MarketActivityFeaturesSchema,
   macd: MACDFeatureSchema,
   bollingerBands: BollingerBandsFeaturesSchema,
+  dema: DEMAFeaturesSchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
 type StockValues = z.infer<typeof StockValuesSchema>;
@@ -162,11 +192,13 @@ type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
 type MarketActivityFeature = z.infer<typeof MarketActivityFeaturesSchema>;
 type MACDFeature = z.infer<typeof MACDFeatureSchema>;
 type BollingerBandsFeature = z.infer<typeof BollingerBandsFeaturesSchema>;
+type DEMAFeature = z.infer<typeof DEMAFeaturesSchema>;
 type FeatureByGroup = {
   priceMomentum: PriceMomentumFeature;
   marketActivity: MarketActivityFeature;
   macd: MACDFeature;
   bollingerBands: BollingerBandsFeature;
+  dema: DEMAFeature;
 };
 type StockData<G extends FeatureGroupOpt> = {
   ticker: string;
@@ -182,11 +214,15 @@ export {
   MarketActivityFeaturesSchema,
   PriceMomentumFeaturesSchema,
   BollingerBandsFeaturesSchema,
+  DEMAFeaturesSchema,
+  DEMAPeriods,
   FeatureSchemas,
   FeatureSubplots,
 };
 export type {
   DataWindowOpt,
+  DEMAPeriodOpt,
+  DEMAFeature,
   StockData,
   StockValues,
   FeatureGroupOpt,

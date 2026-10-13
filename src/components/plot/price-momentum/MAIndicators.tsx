@@ -1,15 +1,14 @@
 import type { FeatureByGroup } from "@/apis";
 import type { PriceChartType } from "@/atoms/stocks";
-import {
-  getPMCircleId,
-  maCircleGroupID,
-  maFeatures,
-  toggleFeature,
-  getPMLegendId,
-  getPMLegendValueId,
-} from "@plot/interactions/price-momentum";
+import { maFeatures, pmIDPrefix, toggleFeature } from "@plot/interactions/price-momentum";
 import { colorPalette } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
+import {
+  getCirclesGroupID,
+  getCircleID,
+  getLegendID,
+  getLegendValueID,
+} from "@plot/interactions/d3-utils";
 
 type MAIndicatorsProps = {
   features: FeatureByGroup["priceMomentum"][];
@@ -21,11 +20,11 @@ export default function MAIndicators({ features, chartType }: MAIndicatorsProps)
     <>
       {/* Moving average lines */}
       {chartType === "line" && (
-        <g id={maCircleGroupID} opacity={0}>
+        <g id={getCirclesGroupID(pmIDPrefix)} opacity={0}>
           {maFeatures.map((featureName, i) => (
             <circle
-              key={getPMCircleId(featureName)}
-              id={getPMCircleId(featureName)}
+              key={getCircleID(pmIDPrefix, featureName)}
+              id={getCircleID(pmIDPrefix, featureName)}
               r={5}
               fill={colorPalette[i]}
               stroke="white"
@@ -39,9 +38,9 @@ export default function MAIndicators({ features, chartType }: MAIndicatorsProps)
         maFeatures.map((featureName, i) => {
           return (
             <Legend
-              key={getPMLegendId(featureName)}
-              legendId={getPMLegendId(featureName)}
-              valueId={getPMLegendValueId(featureName)}
+              key={getLegendID(pmIDPrefix, featureName)}
+              legendId={getLegendID(pmIDPrefix, featureName)}
+              valueId={getLegendValueID(pmIDPrefix, featureName)}
               index={i}
               value={features.at(-1)![featureName].toFixed(2)}
               label={featureName.toUpperCase()}

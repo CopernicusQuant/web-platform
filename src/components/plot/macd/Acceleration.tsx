@@ -4,15 +4,15 @@ import type { MACDFeature } from "@/apis";
 import { colorPalette, plotSizeConfig, priceColors } from "@plot/theme";
 import { useTranslation } from "react-i18next";
 import {
-  getMACDBarGroupID,
-  getMACDLineID,
   accelerationFeatures,
+  macdIDPrefix,
   toggleMACDFeature,
 } from "@plot/interactions/macd";
 import YAxis from "@/components/ui/YAxis";
 import type { MACDSubplotProps } from "./shared";
 import CrossoverSignals from "./CrossoverSignals";
 import MACDFeatureIndicators from "./MACDFeatureIndicators";
+import { getBarGroupID, getLineID } from "@plot/interactions/d3-utils";
 
 export default function Acceleration({ features, width, height, x }: MACDSubplotProps) {
   const { t } = useTranslation();
@@ -47,7 +47,7 @@ export default function Acceleration({ features, width, height, x }: MACDSubplot
         labelXOffset={marginRight}
       />
       <CrossoverSignals features={features} x={x} y={y} currPlot="feature" />
-      <g id={getMACDBarGroupID("hist")}>
+      <g id={getBarGroupID(macdIDPrefix, "hist")}>
         {features.map((feature) => (
           <rect
             key={`macd-hist-${feature.tradeDate}`}
@@ -62,8 +62,8 @@ export default function Acceleration({ features, width, height, x }: MACDSubplot
       </g>
       {Object.entries(paths).map(([featureName, d], i) => (
         <path
-          key={getMACDLineID(featureName)}
-          id={getMACDLineID(featureName)}
+          key={getLineID(macdIDPrefix, featureName)}
+          id={getLineID(macdIDPrefix, featureName)}
           d={d}
           fill="none"
           stroke={colorPalette[i]}

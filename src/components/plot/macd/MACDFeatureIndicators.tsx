@@ -1,6 +1,7 @@
 import type { MACDFeature } from "@/apis";
 import Legend from "@/components/ui/Legend";
-import { getMACDLegendID, getMACDLegendValueID } from "../interactions/macd";
+import { getLegendID, getLegendValueID } from "@plot/interactions/d3-utils";
+import { macdIDPrefix } from "@plot/interactions/macd";
 
 type NumericFeatureName = {
   [K in keyof MACDFeature]: MACDFeature[K] extends number ? K : never;
@@ -27,10 +28,10 @@ export default function MACDFeatureIndicators({
         featureNames.map((featureName, i) => {
           return (
             <Legend
-              key={getMACDLegendID(featureName)}
+              key={getLegendID(macdIDPrefix, featureName)}
               index={i}
-              legendId={getMACDLegendID(featureName)}
-              valueId={getMACDLegendValueID(featureName)}
+              legendId={getLegendID(macdIDPrefix, featureName)}
+              valueId={getLegendValueID(macdIDPrefix, featureName)}
               label={labels ? labels[i] : featureName}
               value={features.at(-1)![featureName].toFixed(3)}
               color={colors && colors[i]}

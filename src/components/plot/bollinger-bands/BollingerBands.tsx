@@ -5,16 +5,19 @@ import type { PriceChartType } from "@/atoms/stocks";
 import Legend from "@/components/ui/Legend";
 import {
   bandFeatures,
-  getBBCircleGroupID,
-  getBBCircleID,
+  bbIDPrefix,
   getBBGroupID,
-  getBBLegendID,
-  getBBLegendValueID,
-  getBBLineID,
   toggleBand,
   toggleBBFeature,
 } from "@plot/interactions/bollinger-bands";
 import { legendConfig } from "@plot/theme";
+import {
+  getCircleID,
+  getCirclesGroupID,
+  getLegendID,
+  getLegendValueID,
+  getLineID,
+} from "@plot/interactions/d3-utils";
 
 type BollingerBandsProps = {
   features: BollingerBandsFeature[];
@@ -58,7 +61,7 @@ export default function BollingerBands({
         <path d={area} fill={colorPalette[2]} opacity={0.1} />
         {["bbUpper", "bbLower"].map((featureName) => (
           <path
-            key={getBBLineID(featureName)}
+            key={getLineID(bbIDPrefix, featureName)}
             d={paths[featureName]}
             stroke={colorPalette[2]}
             strokeWidth={1.2}
@@ -69,7 +72,7 @@ export default function BollingerBands({
       </g>
       <g>
         <path
-          id={getBBLineID("bbMid")}
+          id={getLineID(bbIDPrefix, "bbMid")}
           d={paths["bbMid"]}
           stroke={colorPalette[0]}
           strokeWidth={1.5}
@@ -77,8 +80,8 @@ export default function BollingerBands({
         />
       </g>
       <Legend
-        legendId={getBBLegendID("band")}
-        valueId={getBBLegendValueID("band")}
+        legendId={getLegendID(bbIDPrefix, "band")}
+        valueId={getLegendValueID(bbIDPrefix, "band")}
         value={`L ${lastFeature["bbLower"].toFixed(2)} U ${lastFeature["bbUpper"].toFixed(2)}`}
         index={0}
         label="BB"
@@ -89,8 +92,8 @@ export default function BollingerBands({
       {/* BB Mid */}
       <g transform={`translate(${featureWidthWidest + featureGap} 0)`}>
         <Legend
-          legendId={getBBLegendID("bbMid")}
-          valueId={getBBLegendValueID("bbMid")}
+          legendId={getLegendID(bbIDPrefix, "bbMid")}
+          valueId={getLegendValueID(bbIDPrefix, "bbMid")}
           value={lastFeature["bbMid"].toFixed(2)}
           index={0}
           label="Mid"
@@ -99,9 +102,9 @@ export default function BollingerBands({
         />
       </g>
       {chartType === "line" && (
-        <g id={getBBCircleGroupID("bbMid")} opacity={0}>
+        <g id={getCirclesGroupID("bbMid")} opacity={0}>
           <circle
-            id={getBBCircleID("bbMid")}
+            id={getCircleID(bbIDPrefix, "bbMid")}
             cx={0}
             cy={0}
             r={5}

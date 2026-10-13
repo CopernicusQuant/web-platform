@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import { useMemo } from "react";
 import { digitToPercent } from "@/lib/utils";
 import {
-  getPMBarGroupId,
+  pmIDPrefix,
   returnFeatures,
   toggleFeature,
 } from "@plot/interactions/price-momentum";
@@ -10,6 +10,7 @@ import { plotSizeConfig, priceColors } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
 import type { PMSubplotProps } from "./shared";
+import { getBarGroupID } from "@plot/interactions/d3-utils";
 
 export default function Returns({ features, x, width, height }: PMSubplotProps) {
   const { marginTop, marginBottom, marginLeft, marginRight } = plotSizeConfig;
@@ -50,7 +51,10 @@ export default function Returns({ features, x, width, height }: PMSubplotProps) 
       />
       {returnFeatures.map((featureName, i) => {
         return (
-          <g key={getPMBarGroupId(featureName)} id={getPMBarGroupId(featureName)}>
+          <g
+            key={getBarGroupID(pmIDPrefix, featureName)}
+            id={getBarGroupID(pmIDPrefix, featureName)}
+          >
             {features.map((feature) => {
               const val = feature[featureName];
               return (

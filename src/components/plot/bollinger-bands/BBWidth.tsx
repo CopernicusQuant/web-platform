@@ -1,10 +1,8 @@
 import * as d3 from "d3";
-import { colorPalette, plotSizeConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
 import type { BBSubplotProps } from "./shared";
 import {
-  getBBLegendID,
-  getBBLegendValueID,
-  getBBLineID,
+  bbIDPrefix,
   toggleBBFeature,
   widthFeature,
 } from "@plot/interactions/bollinger-bands";
@@ -12,11 +10,14 @@ import type { BollingerBandsFeature } from "@/apis";
 import YAxis from "@/components/ui/YAxis";
 import Legend from "@/components/ui/Legend";
 import { useTranslation } from "react-i18next";
+import { getLegendID, getLegendValueID, getLineID } from "@plot/interactions/d3-utils";
 
 export default function BBWidth({ features, width, height, x }: BBSubplotProps) {
   const { t } = useTranslation();
   let yMax = 0;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
+  const { strokeDasharray, strokeWidth, markStrokeDasharray, markStrokeWidth } =
+    svgPathConfig;
   features.forEach((feature) => {
     yMax = Math.max(yMax, feature[widthFeature] / 2);
   });
@@ -50,36 +51,36 @@ export default function BBWidth({ features, width, height, x }: BBSubplotProps) 
         labelXOffset={marginRight}
         labelFormatter={(value) => value.toFixed(1)}
       />
-      <g id={getBBLineID(widthFeature)}>
+      <g id={getLineID(bbIDPrefix, widthFeature)}>
         <path d={area} fill={colorPalette[2]} fillOpacity={0.3} />
         <path
           d={upperEdge!}
           fill={"none"}
           stroke={colorPalette[2]}
-          strokeWidth={2.0}
-          strokeDasharray={"12 3"}
+          strokeWidth={strokeWidth}
+          strokeDasharray={strokeDasharray}
         />
         <path
           d={lowerEdge!}
           fill={"none"}
           stroke={colorPalette[2]}
-          strokeWidth={2.0}
-          strokeDasharray={"12 3"}
+          strokeWidth={strokeWidth}
+          strokeDasharray={strokeDasharray}
         />
       </g>
       <line
-        x1={marginLeft}
-        x2={width - marginRight}
+        x1={marginLeft + x.bandwidth() / 2}
+        x2={width - marginRight - x.bandwidth() / 2}
         y1={y(0.0)}
         y2={y(0.0)}
         stroke={"black"}
-        strokeWidth={1.4}
-        strokeDasharray={"6 4"}
+        strokeWidth={markStrokeWidth}
+        strokeDasharray={markStrokeDasharray}
       />
       {/* Legend */}
       <Legend
-        legendId={getBBLegendID(widthFeature)}
-        valueId={getBBLegendValueID(widthFeature)}
+        legendId={getLegendID(bbIDPrefix, widthFeature)}
+        valueId={getLegendValueID(bbIDPrefix, widthFeature)}
         index={0}
         value={features.at(-1)![widthFeature].toFixed(2)}
         label={t(`featureName.${widthFeature}`)}
