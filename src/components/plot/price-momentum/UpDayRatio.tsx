@@ -9,10 +9,15 @@ import YAxis from "@/components/ui/YAxis";
 import { colorPalette, plotSizeConfig } from "@plot/theme";
 import FeatureIndicators from "./FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
-import type { PMSubplotProps } from "./shared";
+import type { SubplotProps } from "@plot/shared";
 import { getLineID } from "@plot/interactions/d3-utils";
 
-export default function UpDayRatio({ features, width, height, x }: PMSubplotProps) {
+export default function UpDayRatio({
+  features,
+  width,
+  height,
+  x,
+}: SubplotProps<"priceMomentum">) {
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
 
   const yPadding = 0.05;

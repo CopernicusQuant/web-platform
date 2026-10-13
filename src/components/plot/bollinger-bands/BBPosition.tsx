@@ -4,7 +4,7 @@ import {
   positionFeature,
   toggleBBFeature,
 } from "@plot/interactions/bollinger-bands";
-import type { BBSubplotProps } from "./shared";
+import type { SubplotProps } from "@plot/shared";
 import { colorPalette, plotSizeConfig, priceColors, svgPathConfig } from "@plot/theme";
 import type { BollingerBandsFeature } from "@/apis";
 import YAxis from "@/components/ui/YAxis";
@@ -12,7 +12,12 @@ import Legend from "@/components/ui/Legend";
 import { useTranslation } from "react-i18next";
 import { getLegendID, getLegendValueID, getLineID } from "@plot/interactions/d3-utils";
 
-export default function BBPosition({ features, width, height, x }: BBSubplotProps) {
+export default function BBPosition({
+  features,
+  width,
+  height,
+  x,
+}: SubplotProps<"bollingerBands">) {
   const { t } = useTranslation();
   let [yMax, yMin] = [1.0, 0.0];
   const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgPathConfig;

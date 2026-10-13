@@ -17,7 +17,6 @@ export default function MACDIndicators({ features, chartType }: MACDIndicatorsPr
   return (
     <>
       {/* EMA circles */}
-      {/* {chartType === "line" && ( */}
       <g opacity={chartType === "line" ? 1 : 0}>
         {emaFeatures.map((featureName, i) => (
           <circle
@@ -31,7 +30,6 @@ export default function MACDIndicators({ features, chartType }: MACDIndicatorsPr
           />
         ))}
       </g>
-      {/* )} */}
 
       {/* MACD Gold and Dead crosses */}
       <Legend

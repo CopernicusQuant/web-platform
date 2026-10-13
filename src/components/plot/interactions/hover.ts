@@ -6,6 +6,7 @@ import type {
   MarketActivityFeature,
   MACDFeature,
   BollingerBandsFeature,
+  DEMAFeature,
 } from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
@@ -23,6 +24,7 @@ import {
 } from "./market-activity";
 import { resetMACDIndicators, updateMACDIndicators } from "./macd";
 import { resetBBIndicators, updateBBIndicators } from "./bollinger-bands";
+import { resetDEMAIndicators, updateDEMAIndicators } from "./dema";
 
 const getHoverPlotFn = ({
   data,
@@ -116,6 +118,16 @@ const getHoverPlotFn = ({
           y,
         });
         break;
+      case "dema":
+        updateDEMAIndicators({
+          xIdx,
+          features: features as DEMAFeature[],
+          height: referenceHeight,
+          marginTop,
+          marginBottom,
+          x,
+          y,
+        });
     }
   };
 };
@@ -160,6 +172,9 @@ const getLeavePlotFn = ({
         break;
       case "bollingerBands":
         resetBBIndicators({ features: features as BollingerBandsFeature[] });
+        break;
+      case "dema":
+        resetDEMAIndicators({ features: features as DEMAFeature[] });
         break;
     }
   };

@@ -10,7 +10,12 @@ import {
   getDEMAFeatureNamesByPeriod,
   toggleDEMAFeature,
 } from "@plot/interactions/dema";
-import { getCircleID, getLegendID, getLegendValueID } from "@plot/interactions/d3-utils";
+import {
+  getCircleID,
+  getCirclesGroupID,
+  getLegendID,
+  getLegendValueID,
+} from "@plot/interactions/d3-utils";
 
 type DEMAIndicatorsProps = {
   features: DEMAFeature[];
@@ -27,23 +32,22 @@ export default function DEMAIndicators({ features, chartType }: DEMAIndicatorsPr
   const { featureWidthTighter, featureGap } = legendConfig;
   return (
     <>
-      {/* EMA circles */}
-      {chartType === "line" && (
-        <g>
-          {featureNames.map((featureName, i) => (
-            <circle
-              key={getCircleID(demaIDPrefix, featureName)}
-              id={getCircleID(demaIDPrefix, featureName)}
-              r={5}
-              fill={colorPalette[i]}
-              stroke="white"
-              strokeWidth={2}
-            />
-          ))}
-        </g>
-      )}
+      {/* DEMA circles */}
+      <g id={getCirclesGroupID(demaIDPrefix)} opacity={chartType === "line" ? 1 : 0}>
+        {slowFastFeatureNames.map((featureName, i) => (
+          <circle
+            key={getCircleID(demaIDPrefix, featureName)}
+            id={getCircleID(demaIDPrefix, featureName)}
+            r={5}
+            fill={colorPalette[i]}
+            stroke="white"
+            strokeWidth={2}
+            opacity={0}
+          />
+        ))}
+      </g>
 
-      {/* MACD Gold and Dead crosses */}
+      {/* DEMA Gold and Dead crosses */}
       <Legend
         legendId={getLegendID(demaIDPrefix, "gold")}
         valueId={getLegendValueID(demaIDPrefix, "gold")}
@@ -64,7 +68,7 @@ export default function DEMAIndicators({ features, chartType }: DEMAIndicatorsPr
         onMouseDown={() => toggleDEMAFeature("dead")}
         size="tighter"
       />
-      {/* EMA lines */}
+      {/* Fast Slow lines */}
       <g transform={`translate(${(featureWidthTighter + featureGap) * 2} 0)`}>
         {slowFastFeatureNames.map((featureName, i) => (
           <Legend
@@ -77,7 +81,6 @@ export default function DEMAIndicators({ features, chartType }: DEMAIndicatorsPr
             )}
             value={features.at(-1)![featureName].toFixed(2)}
             onMouseDown={() => toggleDEMAFeature(featureName)}
-            size="wider"
           />
         ))}
       </g>

@@ -7,6 +7,7 @@ import type {
   MarketActivityFeature,
   MACDFeature,
   BollingerBandsFeature,
+  DEMAFeature,
 } from "@/apis";
 import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
@@ -18,6 +19,7 @@ import { plotConfigAtom } from "@/atoms/plot";
 import MACDFeaturePlot from "@plot/macd/MACDFeaturePlot";
 import MarketFeature from "@plot/market-activity/MarketFeature";
 import BBFeaturePlot from "./bollinger-bands/BBFeaturePlot";
+import DEMAFeaturePlot from "./dema/DEMAFeaturePlot";
 
 type StockFeaturePlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -99,6 +101,15 @@ export default function StockFeaturePlot({
           <BBFeaturePlot
             features={features as BollingerBandsFeature[]}
             subplotName={featureSubPlot}
+            width={width}
+            height={height}
+            x={x}
+          />
+        );
+      case "dema":
+        return (
+          <DEMAFeaturePlot
+            features={features as DEMAFeature[]}
             width={width}
             height={height}
             x={x}

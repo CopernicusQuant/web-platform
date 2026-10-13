@@ -9,12 +9,17 @@ import {
   toggleMACDFeature,
 } from "@plot/interactions/macd";
 import YAxis from "@/components/ui/YAxis";
-import type { MACDSubplotProps } from "./shared";
+import type { SubplotProps } from "@plot/shared";
 import CrossoverSignals from "./CrossoverSignals";
 import MACDFeatureIndicators from "./MACDFeatureIndicators";
 import { getBarGroupID, getLineID } from "@plot/interactions/d3-utils";
 
-export default function Acceleration({ features, width, height, x }: MACDSubplotProps) {
+export default function Acceleration({
+  features,
+  width,
+  height,
+  x,
+}: SubplotProps<"macd">) {
   const { t } = useTranslation();
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   let [yMax, yMin] = [-Infinity, Infinity];

@@ -1,11 +1,11 @@
 import ActivityScores from "@plot/market-activity/ActivityScores";
 import Amplitude from "@plot/market-activity/Amplitude";
 import PriceAndTurnover from "@plot/market-activity/PriceAndTurnover";
-import type { MarketSubplotProps } from "@plot/market-activity/shared";
+import type { SubplotProps } from "@plot/shared";
 
 type MarketFeature = {
   subplotName: string;
-} & MarketSubplotProps;
+} & SubplotProps<"marketActivity">;
 
 export default function MarketFeature({
   features,
@@ -14,7 +14,7 @@ export default function MarketFeature({
   height,
   x,
 }: MarketFeature) {
-  const props: MarketSubplotProps = {
+  const props: SubplotProps<"marketActivity"> = {
     features,
     x,
     width,

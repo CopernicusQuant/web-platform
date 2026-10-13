@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 import type { MACDFeature } from "@/apis";
-import { priceColors } from "../theme";
+import { priceColors } from "@plot/theme";
 
 import { getCrossLinesID } from "@plot/interactions/d3-utils";
 import { macdIDPrefix } from "@plot/interactions/macd";

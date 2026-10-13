@@ -101,8 +101,8 @@ export default function BollingerBands({
           onMouseDown={() => toggleBBFeature("bbMid")}
         />
       </g>
-      {chartType === "line" && (
-        <g id={getCirclesGroupID("bbMid")} opacity={0}>
+      <g id={getCirclesGroupID("bbMid")} opacity={0}>
+        {chartType === "line" && (
           <circle
             id={getCircleID(bbIDPrefix, "bbMid")}
             cx={0}
@@ -112,8 +112,8 @@ export default function BollingerBands({
             fill={colorPalette[0]}
             strokeWidth={2}
           />
-        </g>
-      )}
+        )}
+      </g>
     </>
   );
 }
