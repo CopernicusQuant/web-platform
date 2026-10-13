@@ -78,14 +78,17 @@ const updateDEMAIndicators = ({
   const slowFastFeatureNames = featureNames.filter(
     (featureName) => featureName.endsWith("fast") || featureName.endsWith("slow"),
   );
-  const spreadFeatureName = featureNames.filter((featureName) =>
+  const spreadFeatureNames = featureNames.filter((featureName) =>
     featureName.endsWith("spread"),
-  )[0];
-  updateTextValue(
-    getLegendValueID(demaIDPrefix, spreadFeatureName),
-    digitToPercent(currFeature[spreadFeatureName]),
   );
-  [...slowFastFeatureNames].forEach((featureName) => {
+
+  spreadFeatureNames.forEach((featureName) =>
+    updateTextValue(
+      getLegendValueID(demaIDPrefix, featureName),
+      digitToPercent(currFeature[featureName]),
+    ),
+  );
+  slowFastFeatureNames.forEach((featureName) => {
     const xPos = (x(currFeature.tradeDate) ?? 0) + x.bandwidth() / 2;
     const yPos = y(currFeature[featureName]) ?? 0;
     const currCircle = d3.select(`#${getCircleID(demaIDPrefix, featureName)}`);
@@ -117,12 +120,14 @@ const resetDEMAIndicators = ({ features }: { features: DEMAFeature[] }) => {
   );
   const spreadFeatureName = featureNames.filter((featureName) =>
     featureName.endsWith("spread"),
-  )[0];
-  updateTextValue(
-    getLegendValueID(demaIDPrefix, spreadFeatureName),
-    digitToPercent(features.at(-1)![spreadFeatureName]),
   );
-  [...slowFastFeatureNames].forEach((featureName) => {
+  spreadFeatureName.forEach((featureName) => {
+    updateTextValue(
+      getLegendValueID(demaIDPrefix, featureName),
+      digitToPercent(features.at(-1)![featureName]),
+    );
+  });
+  slowFastFeatureNames.forEach((featureName) => {
     d3.select(`#${getCircleID(demaIDPrefix, featureName)}`).attr("opacity", 0);
     updateTextValue(
       getLegendValueID(demaIDPrefix, featureName),
