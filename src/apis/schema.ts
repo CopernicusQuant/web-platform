@@ -125,7 +125,7 @@ const VolumeMomentumFeatureSchema = z
     vol60Change: input.vol_change_60d,
     volMARatio510: input.vol_ma_5_10_ratio,
     volMARatio1020: input.vol_ma_10_20_ratio,
-    volMARation2060: input.vol_ma_20_60_ratio,
+    volMARatio2060: input.vol_ma_20_60_ratio,
   }));
 
 const MarketActivityFeaturesSchema = z
