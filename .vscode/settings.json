@@ -10,5 +10,5 @@
     ".vscode-insiders",
     "*.css"
   ],
-  "cSpell.words": ["macd"]
+  "cSpell.words": ["macd", "dema"]
 }

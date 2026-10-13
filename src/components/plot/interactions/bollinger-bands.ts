@@ -1,31 +1,32 @@
 import * as d3 from "d3";
 import type { BollingerBandsFeature } from "@/apis";
-import { toggleElement, updateTextValue } from "./d3-utils";
+import {
+  getCircleID,
+  getCirclesGroupID,
+  getLegendID,
+  getLegendValueID,
+  getLineID,
+  toggleElement,
+  updateTextValue,
+} from "./d3-utils";
 import { animationConfig } from "@plot/theme";
 
 const bandFeatures = ["bbUpper", "bbLower", "bbMid"] as const;
 const positionFeature = "bbPos" as const;
 const widthFeature = "bbWidth" as const;
 
-const idPrefix = "bb";
-const getBBGroupID = () => `${idPrefix}-band`;
-const getBBLineID = (featureName: string) => `${idPrefix}-line-${featureName}`;
-const getBBCircleID = (featureName: string) => `${idPrefix}-circle-${featureName}`;
-const getBBCircleGroupID = (featureName: string) =>
-  `${idPrefix}-circle-group-${featureName}`;
-const getBBLegendID = (featureName: string) => `${idPrefix}-legend-${featureName}`;
-const getBBLegendValueID = (featureName: string) =>
-  `${idPrefix}-legend-value-${featureName}`;
+const bbIDPrefix = "bb";
+const getBBGroupID = () => `${bbIDPrefix}-band`;
 
 const toggleBand = () => {
   toggleElement(getBBGroupID());
-  toggleElement(getBBLegendID("band"), 0.3, 1.0);
+  toggleElement(getLegendID(bbIDPrefix, "band"), 0.3, 1.0);
 };
 
 const toggleBBFeature = (featureName: string) => {
-  toggleElement(getBBLineID(featureName));
-  toggleElement(getBBLegendID(featureName), 0.3, 1.0);
-  toggleElement(getBBCircleGroupID("bbMid"));
+  toggleElement(getLineID(bbIDPrefix, featureName));
+  toggleElement(getLegendID(bbIDPrefix, featureName), 0.3, 1.0);
+  toggleElement(getCirclesGroupID("bbMid"));
 };
 
 const updateBBIndicators = ({
@@ -45,18 +46,21 @@ const updateBBIndicators = ({
   const { duration } = animationConfig;
   const currFeature = features[xIdx];
   updateTextValue(
-    getBBLegendValueID("band"),
+    getLegendValueID(bbIDPrefix, "band"),
     `L ${currFeature["bbLower"].toFixed(2)} U ${currFeature["bbUpper"].toFixed(2)}`,
   );
   [...bandFeatures, positionFeature, widthFeature].forEach((featureName) => {
-    updateTextValue(getBBLegendValueID(featureName), currFeature[featureName].toFixed(2));
+    updateTextValue(
+      getLegendValueID(bbIDPrefix, featureName),
+      currFeature[featureName].toFixed(2),
+    );
   });
   // update circle position
-  const circleGroup = d3.select(`#${getBBCircleGroupID("bbMid")}`);
+  const circleGroup = d3.select(`#${getCirclesGroupID("bbMid")}`);
   if (circleGroup.attr("data-on") !== "off") {
-    d3.select(`#${getBBCircleGroupID("bbMid")}`).attr("opacity", 1);
+    d3.select(`#${getCirclesGroupID("bbMid")}`).attr("opacity", 1);
   }
-  d3.select(`#${getBBCircleID("bbMid")}`)
+  d3.select(`#${getCircleID(bbIDPrefix, "bbMid")}`)
     .transition()
     .duration(duration)
     .ease(d3.easeLinear)
@@ -71,27 +75,26 @@ const updateBBIndicators = ({
 const resetBBIndicators = ({ features }: { features: BollingerBandsFeature[] }) => {
   const currFeature = features.at(-1)!;
   updateTextValue(
-    getBBLegendValueID("band"),
+    getLegendValueID(bbIDPrefix, "band"),
     `L ${currFeature["bbLower"].toFixed(2)} U ${currFeature["bbUpper"].toFixed(2)}`,
   );
   [...bandFeatures, positionFeature, widthFeature].forEach((featureName) => {
-    updateTextValue(getBBLegendValueID(featureName), currFeature[featureName].toFixed(2));
+    updateTextValue(
+      getLegendValueID(bbIDPrefix, featureName),
+      currFeature[featureName].toFixed(2),
+    );
   });
 
   // update circle position
-  d3.select(`#${getBBCircleGroupID("bbMid")}`).attr("opacity", 0);
+  d3.select(`#${getCirclesGroupID("bbMid")}`).attr("opacity", 0);
 };
 
 export {
   bandFeatures,
   positionFeature,
   widthFeature,
+  bbIDPrefix,
   getBBGroupID,
-  getBBLineID,
-  getBBCircleID,
-  getBBCircleGroupID,
-  getBBLegendID,
-  getBBLegendValueID,
   toggleBBFeature,
   toggleBand,
   updateBBIndicators,

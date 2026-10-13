@@ -11,6 +11,7 @@ import { setFeatureSubplotAtom, stockSelectionAtom } from "@/atoms/stocks";
 import StockFeaturePlot from "@plot/StockFeaturePlot";
 import { usePlotSize } from "@/hooks/usePlotSize";
 import { useTranslation } from "react-i18next";
+import DEMAPeriodSelector from "@plot/dema/DEMAWindowSelector";
 
 type FeaturesSectionProps = {
   stockData: StockData<FeatureGroupOpt> | undefined;
@@ -29,6 +30,7 @@ export default function FeaturesSection({ stockData, ...props }: FeaturesSection
   return (
     <Section {...props}>
       <Header title={"features"}>
+        {featureGroup === "dema" && <DEMAPeriodSelector />}
         <Selections>
           {FeatureSubplots[featureGroup].map((subPlotName) => (
             <Button

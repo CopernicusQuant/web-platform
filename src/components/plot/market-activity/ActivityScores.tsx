@@ -3,13 +3,14 @@ import { useTranslation } from "react-i18next";
 import type { MarketActivityFeature } from "@/apis";
 import {
   activityScoreFeatures,
-  getMarketLineID,
+  marketIDPrefix,
   toggleFeature,
 } from "@plot/interactions/market-activity";
 import { colorPalette, plotSizeConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
 import type { MarketSubplotProps } from "@plot/market-activity/shared";
+import { getLineID } from "@plot/interactions/d3-utils";
 
 export default function ActivityScores({
   features,
@@ -53,10 +54,10 @@ export default function ActivityScores({
         plotWidth={width - marginLeft - marginRight}
         labelXOffset={marginRight}
       />
-      {Object.entries(paths).map(([key, value], i) => (
+      {Object.entries(paths).map(([featureName, value], i) => (
         <path
-          key={getMarketLineID(key)}
-          id={getMarketLineID(key)}
+          key={getLineID(marketIDPrefix, featureName)}
+          id={getLineID(marketIDPrefix, featureName)}
           d={value}
           fill="none"
           strokeWidth={1.7}

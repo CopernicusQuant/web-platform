@@ -1,9 +1,7 @@
 import type { MarketActivityFeature } from "@/apis";
 import Legend from "@/components/ui/Legend";
-import {
-  getMarketLegendID,
-  getMarketLegendValueID,
-} from "@plot/interactions/market-activity";
+import { getLegendID, getLegendValueID } from "@plot/interactions/d3-utils";
+import { marketIDPrefix } from "@plot/interactions/market-activity";
 
 type NumericFeatureName = {
   [K in keyof MarketActivityFeature]: MarketActivityFeature[K] extends number ? K : never;
@@ -36,9 +34,9 @@ export default function MarketFeatureIndicators({
         featureNames.map((featureName, i) => {
           return (
             <Legend
-              key={getMarketLegendID(featureName)}
-              legendId={getMarketLegendID(featureName)}
-              valueId={getMarketLegendValueID(featureName)}
+              key={getLegendID(marketIDPrefix, featureName)}
+              legendId={getLegendID(marketIDPrefix, featureName)}
+              valueId={getLegendValueID(marketIDPrefix, featureName)}
               index={i}
               label={labels ? labels[i] : featureName}
               value={

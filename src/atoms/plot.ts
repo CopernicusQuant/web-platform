@@ -1,3 +1,4 @@
+import { DEMAPeriods, type DEMAPeriodOpt } from "@/apis";
 import { atom } from "jotai";
 
 type PlotConfig = {
@@ -10,4 +11,6 @@ const initPlotConfig: PlotConfig = {
 
 const plotConfigAtom = atom<PlotConfig>(initPlotConfig);
 
-export { plotConfigAtom };
+const demaPeriodAtom = atom<DEMAPeriodOpt>(DEMAPeriods[0]);
+
+export { plotConfigAtom, demaPeriodAtom };

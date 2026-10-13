@@ -1,15 +1,16 @@
 import * as d3 from "d3";
 import type { PriceMomentumFeature } from "@/apis";
 import {
-  getPMLineId,
   toggleFeature,
   upDayRatioFeatures,
+  pmIDPrefix,
 } from "@plot/interactions/price-momentum";
 import YAxis from "@/components/ui/YAxis";
 import { colorPalette, plotSizeConfig } from "@plot/theme";
 import FeatureIndicators from "./FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
 import type { PMSubplotProps } from "./shared";
+import { getLineID } from "@plot/interactions/d3-utils";
 
 export default function UpDayRatio({ features, width, height, x }: PMSubplotProps) {
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
@@ -45,10 +46,10 @@ export default function UpDayRatio({ features, width, height, x }: PMSubplotProp
         labelPostfix="%"
         labelFormatter={(value: number) => (value * 100).toFixed(1)}
       />
-      {Object.entries(paths).map(([key, value], i) => (
+      {Object.entries(paths).map(([featureName, value], i) => (
         <path
-          key={getPMLineId(key)}
-          id={getPMLineId(key)}
+          key={getLineID(pmIDPrefix, featureName)}
+          id={getLineID(pmIDPrefix, featureName)}
           d={value}
           fill="none"
           strokeWidth={1.7}

@@ -2,7 +2,16 @@ import * as d3 from "d3";
 
 import type { FeatureByGroup } from "@/apis";
 import { animationConfig, priceColors } from "@plot/theme";
-import { toggleElement, updateTextValue } from "@plot/interactions/d3-utils";
+import {
+  getBarGroupID,
+  getCircleID,
+  getCirclesGroupID,
+  getLegendID,
+  getLegendValueID,
+  getLineID,
+  toggleElement,
+  updateTextValue,
+} from "@plot/interactions/d3-utils";
 import { digitToPercent } from "@/lib/utils";
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
@@ -11,14 +20,7 @@ const maBiasFeatures = ["ma5Bias", "ma20Bias", "ma60Bias"] as const;
 const returnFeatures = ["return5d", "return20d", "return60d"] as const;
 const upDayRatioFeatures = ["upRatio5d", "upRatio20d"] as const;
 
-const idPrefix = "price-momentum";
-const maCircleGroupID = `${idPrefix}-circle-group`;
-const getPMLineId = (featureName: string) => `${idPrefix}-line-${featureName}`;
-const getPMCircleId = (featureName: string) => `${idPrefix}-circle-${featureName}`;
-const getPMBarGroupId = (featureName: string) => `${idPrefix}-bars-${featureName}`;
-const getPMLegendId = (featureName: string) => `${idPrefix}-legend-${featureName}`;
-const getPMLegendValueId = (featureName: string) =>
-  `${idPrefix}-legend-text-${featureName}`;
+const pmIDPrefix = "price-momentum";
 
 const updatePriceMomentumIndicators = ({
   features,
@@ -38,15 +40,17 @@ const updatePriceMomentumIndicators = ({
   y: d3.ScaleLinear<number, number>;
 }) => {
   const { duration } = animationConfig;
-  const circleGroup = d3.select(`#${maCircleGroupID}`);
+  const circleGroup = d3.select(`#${getCirclesGroupID(pmIDPrefix)}`);
   circleGroup.attr("opacity", 1);
   const currFeature = features[xIdx];
   maFeatures.forEach((featureName) => {
     // update circle visibility and position
     const xPos = (x(currFeature.tradeDate) ?? 0) + x.bandwidth() / 2;
     const yPos = y(currFeature[featureName]) ?? 0;
-    const currCircle = circleGroup.select(`#${getPMCircleId(featureName)}`);
-    const currLineOpacity = d3.select(`#${getPMLineId(featureName)}`).attr("opacity");
+    const currCircle = circleGroup.select(`#${getCircleID(pmIDPrefix, featureName)}`);
+    const currLineOpacity = d3
+      .select(`#${getLineID(pmIDPrefix, featureName)}`)
+      .attr("opacity");
     currCircle
       .transition()
       .duration(duration)
@@ -60,18 +64,21 @@ const updatePriceMomentumIndicators = ({
       );
     }
     // update legend value
-    updateTextValue(getPMLegendValueId(featureName), currFeature[featureName].toFixed(2));
+    updateTextValue(
+      getLegendValueID(pmIDPrefix, featureName),
+      currFeature[featureName].toFixed(2),
+    );
   });
   [...maBiasFeatures, ...upDayRatioFeatures, ...returnFeatures].forEach((featureName) => {
     updateTextValue(
-      getPMLegendValueId(featureName),
+      getLegendValueID(pmIDPrefix, featureName),
       digitToPercent(currFeature[featureName]),
     );
   });
   returnFeatures.forEach((featureName) => {
     const currColor = currFeature[featureName] >= 0 ? priceColors.up : priceColors.down;
     const legendGroup = d3
-      .select(`#${getPMLegendId(featureName)}`)
+      .select(`#${getLegendID(pmIDPrefix, featureName)}`)
       .transition()
       .duration(duration);
     legendGroup.select("rect").attr("stroke", currColor);
@@ -85,20 +92,20 @@ const resetPriceMomentumIndicators = ({
   features: PriceMomentumFeature[];
 }) => {
   const { duration } = animationConfig;
-  const circleGroup = d3.select(`#${maCircleGroupID}`);
+  const circleGroup = d3.select(`#${getCirclesGroupID(pmIDPrefix)}`);
   circleGroup.attr("opacity", 0);
   if (!features.at(-1)) return;
 
   [...maBiasFeatures, ...upDayRatioFeatures, ...returnFeatures].forEach((featureName) => {
     updateTextValue(
-      getPMLegendValueId(featureName),
+      getLegendValueID(pmIDPrefix, featureName),
       digitToPercent(features.at(-1)![featureName]),
     );
   });
 
   maFeatures.forEach((featureName) => {
     updateTextValue(
-      getPMLegendValueId(featureName),
+      getLegendValueID(pmIDPrefix, featureName),
       features.at(-1)![featureName].toFixed(2),
     );
   });
@@ -107,7 +114,7 @@ const resetPriceMomentumIndicators = ({
     const currColor =
       features.at(-1)![featureName] >= 0 ? priceColors.up : priceColors.down;
     const legendGroup = d3
-      .select(`#${getPMLegendId(featureName)}`)
+      .select(`#${getLegendID(pmIDPrefix, featureName)}`)
       .transition()
       .duration(duration);
     legendGroup.select("rect").attr("stroke", currColor);
@@ -118,26 +125,21 @@ const resetPriceMomentumIndicators = ({
 const toggleFeature = (featureName: string) => {
   // the MA lines' rendering opacity are 0.7
   if (maFeatures.some((name) => name === featureName)) {
-    toggleElement(getPMLineId(featureName), 0.0, 0.7);
+    toggleElement(getLineID(pmIDPrefix, featureName), 0.0, 0.7);
   } else {
-    toggleElement(getPMLineId(featureName));
+    toggleElement(getLineID(pmIDPrefix, featureName));
   }
-  toggleElement(getPMLegendId(featureName), 0.3, 1.0);
-  toggleElement(getPMCircleId(featureName));
-  toggleElement(getPMBarGroupId(featureName));
+  toggleElement(getLegendID(pmIDPrefix, featureName), 0.3, 1.0);
+  toggleElement(getCircleID(pmIDPrefix, featureName));
+  toggleElement(getBarGroupID(pmIDPrefix, featureName));
 };
 
 export {
-  maCircleGroupID,
+  pmIDPrefix,
   maFeatures,
   maBiasFeatures,
   returnFeatures,
   upDayRatioFeatures,
-  getPMCircleId,
-  getPMLineId,
-  getPMLegendId,
-  getPMLegendValueId,
-  getPMBarGroupId,
   updatePriceMomentumIndicators,
   resetPriceMomentumIndicators,
   toggleFeature,

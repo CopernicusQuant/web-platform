@@ -1,21 +1,21 @@
 import * as d3 from "d3";
 import {
-  getBBLegendID,
-  getBBLegendValueID,
-  getBBLineID,
+  bbIDPrefix,
   positionFeature,
   toggleBBFeature,
 } from "@plot/interactions/bollinger-bands";
 import type { BBSubplotProps } from "./shared";
-import { colorPalette, plotSizeConfig, priceColors } from "@plot/theme";
+import { colorPalette, plotSizeConfig, priceColors, svgPathConfig } from "@plot/theme";
 import type { BollingerBandsFeature } from "@/apis";
 import YAxis from "@/components/ui/YAxis";
 import Legend from "@/components/ui/Legend";
 import { useTranslation } from "react-i18next";
+import { getLegendID, getLegendValueID, getLineID } from "@plot/interactions/d3-utils";
 
 export default function BBPosition({ features, width, height, x }: BBSubplotProps) {
   const { t } = useTranslation();
   let [yMax, yMin] = [1.0, 0.0];
+  const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgPathConfig;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   features.forEach((feature) => {
     yMax = Math.max(yMax, feature[positionFeature]);
@@ -31,6 +31,10 @@ export default function BBPosition({ features, width, height, x }: BBSubplotProp
     .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
     .y((feature) => y(feature[positionFeature]))(features);
   if (!path) return <></>;
+  const [xStart, xEnd] = [
+    marginLeft + x.bandwidth() / 2,
+    width - marginRight - x.bandwidth() / 2,
+  ];
   return (
     <>
       <YAxis
@@ -43,60 +47,60 @@ export default function BBPosition({ features, width, height, x }: BBSubplotProp
       />
       {/* Bollinger Band boundaries */}
       <line
-        x1={marginLeft}
-        x2={width - marginRight}
+        x1={xStart}
+        x2={xEnd}
         y1={y(1.0)}
         y2={y(1.0)}
         stroke={priceColors.up}
-        strokeWidth={1.4}
-        strokeDasharray={"6 4"}
+        strokeWidth={markStrokeWidth}
+        strokeDasharray={markStrokeDasharray}
       />
       <rect
-        x={marginLeft}
+        x={xStart}
         y={marginTop}
-        width={width - marginLeft - marginRight}
+        width={width - marginLeft - marginRight - x.bandwidth()}
         height={y(1.0) - y.range()[1]}
         fill={priceColors.up}
         opacity={0.15}
       />
       <line
-        x1={marginLeft}
-        x2={width - marginRight}
+        x1={xStart}
+        x2={xEnd}
         y1={y(0.0)}
         y2={y(0.0)}
         stroke={priceColors.down}
-        strokeWidth={1.4}
-        strokeDasharray={"6 4"}
+        strokeWidth={markStrokeWidth}
+        strokeDasharray={markStrokeDasharray}
       />
       <rect
-        x={marginLeft}
+        x={marginLeft + x.bandwidth() / 2}
         y={y(0.0)}
-        width={width - marginLeft - marginRight}
+        width={width - marginLeft - marginRight - x.bandwidth()}
         height={y.range()[0] - y(0.0)}
         fill={priceColors.down}
         opacity={0.15}
       />
       <line
-        x1={marginLeft}
-        x2={width - marginRight}
+        x1={xStart}
+        x2={xEnd}
         y1={y(0.5)}
         y2={y(0.5)}
         stroke={"black"}
-        strokeWidth={1.4}
-        strokeDasharray={"6 4"}
+        strokeWidth={markStrokeWidth}
+        strokeDasharray={markStrokeDasharray}
       />
       {/* position feature */}
       <path
-        id={getBBLineID(positionFeature)}
+        id={getLineID(bbIDPrefix, positionFeature)}
         d={path}
         fill="none"
-        strokeWidth={1.7}
+        strokeWidth={strokeWidth}
         stroke={colorPalette[2]}
       />
       {/* Legend */}
       <Legend
-        legendId={getBBLegendID(positionFeature)}
-        valueId={getBBLegendValueID(positionFeature)}
+        legendId={getLegendID(bbIDPrefix, positionFeature)}
+        valueId={getLegendValueID(bbIDPrefix, positionFeature)}
         index={0}
         value={features.at(-1)![positionFeature].toFixed(2)}
         label={t(`featureName.${positionFeature}`)}

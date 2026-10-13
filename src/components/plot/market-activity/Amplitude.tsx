@@ -1,16 +1,13 @@
 import * as d3 from "d3";
 import { useTranslation } from "react-i18next";
 import type { MarketActivityFeature } from "@/apis";
-import {
-  amplitudeFeatures,
-  getMarketBarGroupID,
-  getMarketLineID,
-} from "@plot/interactions/market-activity";
-import { colorPalette, plotSizeConfig } from "@plot/theme";
+import { amplitudeFeatures, marketIDPrefix } from "@plot/interactions/market-activity";
+import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
 import type { MarketSubplotProps } from "@plot/market-activity/shared";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
 import { toggleFeature } from "@plot/interactions/market-activity";
 import YAxis from "@/components/ui/YAxis";
+import { getBarGroupID, getLineID } from "@plot/interactions/d3-utils";
 
 export default function Amplitude({ features, x, width, height }: MarketSubplotProps) {
   const { t } = useTranslation();
@@ -47,7 +44,7 @@ export default function Amplitude({ features, x, width, height }: MarketSubplotP
         labelFormatter={(value) => (value * 100).toFixed(1)}
         labelPostfix="%"
       />
-      <g id={getMarketBarGroupID("amplitude")}>
+      <g id={getBarGroupID(marketIDPrefix, "amplitude")}>
         {features.map((feature) => (
           <rect
             key={`market-amplitude-${feature.tradeDate}`}
@@ -60,13 +57,13 @@ export default function Amplitude({ features, x, width, height }: MarketSubplotP
           />
         ))}
       </g>
-      {Object.entries(paths).map(([key, value], i) => (
+      {Object.entries(paths).map(([featureName, value], i) => (
         <path
-          key={getMarketLineID(key)}
-          id={getMarketLineID(key)}
+          key={getLineID(marketIDPrefix, featureName)}
+          id={getLineID(marketIDPrefix, featureName)}
           d={value}
           fill="none"
-          strokeWidth={1.7}
+          strokeWidth={svgPathConfig.strokeWidth}
           stroke={colorPalette[i + 1]}
         />
       ))}

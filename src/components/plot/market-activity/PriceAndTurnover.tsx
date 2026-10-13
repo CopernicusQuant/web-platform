@@ -1,14 +1,12 @@
 import * as d3 from "d3";
-import { colorPalette, plotSizeConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
 import { useTranslation } from "react-i18next";
 import YAxis from "@/components/ui/YAxis";
-import {
-  getMarketCircleGroupID,
-  priceAndTurnoverFeatures,
-} from "@plot/interactions/market-activity";
+import { priceAndTurnoverFeatures } from "@plot/interactions/market-activity";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
 import type { MarketSubplotProps } from "@plot/market-activity/shared";
 import { toggleFeature } from "@plot/interactions/market-activity";
+import { getCirclesGroupID } from "@plot/interactions/d3-utils";
 
 export default function PriceAndTurnover({
   features,
@@ -36,8 +34,8 @@ export default function PriceAndTurnover({
           y1={y(0.8)}
           y2={y(0.8)}
           stroke="black"
-          strokeWidth={1.4}
-          strokeDasharray={"6 4"}
+          strokeWidth={svgPathConfig.markStrokeWidth}
+          strokeDasharray={svgPathConfig.markStrokeDasharray}
         />
         <line
           x1={marginLeft}
@@ -45,8 +43,8 @@ export default function PriceAndTurnover({
           y1={y(0.2)}
           y2={y(0.2)}
           stroke="black"
-          strokeWidth={1.4}
-          strokeDasharray={"6 4"}
+          strokeWidth={svgPathConfig.markStrokeWidth}
+          strokeDasharray={svgPathConfig.markStrokeDasharray}
         />
         <rect
           x={x.range()[0]}
@@ -58,13 +56,10 @@ export default function PriceAndTurnover({
         />
       </g>
       {priceAndTurnoverFeatures.map((featureName, i) => (
-        <g
-          key={getMarketCircleGroupID(featureName)}
-          id={getMarketCircleGroupID(featureName)}
-        >
+        <g key={getCirclesGroupID(featureName)} id={getCirclesGroupID(featureName)}>
           {features.map((feature) => (
             <circle
-              key={`${getMarketCircleGroupID(featureName)}-${feature.tradeDate}`}
+              key={`${getCirclesGroupID(featureName)}-${feature.tradeDate}`}
               cx={(x(feature.tradeDate) ?? 0) + x.bandwidth() / 2}
               cy={y(feature[featureName])}
               r={3}

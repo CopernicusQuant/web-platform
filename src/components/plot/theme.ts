@@ -29,4 +29,19 @@ const plotSizeConfig = {
   marginLeft: 0,
 };
 
-export { priceColors, legendConfig, animationConfig, plotSizeConfig, colorPalette };
+const svgPathConfig = {
+  strokeWidth: 1.5,
+  opacity: 0.7,
+  strokeDasharray: "10 4",
+  markStrokeWidth: 1.5,
+  markStrokeDasharray: "6 4",
+};
+
+export {
+  priceColors,
+  legendConfig,
+  animationConfig,
+  plotSizeConfig,
+  svgPathConfig,
+  colorPalette,
+};

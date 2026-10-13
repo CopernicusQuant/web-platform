@@ -1,12 +1,13 @@
 import * as d3 from "d3";
 import type { StockValues } from "@/apis";
-import {
-  getMarketBarGroupID,
-  getMarketLegendID,
-  getMarketLegendValueID,
-} from "@plot/interactions/market-activity";
 import { colorPalette } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
+import {
+  getBarGroupID,
+  getLegendID,
+  getLegendValueID,
+} from "@plot/interactions/d3-utils";
+import { marketIDPrefix, toggleFeature } from "@plot/interactions/market-activity";
 
 type TurnoverBarsProps = {
   stock: StockValues[];
@@ -25,7 +26,7 @@ export default function TurnoverBars({ stock, x, y }: TurnoverBarsProps) {
   );
   return (
     <>
-      <g id={getMarketBarGroupID("turnover")}>
+      <g id={getBarGroupID(marketIDPrefix, "turnover")}>
         {stock.map((price) => (
           <rect
             key={`market-turnover-${price.tradeDate}`}
@@ -40,12 +41,13 @@ export default function TurnoverBars({ stock, x, y }: TurnoverBarsProps) {
         ))}
       </g>
       <Legend
-        legendId={getMarketLegendID("turnover")}
-        valueId={getMarketLegendValueID("turnover")}
+        legendId={getLegendID(marketIDPrefix, "turnover")}
+        valueId={getLegendValueID(marketIDPrefix, "turnover")}
         label="Turnover"
         index={0}
         value={stock.at(-1)?.turnover.toFixed(2) || "0.0"}
         color={colorPalette[2]}
+        onMouseDown={() => toggleFeature("turnover")}
       />
     </>
   );
