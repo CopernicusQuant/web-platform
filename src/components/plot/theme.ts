@@ -3,7 +3,7 @@ const priceColors = {
   down: "#F96E5B",
 };
 
-const colorPalette = ["#C5B3D3", "#F38181", "#93BFCF", "#FCE38A"];
+const colorPalette = ["#C5B3D3", "#F38181", "#93BFCF", "#F4AE52"];
 
 const animationConfig = {
   duration: 50,

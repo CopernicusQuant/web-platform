@@ -8,6 +8,7 @@ import type {
   MACDFeature,
   BollingerBandsFeature,
   DEMAFeature,
+  VolumeMomentumFeature,
 } from "@/apis";
 import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
@@ -17,9 +18,10 @@ import StockFeatureIndicators from "@plot/StockFeatureIndicators";
 import PMFeature from "@plot/price-momentum/PMFeature";
 import { plotConfigAtom } from "@/atoms/plot";
 import MACDFeaturePlot from "@plot/macd/MACDFeaturePlot";
-import MarketFeature from "@plot/market-activity/MarketFeature";
-import BBFeaturePlot from "./bollinger-bands/BBFeaturePlot";
-import DEMAFeaturePlot from "./dema/DEMAFeaturePlot";
+import MarketFeaturePlot from "@plot/market-activity/MarketFeaturePlot";
+import BBFeaturePlot from "@plot/bollinger-bands/BBFeaturePlot";
+import DEMAFeaturePlot from "@plot/dema/DEMAFeaturePlot";
+import VolumeFeaturePlot from "@plot/volume-momentum/VolumeFeaturePlot";
 
 type StockFeaturePlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -77,9 +79,19 @@ export default function StockFeaturePlot({
             subplotName={featureSubPlot}
           />
         );
+      case "volumeMomentum":
+        return (
+          <VolumeFeaturePlot
+            features={features as VolumeMomentumFeature[]}
+            width={width}
+            height={height}
+            x={x}
+            subplotName={featureSubPlot}
+          />
+        );
       case "marketActivity":
         return (
-          <MarketFeature
+          <MarketFeaturePlot
             features={features as MarketActivityFeature[]}
             width={width}
             height={height}

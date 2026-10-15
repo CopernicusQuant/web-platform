@@ -27,7 +27,7 @@ function App() {
             <FeaturesSection stockData={data} className="flex flex-col flex-2" />
           </div>
         </div>
-        <div className="min-w-72 w-72 py-4">
+        <div className="min-w-70 w-70 py-4">
           <FeatureGroupSidebar />
         </div>
       </div>

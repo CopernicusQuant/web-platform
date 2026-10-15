@@ -93,16 +93,12 @@ const PriceMomentumFeaturesSchema = z
 const VolumeMomentumFeatureSchema = z
   .object({
     trade_date: z.string(),
-    vol_ma_5: z.float32(),
     vol_ma_5_bias: z.float32(),
     vol_change_5d: z.float32(),
-    vol_ma_10: z.float32(),
     vol_ma_10_bias: z.float32(),
     vol_change_10d: z.float32(),
-    vol_ma_20: z.float32(),
     vol_ma_20_bias: z.float32(),
     vol_change_20d: z.float32(),
-    vol_ma_60: z.float32(),
     vol_ma_60_bias: z.float32(),
     vol_change_60d: z.float32(),
     vol_ma_5_10_ratio: z.float32(),
@@ -111,16 +107,12 @@ const VolumeMomentumFeatureSchema = z
   })
   .transform((input) => ({
     tradeDate: input.trade_date,
-    volMa5: input.vol_ma_5,
     vol5Bias: input.vol_ma_5_bias,
     vol5Change: input.vol_change_5d,
-    volMa10: input.vol_ma_10,
     vol10Bias: input.vol_ma_10_bias,
     vol10Change: input.vol_change_10d,
-    volMa20: input.vol_ma_20,
     vol20Bias: input.vol_ma_20_bias,
     vol20Change: input.vol_change_20d,
-    volMa60: input.vol_ma_60,
     vol60Bias: input.vol_ma_60_bias,
     vol60Change: input.vol_change_60d,
     volMARatio510: input.vol_ma_5_10_ratio,

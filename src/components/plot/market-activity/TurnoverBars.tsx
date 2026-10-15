@@ -18,23 +18,22 @@ type TurnoverBarsProps = {
 export default function TurnoverBars({ stock, x, y }: TurnoverBarsProps) {
   const yMax = d3.max(stock, (d) => d.turnover) ?? 1;
   const yMin = d3.min(stock, (d) => d.turnover) ?? 0;
-  const [yLow] = y.range();
+  const yRange = y.range();
   const yPadding = (yMax - yMin) * 0.05 || 1;
   const subY = d3.scaleLinear(
     [yMin === 0 ? 0 : yMin - yPadding, yMax + yPadding],
-    [0, yLow / 2],
+    [yRange[0], yRange[0] + (yRange[1] - yRange[0]) / 2],
   );
   return (
     <>
       <g id={getBarGroupID(marketIDPrefix, "turnover")}>
-        {stock.map((price) => (
+        {stock.map((values) => (
           <rect
-            key={`market-turnover-${price.tradeDate}`}
-            transform={`translate(0 -${subY(price.turnover)})`}
-            x={x(price.tradeDate)}
-            y={y(y.domain()[0])}
+            key={`market-turnover-${values.tradeDate}`}
+            x={x(values.tradeDate)}
+            y={subY(values.turnover)}
             width={x.bandwidth()}
-            height={subY(price.turnover)}
+            height={subY.range()[0] - subY(values.turnover)}
             fill={colorPalette[2]}
             opacity={0.6}
           />

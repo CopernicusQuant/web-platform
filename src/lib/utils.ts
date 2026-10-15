@@ -50,8 +50,12 @@ const getMonthName = (monthStr: string): string => {
   return monthNames[monthIdx];
 };
 
-const digitToPercent = (value: number) => {
-  return `${(value * 100).toFixed(2)}%`;
+const digitToPercent = (value: number, digits?: number) => {
+  let fixedDigits = 2;
+  if (digits !== undefined) {
+    fixedDigits = Math.min(2, Math.max(Math.round(digits), 0));
+  }
+  return `${(value * 100).toFixed(fixedDigits)}%`;
 };
 
 export { cn, parseDate, getMonthName, parseVolume, computePriceChange, digitToPercent };
