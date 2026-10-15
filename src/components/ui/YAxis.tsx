@@ -1,7 +1,5 @@
 type YAxisProps = {
   y: d3.ScaleLinear<number, number>;
-  xPos: number;
-  yPos: number;
   plotWidth: number;
   labelXOffset?: number;
   labelPrefix?: string;
@@ -11,8 +9,6 @@ type YAxisProps = {
 
 export default function YAxis({
   y,
-  xPos,
-  yPos,
   plotWidth,
   labelXOffset,
   labelPrefix,
@@ -20,7 +16,7 @@ export default function YAxis({
   labelFormatter,
 }: YAxisProps) {
   return (
-    <g transform={`translate(${xPos}, ${yPos})`} fontSize={12} className="select-none">
+    <g fontSize={12} className="select-none">
       {y.ticks(6).map((tick) => (
         <g key={`stock-${tick}`}>
           <line

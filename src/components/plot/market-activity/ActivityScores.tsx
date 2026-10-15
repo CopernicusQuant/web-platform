@@ -49,8 +49,6 @@ export default function ActivityScores({
     <>
       <YAxis
         y={y}
-        xPos={marginLeft}
-        yPos={0}
         plotWidth={width - marginLeft - marginRight}
         labelXOffset={marginRight}
       />
