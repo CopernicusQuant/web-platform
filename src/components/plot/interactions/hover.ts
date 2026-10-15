@@ -7,6 +7,7 @@ import type {
   MACDFeature,
   BollingerBandsFeature,
   DEMAFeature,
+  VolumeMomentumFeature,
 } from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
@@ -25,6 +26,7 @@ import {
 import { resetMACDIndicators, updateMACDIndicators } from "./macd";
 import { resetBBIndicators, updateBBIndicators } from "./bollinger-bands";
 import { resetDEMAIndicators, updateDEMAIndicators } from "./dema";
+import { resetVolumeIndicators, updateVolumeIndicators } from "./volume-momentum";
 
 const getHoverPlotFn = ({
   data,
@@ -87,6 +89,13 @@ const getHoverPlotFn = ({
           marginBottom,
           x,
           y,
+        });
+        break;
+      case "volumeMomentum":
+        updateVolumeIndicators({
+          xIdx,
+          stock,
+          features: features as VolumeMomentumFeature[],
         });
         break;
       case "marketActivity":
@@ -160,6 +169,9 @@ const getLeavePlotFn = ({
     switch (featureGroup) {
       case "priceMomentum":
         resetPriceMomentumIndicators({ features: features as PriceMomentumFeature[] });
+        break;
+      case "volumeMomentum":
+        resetVolumeIndicators({ features: features as VolumeMomentumFeature[], stock });
         break;
       case "marketActivity":
         resetMarketActivityIndicators({

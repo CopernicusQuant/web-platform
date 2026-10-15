@@ -27,6 +27,7 @@ import BollingerBands from "@plot/bollinger-bands/BollingerBands";
 import DEMATrendLines from "@plot/dema/DEMATrendLines";
 import DEMASignals from "@plot/dema/DEMASignals";
 import DEMAIndicators from "./dema/DEMAIndicators";
+import Volumes from "./volume-momentum/Volumes";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -96,6 +97,8 @@ export default function StockDataPlot({
             yAxisMax={height - marginBottom}
           />
         );
+      case "volumeMomentum":
+        return <Volumes stock={stock} x={x} y={y} />;
       case "marketActivity":
         return <TurnoverBars stock={stock} x={x} y={y} />;
       case "macd":

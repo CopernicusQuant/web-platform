@@ -47,6 +47,9 @@
     "20_60": "20D vs 60D"
   },
   "featureName": {
+
+    "adjVol": "Volume",
+
     "tradingActivityScore": "Trading Activity",
     "lowLiquidityVolatilityScore": "Low Liquidity Volatility",
     "stagnantTurnoverScore": "Stagnant Turnover",
@@ -67,6 +70,10 @@
     "bbWidth": "Bandwidth",
 
     "demaSlow": "Slow",
-    "demaFast": "Fast"
+    "demaFast": "Fast",
+
+   "volMARatio510": "5D vs 10D",
+   "volMARatio1020": "10D vs 20D",
+   "volMARatio2060": "20D vs 60D"
   }
 }

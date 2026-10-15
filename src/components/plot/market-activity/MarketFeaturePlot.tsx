@@ -7,7 +7,7 @@ type MarketFeature = {
   subplotName: string;
 } & SubplotProps<"marketActivity">;
 
-export default function MarketFeature({
+export default function MarketFeaturePlot({
   features,
   subplotName,
   width,

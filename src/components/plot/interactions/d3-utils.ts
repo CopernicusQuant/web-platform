@@ -35,6 +35,21 @@ const toggleElement = (
   element.attr("data-on", currState === "on" ? "off" : "on");
 };
 
+const getYScale = (
+  values: number[],
+  low: number,
+  high: number,
+): d3.ScaleLinear<number, number> => {
+  let [yMax, yMin] = [-Infinity, Infinity];
+  values.forEach((value) => {
+    yMax = Math.max(yMax, value);
+    yMin = Math.min(yMin, value);
+  });
+  const yPadding = (yMax - yMin) * 0.05 || 1;
+  const y = d3.scaleLinear([yMin - yPadding, yMax + yPadding], [low, high]);
+  return y;
+};
+
 export {
   updateTextValue,
   toggleElement,
@@ -45,4 +60,5 @@ export {
   getCirclesGroupID,
   getCircleID,
   getBarGroupID,
+  getYScale,
 };
