@@ -42,8 +42,6 @@ export default function Amplitude({
     <>
       <YAxis
         y={y}
-        xPos={marginLeft}
-        yPos={0}
         plotWidth={width - marginLeft - marginRight}
         labelXOffset={marginRight}
         labelFormatter={(value) => (value * 100).toFixed(1)}

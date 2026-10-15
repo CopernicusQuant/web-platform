@@ -44,8 +44,6 @@ export default function VolMARatio({
     <>
       <YAxis
         y={y}
-        xPos={marginLeft}
-        yPos={0}
         plotWidth={width - marginLeft - marginRight}
         labelXOffset={marginRight}
       />

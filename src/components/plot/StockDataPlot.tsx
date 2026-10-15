@@ -168,8 +168,6 @@ export default function StockDataPlot({
       {/* y axis marks */}
       <YAxis
         y={y}
-        xPos={marginLeft}
-        yPos={0}
         plotWidth={width - marginLeft - marginRight}
         labelXOffset={marginRight}
         labelPrefix="$"

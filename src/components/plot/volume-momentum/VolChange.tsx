@@ -47,8 +47,6 @@ export default function VolChange({
     <g>
       <YAxis
         y={y}
-        xPos={marginLeft}
-        yPos={0}
         plotWidth={width - marginLeft - marginRight}
         labelXOffset={marginRight}
         labelFormatter={(value: number) => digitToPercent(value, 0)}

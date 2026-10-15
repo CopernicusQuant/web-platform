@@ -50,8 +50,6 @@ export default function BBWidth({
     <>
       <YAxis
         y={y}
-        xPos={marginLeft}
-        yPos={0}
         plotWidth={width - marginLeft - marginRight}
         labelXOffset={marginRight}
         labelFormatter={(value) => value.toFixed(1)}
