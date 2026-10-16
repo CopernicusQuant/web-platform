@@ -1,8 +1,7 @@
 import * as d3 from "d3";
-import { parseVolume, computePriceChange } from "@/lib/utils";
+import { parseVolume, computePriceChange, parseDate, getMonthName } from "@/lib/utils";
 import type { StockValues } from "@/apis";
-import { priceColors } from "../theme";
-import { updateDateLine } from "./date-line";
+import { animationConfig, priceColors } from "../theme";
 import { toggleElement, updateTextValue } from "./d3-utils";
 
 const priceElementIds = {
@@ -26,6 +25,70 @@ const priceElementIds = {
   volumeLegendValue: "price-vol-legend-val",
 };
 
+// update the vertical date line
+const updateDateLine = (show: boolean, date?: string, xPos?: number) => {
+  const { duration } = animationConfig;
+  const { indicatorDateGroup, indicatorGroup, indicatorDay, indicatorMonth } =
+    priceElementIds;
+  d3.select(`#${indicatorGroup}`).attr("opacity", show ? 1 : 0);
+  if (!show || !date) return;
+  const dateElements = parseDate(date);
+  // update line position
+  d3.select(`#${indicatorGroup}`)
+    .transition()
+    .duration(duration)
+    .ease(d3.easeLinear)
+    .attr("transform", `translate(${xPos} 0)`);
+  // update date value
+  const dateGroup = d3.select(`#${indicatorDateGroup}`);
+  dateGroup.select(`#${indicatorDay}`).text(dateElements[2]);
+  dateGroup.select(`#${indicatorMonth}`).text(getMonthName(dateElements[1]));
+};
+
+// update hover tag's position, value, and color (tag on Y axis)
+const updateHoverValueTag = (
+  stock: StockValues[],
+  xIdx: number,
+  y: d3.ScaleLinear<number, number>,
+  width: number,
+  marginRight: number,
+) => {
+  const currClose = stock.at(xIdx)!["adjClose"];
+  const beginClose = stock.at(0)!["adjClose"];
+  const currPriceGroup = d3
+    .transition()
+    .duration(50)
+    .ease(d3.easeLinear)
+    .select(`#${priceElementIds.valuesCurrGroup}`)
+    .attr("transform", `translate(${width - marginRight} ${y(currClose)})`);
+  currPriceGroup
+    .select("rect")
+    .attr("fill", currClose >= beginClose ? priceColors.up : priceColors.down);
+  currPriceGroup.select("text").text(`${currClose.toFixed(2)}`);
+};
+
+// update stock display values (V, L, H, C, O)
+const updateDisplayValues = (stockValues: StockValues, priceChangePct: string) => {
+  const { adjClose, adjOpen, adjHigh, adjLow, adjVol } = stockValues;
+  updateTextValue(priceElementIds.valuesClose, adjClose.toFixed(2));
+  updateTextValue(priceElementIds.valuesOpen, adjOpen.toFixed(2));
+  updateTextValue(priceElementIds.valuesHigh, adjHigh.toFixed(2));
+  updateTextValue(priceElementIds.valuesLow, adjLow.toFixed(2));
+  updateTextValue(priceElementIds.valuesVol, parseVolume(adjVol));
+  updateTextValue(priceElementIds.valuesPctChange, priceChangePct);
+};
+
+// update volume legend
+const updateVolumeLegend = (stockValues: StockValues) => {
+  const { adjClose, adjOpen } = stockValues;
+  const volumeLegend = d3.select(`#${priceElementIds.volumeLegend}`);
+  if (!volumeLegend.empty()) {
+    const volumeColor = adjClose >= adjOpen ? priceColors.up : priceColors.down;
+    volumeLegend.select("rect").attr("stroke", volumeColor);
+    volumeLegend.select("text").attr("fill", volumeColor);
+  }
+};
+
 const updatePriceTrendIndicators = ({
   stock,
   xIdx,
@@ -46,50 +109,19 @@ const updatePriceTrendIndicators = ({
 }) => {
   const indicatorGroup = d3.select(`#${priceElementIds.indicatorGroup}`);
   indicatorGroup.attr("opacity", 1);
-  const { tradeDate, adjClose, adjOpen, adjHigh, adjLow, adjVol } = stock[xIdx];
+  const { tradeDate, adjClose } = stock[xIdx];
   const xPos = (x(tradeDate) ?? 0) + x.bandwidth() / 2;
   const yPos = y(adjClose) ?? 0;
-  updateDateLine({
-    date: tradeDate,
-    xPos,
-    groupId: priceElementIds.indicatorGroup,
-    dateGroupId: priceElementIds.indicatorDateGroup,
-    dayId: priceElementIds.indicatorDay,
-    monthId: priceElementIds.indicatorMonth,
-  });
-  const circle = indicatorGroup.select(`#${priceElementIds.indicatorPoint}`);
+  const circle = d3.select(`#${priceElementIds.indicatorPoint}`);
   circle.transition().duration(50).ease(d3.easeLinear).attr("cy", yPos);
-  updateTextValue(priceElementIds.valuesClose, adjClose.toFixed(2));
-  updateTextValue(priceElementIds.valuesOpen, adjOpen.toFixed(2));
-  updateTextValue(priceElementIds.valuesHigh, adjHigh.toFixed(2));
-  updateTextValue(priceElementIds.valuesLow, adjLow.toFixed(2));
-  updateTextValue(priceElementIds.valuesVol, parseVolume(adjVol));
-  updateTextValue(
-    priceElementIds.valuesPctChange,
-    computePriceChange(stock.at(0)?.adjClose, adjClose),
-  );
   d3.select(`#${priceElementIds.valuesPctRect}`).attr(
     "fill",
     adjClose >= stock[0].adjClose ? priceColors.up : priceColors.down,
   );
-
-  const currPriceGroup = d3
-    .transition()
-    .duration(50)
-    .ease(d3.easeLinear)
-    .select(`#${priceElementIds.valuesCurrGroup}`)
-    .attr("transform", `translate(${width - marginRight} ${y(adjClose)})`);
-  currPriceGroup
-    .select("rect")
-    .attr("fill", adjClose > stock[0].adjClose ? priceColors.up : priceColors.down);
-  currPriceGroup.select("text").text(`${adjClose.toFixed(2)}`);
-
-  const volumeLegend = d3.select(`#${priceElementIds.volumeLegend}`);
-  if (!volumeLegend.empty()) {
-    const volumeColor = adjClose >= adjOpen ? priceColors.up : priceColors.down;
-    volumeLegend.select("rect").attr("stroke", volumeColor);
-    volumeLegend.select("text").attr("fill", volumeColor);
-  }
+  updateDateLine(true, tradeDate, xPos);
+  updateDisplayValues(stock[xIdx], computePriceChange(stock.at(0)!.adjClose, adjClose));
+  updateHoverValueTag(stock, xIdx, y, width, marginRight);
+  updateVolumeLegend(stock[xIdx]);
 };
 
 const resetPriceTrendIndicators = ({
@@ -103,34 +135,17 @@ const resetPriceTrendIndicators = ({
   marginRight: number;
   y: d3.ScaleLinear<number, number>;
 }) => {
-  const indicatorGroup = d3.select(`#${priceElementIds.indicatorGroup}`);
-  indicatorGroup.attr("opacity", 0);
   const lastestStock = stock.at(-1);
   if (!lastestStock) return;
-  const { adjClose, adjOpen, adjHigh, adjLow, adjVol } = stock.at(-1)!;
-  updateTextValue(priceElementIds.valuesClose, adjClose.toFixed(2));
-  updateTextValue(priceElementIds.valuesOpen, adjOpen.toFixed(2));
-  updateTextValue(priceElementIds.valuesHigh, adjHigh.toFixed(2));
-  updateTextValue(priceElementIds.valuesLow, adjLow.toFixed(2));
-  updateTextValue(priceElementIds.valuesVol, parseVolume(adjVol));
-  updateTextValue(
-    priceElementIds.valuesPctChange,
-    computePriceChange(stock.at(0)?.adjClose, adjClose),
-  );
+  const { adjClose } = lastestStock;
   d3.select(`#${priceElementIds.valuesPctRect}`).attr(
     "fill",
     adjClose > stock[0].adjClose ? priceColors.up : priceColors.down,
   );
-  const currPriceGroup = d3
-    .transition()
-    .duration(50)
-    .ease(d3.easeLinear)
-    .select(`#${priceElementIds.valuesCurrGroup}`)
-    .attr("transform", `translate(${width - marginRight} ${y(adjClose)})`);
-  currPriceGroup
-    .select("rect")
-    .attr("fill", adjClose > stock[0].adjClose ? priceColors.up : priceColors.down);
-  currPriceGroup.select("text").text(`${adjClose.toFixed(2)}`);
+  updateDateLine(false);
+  updateHoverValueTag(stock, -1, y, width, marginRight);
+  updateDisplayValues(lastestStock, computePriceChange(stock.at(0)!.adjClose, adjClose));
+  updateVolumeLegend(lastestStock);
 };
 
 const toggleVolumeGroup = () => {

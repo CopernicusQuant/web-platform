@@ -51,7 +51,7 @@ export default function OBVPressure({ features, width, height, x }: SubplotProps
         width={xEnd - xStart}
         height={y(0) - y.range()[1]}
         fill={priceColors.up}
-        opacity={shadeOpacity - 0.05}
+        opacity={shadeOpacity - 0.1}
       />
       <rect
         x={xStart}
@@ -59,7 +59,7 @@ export default function OBVPressure({ features, width, height, x }: SubplotProps
         width={xEnd - xStart}
         height={y.range()[0] - y(0)}
         fill={priceColors.down}
-        opacity={shadeOpacity - 0.05}
+        opacity={shadeOpacity - 0.1}
       />
       {obvPressureFeatures.map((featureName, i) => (
         <g key={getLineID(obvIDPrefix, featureName)}>
