@@ -1,15 +1,10 @@
 import * as d3 from "d3";
 import type { StockValues } from "@/apis";
 import { priceColors } from "@plot/theme";
-import {
-  getBarGroupID,
-  getLegendID,
-  getLegendValueID,
-  getYScale,
-} from "@plot/interactions/d3-utils";
-import { toggleVolumeFeature, vmIDPrefix } from "@plot/interactions/volume-momentum";
+import { getYScale } from "@plot/interactions/d3-utils";
 import Legend from "@/components/ui/Legend";
 import { useTranslation } from "react-i18next";
+import { priceElementIds, toggleVolumeGroup } from "./interactions/price-trend";
 
 type VolumesProps = {
   stock: StockValues[];
@@ -26,7 +21,7 @@ export default function Volumes({ stock, x, y }: VolumesProps) {
   const isUp = stock.at(-1)!["adjClose"] >= stock.at(-1)!["adjOpen"];
   return (
     <>
-      <g id={getBarGroupID(vmIDPrefix, "adjVol")}>
+      <g id={priceElementIds.volumeBarGroup}>
         {stock.map(({ tradeDate, adjVol, adjClose, adjOpen }) => (
           <rect
             key={`volume-${tradeDate}`}
@@ -40,12 +35,12 @@ export default function Volumes({ stock, x, y }: VolumesProps) {
         ))}
       </g>
       <Legend
-        legendId={getLegendID(vmIDPrefix, "adjVol")}
-        valueId={getLegendValueID(vmIDPrefix, "adjVol")}
+        legendId={priceElementIds.volumeLegend}
+        valueId={priceElementIds.volumeLegendValue}
         index={0}
         label={t(`featureName.adjVol`)}
         color={isUp ? priceColors.up : priceColors.down}
-        onMouseDown={() => toggleVolumeFeature("adjVol")}
+        onMouseDown={() => toggleVolumeGroup()}
       />
     </>
   );

@@ -5,6 +5,7 @@ type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "5Y";
 const FeatureGroups = [
   "priceMomentum",
   "volumeMomentum",
+  "obv",
   "marketActivity",
   "bollingerBands",
   "macd",
@@ -16,6 +17,7 @@ type FeatureGroupOpt = (typeof FeatureGroups)[number];
 const featureGroupParam: Record<FeatureGroupOpt, string> = {
   priceMomentum: "pricemomentum",
   volumeMomentum: "volumemomentum",
+  obv: "obv",
   marketActivity: "marketactivity",
   bollingerBands: "bollingerbands",
   macd: "macd",
@@ -26,6 +28,7 @@ const featureGroupParam: Record<FeatureGroupOpt, string> = {
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   priceMomentum: ["maBias", "return", "upDayRatio"] as const,
   volumeMomentum: ["volumeBias", "volumeChanges", "volumeMARatio"] as const,
+  obv: ["pressure", "momentum"] as const,
   marketActivity: ["activityScores", "priceAndTurnover", "amplitude"] as const,
   macd: ["acceleration"] as const,
   bollingerBands: ["position", "width"] as const,
@@ -121,6 +124,20 @@ const VolumeMomentumFeatureSchema = z
     volMARatio510: input.vol_ma_5_10_ratio,
     volMARatio1020: input.vol_ma_10_20_ratio,
     volMARatio2060: input.vol_ma_20_60_ratio,
+  }));
+
+const OBVFeatureSchema = z
+  .object({
+    trade_date: z.string(),
+    obv_strength_5: z.float32(),
+    obv_strength_20: z.float32(),
+    obv_strength_accel_5_20: z.float32(),
+  })
+  .transform((input) => ({
+    tradeDate: input.trade_date,
+    obv5: input.obv_strength_5,
+    obv20: input.obv_strength_20,
+    obvAccel520: input.obv_strength_accel_5_20,
   }));
 
 const MarketActivityFeaturesSchema = z
@@ -228,6 +245,7 @@ const RSISchema = z
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
   volumeMomentum: VolumeMomentumFeatureSchema,
+  obv: OBVFeatureSchema,
   marketActivity: MarketActivityFeaturesSchema,
   macd: MACDFeatureSchema,
   bollingerBands: BollingerBandsFeaturesSchema,
@@ -238,6 +256,7 @@ const FeatureSchemas = {
 type StockValues = z.infer<typeof StockValuesSchema>;
 type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
 type VolumeMomentumFeature = z.infer<typeof VolumeMomentumFeatureSchema>;
+type OBVFeature = z.infer<typeof OBVFeatureSchema>;
 type MarketActivityFeature = z.infer<typeof MarketActivityFeaturesSchema>;
 type MACDFeature = z.infer<typeof MACDFeatureSchema>;
 type BollingerBandsFeature = z.infer<typeof BollingerBandsFeaturesSchema>;
@@ -246,6 +265,7 @@ type RSIFeature = z.infer<typeof RSISchema>;
 type FeatureByGroup = {
   priceMomentum: PriceMomentumFeature;
   volumeMomentum: VolumeMomentumFeature;
+  obv: OBVFeature;
   marketActivity: MarketActivityFeature;
   macd: MACDFeature;
   bollingerBands: BollingerBandsFeature;
@@ -266,6 +286,7 @@ export {
   MarketActivityFeaturesSchema,
   PriceMomentumFeaturesSchema,
   VolumeMomentumFeatureSchema,
+  OBVFeatureSchema,
   BollingerBandsFeaturesSchema,
   DEMAFeaturesSchema,
   DEMAPeriods,
@@ -284,6 +305,7 @@ export type {
   MACDFeature,
   PriceMomentumFeature,
   VolumeMomentumFeature,
+  OBVFeature,
   MarketActivityFeature,
   BollingerBandsFeature,
 };

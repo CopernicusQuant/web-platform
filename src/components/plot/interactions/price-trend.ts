@@ -3,7 +3,7 @@ import { parseVolume, computePriceChange } from "@/lib/utils";
 import type { StockValues } from "@/apis";
 import { priceColors } from "../theme";
 import { updateDateLine } from "./date-line";
-import { updateTextValue } from "./d3-utils";
+import { toggleElement, updateTextValue } from "./d3-utils";
 
 const priceElementIds = {
   indicatorGroup: "price-indicator-group",
@@ -21,6 +21,9 @@ const priceElementIds = {
   valuesCurrGroup: "price-curr-group",
   valuesCurrRect: "price-curr-rect",
   valuesCurrVal: "price-curr-val",
+  volumeBarGroup: "price-vol_group",
+  volumeLegend: "price-vol-legend",
+  volumeLegendValue: "price-vol-legend-val",
 };
 
 const updatePriceTrendIndicators = ({
@@ -80,6 +83,13 @@ const updatePriceTrendIndicators = ({
     .select("rect")
     .attr("fill", adjClose > stock[0].adjClose ? priceColors.up : priceColors.down);
   currPriceGroup.select("text").text(`${adjClose.toFixed(2)}`);
+
+  const volumeLegend = d3.select(`#${priceElementIds.volumeLegend}`);
+  if (!volumeLegend.empty()) {
+    const volumeColor = adjClose >= adjOpen ? priceColors.up : priceColors.down;
+    volumeLegend.select("rect").attr("stroke", volumeColor);
+    volumeLegend.select("text").attr("fill", volumeColor);
+  }
 };
 
 const resetPriceTrendIndicators = ({
@@ -123,4 +133,14 @@ const resetPriceTrendIndicators = ({
   currPriceGroup.select("text").text(`${adjClose.toFixed(2)}`);
 };
 
-export { priceElementIds, updatePriceTrendIndicators, resetPriceTrendIndicators };
+const toggleVolumeGroup = () => {
+  toggleElement(priceElementIds.volumeBarGroup);
+  toggleElement(priceElementIds.volumeLegend, 0.3, 1.0);
+};
+
+export {
+  priceElementIds,
+  updatePriceTrendIndicators,
+  resetPriceTrendIndicators,
+  toggleVolumeGroup,
+};
