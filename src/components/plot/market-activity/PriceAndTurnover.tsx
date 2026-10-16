@@ -14,6 +14,7 @@ export default function PriceAndTurnover({
   width,
   height,
 }: SubplotProps<"marketActivity">) {
+  const { shadeOpacity } = svgPathConfig;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const { t } = useTranslation();
   const y = d3.scaleLinear([-0.05, 1.05], [height - marginBottom, marginTop]);
@@ -50,7 +51,7 @@ export default function PriceAndTurnover({
           width={x.range()[1] - x.range()[0]}
           height={y(0.2) - y(0.8)}
           fill={colorPalette[3]}
-          opacity={0.6}
+          opacity={shadeOpacity + 0.1}
         />
       </g>
       {priceAndTurnoverFeatures.map((featureName, i) => (

@@ -5,7 +5,8 @@
     "marketActivity": "Market Activity",
     "macd": "MACD",
     "bollingerBands": "Bollinger Bands",
-    "dema": "DEMA"
+    "dema": "DEMA",
+    "rsi": "RSI"
   },
   "featureGroupBrief": {
     "priceMomentum": "moving averages, deviations, returns, and up-day ratios.",
@@ -13,7 +14,8 @@
     "marketActivity": "trading activity, turnover, liquidity, and price volatility.",
     "macd":"moving average convergence divergence, with crossover signals.",
     "bollingerBands": "price position and volatility relative to a moving-average band.",
-    "dema": "double exponential moving averages, spreads, and crossover signals."
+    "dema": "double exponential moving averages, spreads, and crossover signals.",
+    "rsi": "relative strength index, measuring the speed and magnitude of price changes."
   },
   "featureGroupDescription": {
     "priceMomentum": "measures price momentum using moving averages, deviations, returns, and up-day ratios to help predict future price movement from the direction, strength, and persistence of recent trends.",
@@ -21,7 +23,8 @@
     "marketActivity": "measures market activity through trading intensity, turnover, liquidity conditions, and price volatility to identify active trading, thin liquidity, and stagnant capital flows.",
     "macd": "tracks changes in trend momentum through fast and slow exponential moving averages, DIFF, DEA, and the histogram. Crossovers indicate shifts in momentum relative to its smoothed trend.",
     "bollingerBands": "measures price volatility and relative position using moving-average bands to identify expanding or contracting volatility and unusually strong moves near the upper or lower band.",
-    "dema": "tracks price trends and momentum that react faster than standard exponential averages. Crossovers and spreads highlight potential trend reversals, accelerating moves, and weakening momentum."
+    "dema": "tracks price trends and momentum that react faster than standard exponential averages. Crossovers and spreads highlight potential trend reversals, accelerating moves, and weakening momentum.",
+    "rsi": "measures price momentum from the speed and magnitude of recent price changes to identify strengthening or weakening momentum and potential overbought or oversold conditions."
   },
   "subPlotName": {
     "maBias": "MA Bias",
@@ -44,7 +47,9 @@
     "spread": "Spread",
     "5_10": "5D vs 10D",
     "10_20": "10D vs 20D",
-    "20_60": "20D vs 60D"
+    "20_60": "20D vs 60D",
+
+    "rsi": "RSI"
   },
   "featureName": {
 

@@ -25,8 +25,8 @@ export default function FeatureGroupCard({
     >
       <h2
         className={cn(
-          "h-12 flex items-end overflow-clip transition-all duration-100",
-          active && "font-bold text-[17px]",
+          "h-11 flex items-end overflow-clip transition-all duration-100",
+          active && "font-bold",
         )}
       >
         {t(`featureGroupName.${featureGroup}`)}
