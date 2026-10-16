@@ -37,10 +37,7 @@ export default function BBPosition({
     .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
     .y((feature) => y(feature[positionFeature]))(features);
   if (!path) return <></>;
-  const [xStart, xEnd] = [
-    marginLeft + x.bandwidth() / 2,
-    width - marginRight - x.bandwidth() / 2,
-  ];
+  const [xStart, xEnd] = x.range();
   return (
     <>
       <YAxis
@@ -62,7 +59,7 @@ export default function BBPosition({
       <rect
         x={xStart}
         y={marginTop}
-        width={width - marginLeft - marginRight - x.bandwidth()}
+        width={xEnd - xStart}
         height={y(1.0) - y.range()[1]}
         fill={priceColors.up}
         opacity={shadeOpacity}
@@ -77,9 +74,9 @@ export default function BBPosition({
         strokeDasharray={markStrokeDasharray}
       />
       <rect
-        x={marginLeft + x.bandwidth() / 2}
+        x={xStart}
         y={y(0.0)}
-        width={width - marginLeft - marginRight - x.bandwidth()}
+        width={xEnd - xStart}
         height={y.range()[0] - y(0.0)}
         fill={priceColors.down}
         opacity={shadeOpacity}
