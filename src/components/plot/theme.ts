@@ -35,6 +35,7 @@ const svgPathConfig = {
   strokeDasharray: "10 4",
   markStrokeWidth: 1.5,
   markStrokeDasharray: "6 4",
+  shadeOpacity: 0.15,
 };
 
 export {

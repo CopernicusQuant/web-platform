@@ -20,7 +20,8 @@ export default function BBPosition({
 }: SubplotProps<"bollingerBands">) {
   const { t } = useTranslation();
   let [yMax, yMin] = [1.0, 0.0];
-  const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgPathConfig;
+  const { strokeWidth, markStrokeDasharray, markStrokeWidth, shadeOpacity } =
+    svgPathConfig;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   features.forEach((feature) => {
     yMax = Math.max(yMax, feature[positionFeature]);
@@ -64,7 +65,7 @@ export default function BBPosition({
         width={width - marginLeft - marginRight - x.bandwidth()}
         height={y(1.0) - y.range()[1]}
         fill={priceColors.up}
-        opacity={0.15}
+        opacity={shadeOpacity}
       />
       <line
         x1={xStart}
@@ -81,7 +82,7 @@ export default function BBPosition({
         width={width - marginLeft - marginRight - x.bandwidth()}
         height={y.range()[0] - y(0.0)}
         fill={priceColors.down}
-        opacity={0.15}
+        opacity={shadeOpacity}
       />
       <line
         x1={xStart}

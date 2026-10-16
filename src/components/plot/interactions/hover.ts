@@ -8,6 +8,7 @@ import type {
   BollingerBandsFeature,
   DEMAFeature,
   VolumeMomentumFeature,
+  RSIFeature,
 } from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
@@ -27,6 +28,7 @@ import { resetMACDIndicators, updateMACDIndicators } from "./macd";
 import { resetBBIndicators, updateBBIndicators } from "./bollinger-bands";
 import { resetDEMAIndicators, updateDEMAIndicators } from "./dema";
 import { resetVolumeIndicators, updateVolumeIndicators } from "./volume-momentum";
+import { updateRSIIndicators, resetRSIIndicators } from "./rsi";
 
 const getHoverPlotFn = ({
   data,
@@ -137,6 +139,10 @@ const getHoverPlotFn = ({
           x,
           y,
         });
+        break;
+      case "rsi":
+        updateRSIIndicators({ features: features as RSIFeature[], xIdx });
+        break;
     }
   };
 };
@@ -187,6 +193,9 @@ const getLeavePlotFn = ({
         break;
       case "dema":
         resetDEMAIndicators({ features: features as DEMAFeature[] });
+        break;
+      case "rsi":
+        resetRSIIndicators({ features: features as RSIFeature[] });
         break;
     }
   };

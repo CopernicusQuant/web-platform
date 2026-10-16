@@ -1,3 +1,5 @@
+import { svgPathConfig } from "@plot/theme";
+
 type YAxisProps = {
   y: d3.ScaleLinear<number, number>;
   plotWidth: number;
@@ -15,6 +17,7 @@ export default function YAxis({
   labelPostfix,
   labelFormatter,
 }: YAxisProps) {
+  const { markStrokeDasharray } = svgPathConfig;
   return (
     <g fontSize={12} className="select-none">
       {y.ticks(6).map((tick) => (
@@ -25,7 +28,7 @@ export default function YAxis({
             y1={y(tick)}
             y2={y(tick)}
             stroke="lightgray"
-            strokeDasharray={"6 4"}
+            strokeDasharray={markStrokeDasharray}
           />
           <text
             x={plotWidth + (labelXOffset ?? 0)}

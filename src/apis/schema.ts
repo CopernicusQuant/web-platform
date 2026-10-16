@@ -9,6 +9,7 @@ const FeatureGroups = [
   "bollingerBands",
   "macd",
   "dema",
+  "rsi",
 ] as const;
 type FeatureGroupOpt = (typeof FeatureGroups)[number];
 
@@ -19,6 +20,7 @@ const featureGroupParam: Record<FeatureGroupOpt, string> = {
   bollingerBands: "bollingerbands",
   macd: "macd",
   dema: "dema",
+  rsi: "rsi",
 };
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
@@ -28,6 +30,7 @@ const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   macd: ["acceleration"] as const,
   bollingerBands: ["position", "width"] as const,
   dema: ["spread"] as const,
+  rsi: ["rsi"] as const,
 };
 
 const dataWindowParam: Record<DataWindowOpt, string> = {
@@ -210,6 +213,18 @@ const DEMAFeaturesSchema = z
     ...input,
   }));
 
+const RSISchema = z
+  .object({
+    trade_date: z.string(),
+    rsi_6: z.float32(),
+    rsi_14: z.float32(),
+  })
+  .transform((input) => ({
+    tradeDate: input.trade_date,
+    rsi6: input.rsi_6,
+    rsi14: input.rsi_14,
+  }));
+
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
   volumeMomentum: VolumeMomentumFeatureSchema,
@@ -217,6 +232,7 @@ const FeatureSchemas = {
   macd: MACDFeatureSchema,
   bollingerBands: BollingerBandsFeaturesSchema,
   dema: DEMAFeaturesSchema,
+  rsi: RSISchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
 type StockValues = z.infer<typeof StockValuesSchema>;
@@ -226,6 +242,7 @@ type MarketActivityFeature = z.infer<typeof MarketActivityFeaturesSchema>;
 type MACDFeature = z.infer<typeof MACDFeatureSchema>;
 type BollingerBandsFeature = z.infer<typeof BollingerBandsFeaturesSchema>;
 type DEMAFeature = z.infer<typeof DEMAFeaturesSchema>;
+type RSIFeature = z.infer<typeof RSISchema>;
 type FeatureByGroup = {
   priceMomentum: PriceMomentumFeature;
   volumeMomentum: VolumeMomentumFeature;
@@ -233,6 +250,7 @@ type FeatureByGroup = {
   macd: MACDFeature;
   bollingerBands: BollingerBandsFeature;
   dema: DEMAFeature;
+  rsi: RSIFeature;
 };
 type StockData<G extends FeatureGroupOpt> = {
   ticker: string;
@@ -262,6 +280,7 @@ export type {
   StockValues,
   FeatureGroupOpt,
   FeatureByGroup,
+  RSIFeature,
   MACDFeature,
   PriceMomentumFeature,
   VolumeMomentumFeature,
