@@ -8,13 +8,12 @@ import {
 } from "@plot/interactions/d3-utils";
 import { rsiFeatures, rsiIDPrefix, toggleRSIFeature } from "@plot/interactions/rsi";
 import type { SubplotProps } from "@plot/shared";
-import { colorPalette, plotSizeConfig, priceColors, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, priceColors, svgConfig } from "@plot/theme";
 import type { RSIFeature } from "@/apis";
 import Legend from "@/components/ui/Legend";
 
 export default function RSIPlot({ features, x, width, height }: SubplotProps<"rsi">) {
-  const { strokeWidth, shadeOpacity, markStrokeDasharray, markStrokeWidth } =
-    svgPathConfig;
+  const { strokeWidth, shadeOpacity, markStrokeDasharray, markStrokeWidth } = svgConfig;
   const { marginTop, marginBottom, marginLeft, marginRight } = plotSizeConfig;
   const values = features.reduce((acc, feature) => {
     rsiFeatures.forEach((featureName) => acc.push(feature[featureName]));

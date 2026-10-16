@@ -1,4 +1,4 @@
-import { svgPathConfig } from "@plot/theme";
+import { svgConfig } from "@plot/theme";
 
 type YAxisProps = {
   y: d3.ScaleLinear<number, number>;
@@ -17,7 +17,7 @@ export default function YAxis({
   labelPostfix,
   labelFormatter,
 }: YAxisProps) {
-  const { markStrokeDasharray } = svgPathConfig;
+  const { markStrokeDasharray } = svgConfig;
   return (
     <g fontSize={12} className="select-none">
       {y.ticks(6).map((tick) => (

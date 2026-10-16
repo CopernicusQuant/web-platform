@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import type { FeatureByGroup } from "@/apis";
 import { maFeatures, pmIDPrefix } from "@plot/interactions/price-momentum";
 import { getLineID } from "@plot/interactions/d3-utils";
-import { colorPalette, svgPathConfig } from "../theme";
+import { colorPalette, svgConfig } from "../theme";
 
 type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
@@ -15,7 +15,7 @@ type MALinesProps = {
 };
 
 export default function MALines({ features, x, y, yAxisMin, yAxisMax }: MALinesProps) {
-  const { strokeWidth, opacity } = svgPathConfig;
+  const { strokeWidth, opacity } = svgConfig;
   const paths: Record<string, string> = {};
   maFeatures.forEach((featureName) => {
     const path = d3

@@ -7,7 +7,7 @@ import {
   toggleFeature,
 } from "@plot/interactions/price-momentum";
 import { getLineID } from "@plot/interactions/d3-utils";
-import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
 import type { SubplotProps } from "@plot/shared";
@@ -20,7 +20,7 @@ export default function MABias({
   height,
   x,
 }: SubplotProps<"priceMomentum">) {
-  const { markStrokeDasharray, markStrokeWidth, strokeWidth } = svgPathConfig;
+  const { markStrokeDasharray, markStrokeWidth, strokeWidth } = svgConfig;
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
   // y-axis mapper
   let yMin = 1.0;

@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import { useTranslation } from "react-i18next";
 import YAxis from "@/components/ui/YAxis";
 import { priceAndTurnoverFeatures } from "@plot/interactions/market-activity";
@@ -14,7 +14,7 @@ export default function PriceAndTurnover({
   width,
   height,
 }: SubplotProps<"marketActivity">) {
-  const { shadeOpacity } = svgPathConfig;
+  const { shadeOpacity } = svgConfig;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const { t } = useTranslation();
   const y = d3.scaleLinear([-0.05, 1.05], [height - marginBottom, marginTop]);
@@ -33,8 +33,8 @@ export default function PriceAndTurnover({
           y1={y(0.8)}
           y2={y(0.8)}
           stroke="black"
-          strokeWidth={svgPathConfig.markStrokeWidth}
-          strokeDasharray={svgPathConfig.markStrokeDasharray}
+          strokeWidth={svgConfig.markStrokeWidth}
+          strokeDasharray={svgConfig.markStrokeDasharray}
         />
         <line
           x1={marginLeft}
@@ -42,8 +42,8 @@ export default function PriceAndTurnover({
           y1={y(0.2)}
           y2={y(0.2)}
           stroke="black"
-          strokeWidth={svgPathConfig.markStrokeWidth}
-          strokeDasharray={svgPathConfig.markStrokeDasharray}
+          strokeWidth={svgConfig.markStrokeWidth}
+          strokeDasharray={svgConfig.markStrokeDasharray}
         />
         <rect
           x={x.range()[0]}

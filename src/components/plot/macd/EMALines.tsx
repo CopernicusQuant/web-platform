@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import type { MACDFeature } from "@/apis";
 import { emaFeatures, macdIDPrefix } from "@plot/interactions/macd";
-import { colorPalette, svgPathConfig } from "@plot/theme";
+import { colorPalette, svgConfig } from "@plot/theme";
 import { getLineID } from "@plot/interactions/d3-utils";
 
 type EMALinesProps = {
@@ -11,7 +11,7 @@ type EMALinesProps = {
 };
 
 export default function EMALines({ features, x, y }: EMALinesProps) {
-  const { strokeWidth, opacity } = svgPathConfig;
+  const { strokeWidth, opacity } = svgConfig;
   const paths: Record<string, string> = {};
   const yDomain = y.domain();
   emaFeatures.forEach((featureName) => {

@@ -7,7 +7,8 @@
     "macd": "MACD",
     "bollingerBands": "Bollinger Bands",
     "dema": "DEMA",
-    "rsi": "RSI"
+    "rsi": "RSI",
+    "kdj": "KDJ"
   },
   "featureGroupBrief": {
     "priceMomentum": "moving averages, deviations, returns, and up-day ratios.",
@@ -17,7 +18,8 @@
     "macd":"moving average convergence divergence, with crossover signals.",
     "bollingerBands": "price position and volatility relative to a moving-average band.",
     "dema": "double exponential moving averages, spreads, and crossover signals.",
-    "rsi": "relative strength index, measuring the speed and magnitude of price changes."
+    "rsi": "relative strength index, measuring the speed and magnitude of price changes.",
+    "kdj": "KDJ stochastic oscillator, comparing the price with its recent high-low range."
   },
   "featureGroupDescription": {
     "priceMomentum": "measures price momentum using moving averages, deviations, returns, and up-day ratios to help predict future price movement from the direction, strength, and persistence of recent trends.",
@@ -27,7 +29,8 @@
     "macd": "tracks changes in trend momentum through fast and slow exponential moving averages, DIFF, DEA, and the histogram. Crossovers indicate shifts in momentum relative to its smoothed trend.",
     "bollingerBands": "measures price volatility and relative position using moving-average bands to identify expanding or contracting volatility and unusually strong moves near the upper or lower band.",
     "dema": "tracks price trends and momentum that react faster than standard exponential averages. Crossovers and spreads highlight potential trend reversals, accelerating moves, and weakening momentum.",
-    "rsi": "measures price momentum from the speed and magnitude of recent price changes to identify strengthening or weakening momentum and potential overbought or oversold conditions."
+    "rsi": "measures price momentum from the speed and magnitude of recent price changes to identify strengthening or weakening momentum and potential overbought or oversold conditions.",
+    "kdj": "measures the closing price relative to its recent high-low range using K, D, and J lines to identify momentum shifts and potential overbought or oversold conditions."
   },
   "subPlotName": {
     "maBias": "MA Bias",
@@ -55,7 +58,9 @@
     "10_20": "10D vs 20D",
     "20_60": "20D vs 60D",
 
-    "rsi": "RSI"
+    "rsi": "RSI",
+
+    "kdj": "KDJ"
   },
   "featureName": {
 
@@ -87,6 +92,9 @@
    "volMARatio1020": "10D vs 20D",
    "volMARatio2060": "20D vs 60D",
    
-   "obvAccel520": "5D vs 20D"
+   "obvAccel520": "5D vs 20D",
+
+   "kdjHigh9": "9D High",
+   "kdjLow9": "9D Low"
   }
 }

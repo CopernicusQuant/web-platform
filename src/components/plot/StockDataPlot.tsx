@@ -4,6 +4,7 @@ import type {
   BollingerBandsFeature,
   DEMAFeature,
   FeatureGroupOpt,
+  KDJFeature,
   MACDFeature,
   PriceMomentumFeature,
   StockData,
@@ -28,6 +29,7 @@ import DEMATrendLines from "@plot/dema/DEMATrendLines";
 import DEMASignals from "@plot/dema/DEMASignals";
 import DEMAIndicators from "./dema/DEMAIndicators";
 import Volumes from "./Volumes";
+import KDJLowHigh from "./kdj/KDJLowHigh";
 
 type StockDataPlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -129,6 +131,15 @@ export default function StockDataPlot({
             />
             <DEMASignals features={features as DEMAFeature[]} x={x} y={y} />
           </>
+        );
+      case "kdj":
+        return (
+          <KDJLowHigh
+            features={features as KDJFeature[]}
+            chartType={chartType}
+            x={x}
+            y={y}
+          />
         );
       default:
         return <></>;

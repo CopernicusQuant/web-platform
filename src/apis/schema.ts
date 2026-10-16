@@ -11,6 +11,7 @@ const FeatureGroups = [
   "macd",
   "dema",
   "rsi",
+  "kdj",
 ] as const;
 type FeatureGroupOpt = (typeof FeatureGroups)[number];
 
@@ -23,6 +24,7 @@ const featureGroupParam: Record<FeatureGroupOpt, string> = {
   macd: "macd",
   dema: "dema",
   rsi: "rsi",
+  kdj: "kdj",
 };
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
@@ -34,6 +36,7 @@ const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   bollingerBands: ["position", "width"] as const,
   dema: ["spread"] as const,
   rsi: ["rsi"] as const,
+  kdj: ["kdj"] as const,
 };
 
 const dataWindowParam: Record<DataWindowOpt, string> = {
@@ -242,6 +245,24 @@ const RSISchema = z
     rsi14: input.rsi_14,
   }));
 
+const KDJSchema = z
+  .object({
+    trade_date: z.string(),
+    kdj_low_9: z.float32(),
+    kdj_high_9: z.float32(),
+    kdj_k: z.float32(),
+    kdj_d: z.float32(),
+    kdj_j: z.float32(),
+  })
+  .transform((input) => ({
+    tradeDate: input.trade_date,
+    kdjHigh9: input.kdj_high_9,
+    kdjLow9: input.kdj_low_9,
+    kdjK: input.kdj_k,
+    kdjD: input.kdj_d,
+    kdjJ: input.kdj_j,
+  }));
+
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
   volumeMomentum: VolumeMomentumFeatureSchema,
@@ -251,6 +272,7 @@ const FeatureSchemas = {
   bollingerBands: BollingerBandsFeaturesSchema,
   dema: DEMAFeaturesSchema,
   rsi: RSISchema,
+  kdj: KDJSchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
 type StockValues = z.infer<typeof StockValuesSchema>;
@@ -262,6 +284,7 @@ type MACDFeature = z.infer<typeof MACDFeatureSchema>;
 type BollingerBandsFeature = z.infer<typeof BollingerBandsFeaturesSchema>;
 type DEMAFeature = z.infer<typeof DEMAFeaturesSchema>;
 type RSIFeature = z.infer<typeof RSISchema>;
+type KDJFeature = z.infer<typeof KDJSchema>;
 type FeatureByGroup = {
   priceMomentum: PriceMomentumFeature;
   volumeMomentum: VolumeMomentumFeature;
@@ -271,6 +294,7 @@ type FeatureByGroup = {
   bollingerBands: BollingerBandsFeature;
   dema: DEMAFeature;
   rsi: RSIFeature;
+  kdj: KDJFeature;
 };
 type StockData<G extends FeatureGroupOpt> = {
   ticker: string;
@@ -289,6 +313,7 @@ export {
   OBVFeatureSchema,
   BollingerBandsFeaturesSchema,
   DEMAFeaturesSchema,
+  KDJSchema,
   DEMAPeriods,
   FeatureSchemas,
   FeatureSubplots,
@@ -303,6 +328,7 @@ export type {
   FeatureByGroup,
   RSIFeature,
   MACDFeature,
+  KDJFeature,
   PriceMomentumFeature,
   VolumeMomentumFeature,
   OBVFeature,

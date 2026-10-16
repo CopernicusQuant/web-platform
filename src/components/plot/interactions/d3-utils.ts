@@ -18,6 +18,23 @@ const updateTextValue = (id: string, text: string) => {
   d3.select(`#${id}`).text(text);
 };
 
+const updateCircleOpacity = (id: string, hovering: boolean) => {
+  const circleGroup = d3.select(`#${id}`);
+  if (circleGroup.attr("data-on") !== "off") {
+    circleGroup.attr("opacity", hovering ? 1 : 0);
+  }
+};
+
+const updateCirclePos = (id: string, duration: number, cx: number, cy: number) => {
+  const circle = d3.select(`#${id}`);
+  circle
+    .transition()
+    .duration(duration)
+    .ease(d3.easeLinear)
+    .attr("cx", cx)
+    .attr("cy", cy);
+};
+
 const toggleElement = (
   id: string,
   hiddenOpacity: number = 0,
@@ -51,6 +68,8 @@ const getYScale = (
 };
 
 export {
+  updateCirclePos,
+  updateCircleOpacity,
   updateTextValue,
   toggleElement,
   getLineID,
