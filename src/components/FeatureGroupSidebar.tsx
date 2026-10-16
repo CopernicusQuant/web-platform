@@ -10,13 +10,15 @@ export default function FeatureGroupSidebar() {
       <div className="h-10 flex justify-center items-center border-b border-gray-300">
         <h2 className="text-sm">Feature Group</h2>
       </div>
-      {FeatureGroups.map((group) => (
-        <FeatureGroupCard
-          key={`sidebar-${group}`}
-          featureGroup={group}
-          active={featureGroup === group}
-        />
-      ))}
+      <div className="flex-1 flex flex-col overflow-y-auto scrollbar-none">
+        {FeatureGroups.map((group) => (
+          <FeatureGroupCard
+            key={`sidebar-${group}`}
+            featureGroup={group}
+            active={featureGroup === group}
+          />
+        ))}
+      </div>
     </div>
   );
 }

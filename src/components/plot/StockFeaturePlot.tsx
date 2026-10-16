@@ -10,6 +10,7 @@ import type {
   DEMAFeature,
   VolumeMomentumFeature,
   RSIFeature,
+  OBVFeature,
 } from "@/apis";
 import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
@@ -24,6 +25,7 @@ import BBFeaturePlot from "@plot/bollinger-bands/BBFeaturePlot";
 import DEMAFeaturePlot from "@plot/dema/DEMAFeaturePlot";
 import VolumeFeaturePlot from "@plot/volume-momentum/VolumeFeaturePlot";
 import RSIPlot from "./rsi/RSIPlot";
+import OBVFeaturePlot from "./obv/OBVFeaturePlot";
 
 type StockFeaturePlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -85,6 +87,16 @@ export default function StockFeaturePlot({
         return (
           <VolumeFeaturePlot
             features={features as VolumeMomentumFeature[]}
+            width={width}
+            height={height}
+            x={x}
+            subplotName={featureSubPlot}
+          />
+        );
+      case "obv":
+        return (
+          <OBVFeaturePlot
+            features={features as OBVFeature[]}
             width={width}
             height={height}
             x={x}
