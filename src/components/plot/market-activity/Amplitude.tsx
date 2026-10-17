@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import { useTranslation } from "react-i18next";
 import type { MarketActivityFeature } from "@/apis";
 import { amplitudeFeatures, marketIDPrefix } from "@plot/interactions/market-activity";
-import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import type { SubplotProps } from "@plot/shared";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
 import { toggleFeature } from "@plot/interactions/market-activity";
@@ -66,7 +66,7 @@ export default function Amplitude({
           id={getLineID(marketIDPrefix, featureName)}
           d={value}
           fill="none"
-          strokeWidth={svgPathConfig.strokeWidth}
+          strokeWidth={svgConfig.strokeWidth}
           stroke={colorPalette[i + 1]}
         />
       ))}

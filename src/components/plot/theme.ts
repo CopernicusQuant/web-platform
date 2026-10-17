@@ -29,13 +29,15 @@ const plotSizeConfig = {
   marginLeft: 0,
 };
 
-const svgPathConfig = {
+const svgConfig = {
   strokeWidth: 1.5,
   opacity: 0.7,
   strokeDasharray: "10 4",
   markStrokeWidth: 1.5,
   markStrokeDasharray: "6 4",
   shadeOpacity: 0.15,
+  circleR: 5,
+  circleStroke: 2,
 };
 
 export {
@@ -43,6 +45,6 @@ export {
   legendConfig,
   animationConfig,
   plotSizeConfig,
-  svgPathConfig,
+  svgConfig,
   colorPalette,
 };

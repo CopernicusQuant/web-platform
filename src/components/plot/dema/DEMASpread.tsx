@@ -10,14 +10,14 @@ import {
 } from "@plot/interactions/dema";
 import type { SubplotProps } from "@plot/shared";
 import DEMASignals from "@plot/dema/DEMASignals";
-import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import Legend from "@/components/ui/Legend";
 import { getLegendID, getLegendValueID, getLineID } from "@plot/interactions/d3-utils";
 
 export default function DEMASpread({ features, width, height, x }: SubplotProps<"dema">) {
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
-  const { strokeWidth, markStrokeWidth, markStrokeDasharray } = svgPathConfig;
+  const { strokeWidth, markStrokeWidth, markStrokeDasharray } = svgConfig;
   const demaPeriod = useAtomValue(demaPeriodAtom);
   const featureNames = getDEMAFeatureNamesByPeriod(demaPeriod);
   const spreadFeatureName = featureNames.filter((featureName) =>

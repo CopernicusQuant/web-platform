@@ -2,7 +2,7 @@ import type { DEMAFeature } from "@/apis";
 import { demaPeriodAtom } from "@/atoms/plot";
 import { getCrossLinesID } from "@plot/interactions/d3-utils";
 import { demaIDPrefix, getDEMAFeatureNamesByPeriod } from "@plot/interactions/dema";
-import { priceColors, svgPathConfig } from "@plot/theme";
+import { priceColors, svgConfig } from "@plot/theme";
 import { useAtomValue } from "jotai";
 
 type DEMASignalsProps = {
@@ -36,9 +36,9 @@ export default function DEMASignals({
         x2={(x(date) ?? 0) + x.bandwidth() / 2}
         y1={y.range()[0]}
         y2={y.range()[1]}
-        strokeWidth={svgPathConfig.strokeWidth}
+        strokeWidth={svgConfig.strokeWidth}
         stroke={stroke}
-        strokeDasharray={svgPathConfig.strokeDasharray}
+        strokeDasharray={svgConfig.strokeDasharray}
       />
     );
   };

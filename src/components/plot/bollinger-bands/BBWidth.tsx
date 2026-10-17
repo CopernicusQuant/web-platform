@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import type { SubplotProps } from "@plot/shared";
 import {
   bbIDPrefix,
@@ -22,7 +22,7 @@ export default function BBWidth({
   let yMax = 0;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const { strokeDasharray, strokeWidth, markStrokeDasharray, markStrokeWidth } =
-    svgPathConfig;
+    svgConfig;
   features.forEach((feature) => {
     yMax = Math.max(yMax, feature[widthFeature] / 2);
   });

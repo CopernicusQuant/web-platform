@@ -13,7 +13,7 @@ import {
   volMARatioFeatures,
 } from "@plot/interactions/volume-momentum";
 import type { SubplotProps } from "@plot/shared";
-import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import type { VolumeMomentumFeature } from "@/apis";
 import Legend from "@/components/ui/Legend";
 
@@ -25,7 +25,7 @@ export default function VolMARatio({
 }: SubplotProps<"volumeMomentum">) {
   const { t } = useTranslation();
   const { marginBottom, marginTop, marginLeft, marginRight } = plotSizeConfig;
-  const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgPathConfig;
+  const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgConfig;
   const maRatioValues = features.reduce((curr, feature) => {
     volMARatioFeatures.forEach((featureName) => curr.push(feature[featureName]));
     return curr;

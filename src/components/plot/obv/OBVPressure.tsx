@@ -13,14 +13,13 @@ import {
   toggleOBVElements,
 } from "@plot/interactions/obv";
 import type { SubplotProps } from "@plot/shared";
-import { colorPalette, plotSizeConfig, priceColors, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, priceColors, svgConfig } from "@plot/theme";
 import type { OBVFeature } from "@/apis";
 import Legend from "@/components/ui/Legend";
 
 export default function OBVPressure({ features, width, height, x }: SubplotProps<"obv">) {
   const { marginTop, marginBottom, marginLeft, marginRight } = plotSizeConfig;
-  const { strokeWidth, markStrokeWidth, markStrokeDasharray, shadeOpacity } =
-    svgPathConfig;
+  const { strokeWidth, markStrokeWidth, markStrokeDasharray, shadeOpacity } = svgConfig;
   const values = features.reduce((acc, feature) => {
     obvPressureFeatures.forEach((featureName) => acc.push(feature[featureName]));
     return acc;

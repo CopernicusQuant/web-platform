@@ -5,7 +5,7 @@ import {
   volBiasFeatures,
 } from "@plot/interactions/volume-momentum";
 import type { SubplotProps } from "@plot/shared";
-import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import type { VolumeMomentumFeature } from "@/apis";
 import {
@@ -24,7 +24,7 @@ export default function VolBias({
   x,
 }: SubplotProps<"volumeMomentum">) {
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
-  const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgPathConfig;
+  const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgConfig;
   const biasVals = features.reduce((acc, feature) => {
     volBiasFeatures.forEach((featureName) => acc.push(feature[featureName]));
     return acc;

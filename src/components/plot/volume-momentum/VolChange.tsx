@@ -13,7 +13,7 @@ import {
   volChangesFeatures,
 } from "@plot/interactions/volume-momentum";
 import type { SubplotProps } from "@plot/shared";
-import { colorPalette, plotSizeConfig, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import type { VolumeMomentumFeature } from "@/apis";
 import Legend from "@/components/ui/Legend";
 
@@ -24,7 +24,7 @@ export default function VolChange({
   x,
 }: SubplotProps<"volumeMomentum">) {
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
-  const { strokeWidth, markStrokeWidth, markStrokeDasharray } = svgPathConfig;
+  const { strokeWidth, markStrokeWidth, markStrokeDasharray } = svgConfig;
   const changesVals = features.reduce((acc, feature) => {
     volChangesFeatures.forEach((featureName) => acc.push(feature[featureName]));
     return acc;

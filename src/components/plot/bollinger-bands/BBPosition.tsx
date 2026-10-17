@@ -5,7 +5,7 @@ import {
   toggleBBFeature,
 } from "@plot/interactions/bollinger-bands";
 import type { SubplotProps } from "@plot/shared";
-import { colorPalette, plotSizeConfig, priceColors, svgPathConfig } from "@plot/theme";
+import { colorPalette, plotSizeConfig, priceColors, svgConfig } from "@plot/theme";
 import type { BollingerBandsFeature } from "@/apis";
 import YAxis from "@/components/ui/YAxis";
 import Legend from "@/components/ui/Legend";
@@ -20,8 +20,7 @@ export default function BBPosition({
 }: SubplotProps<"bollingerBands">) {
   const { t } = useTranslation();
   let [yMax, yMin] = [1.0, 0.0];
-  const { strokeWidth, markStrokeDasharray, markStrokeWidth, shadeOpacity } =
-    svgPathConfig;
+  const { strokeWidth, markStrokeDasharray, markStrokeWidth, shadeOpacity } = svgConfig;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   features.forEach((feature) => {
     yMax = Math.max(yMax, feature[positionFeature]);

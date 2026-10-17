@@ -10,6 +10,7 @@ import type {
   VolumeMomentumFeature,
   RSIFeature,
   OBVFeature,
+  KDJFeature,
 } from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
@@ -31,6 +32,7 @@ import { resetDEMAIndicators, updateDEMAIndicators } from "./dema";
 import { resetVolumeIndicators, updateVolumeIndicators } from "./volume-momentum";
 import { updateRSIIndicators, resetRSIIndicators } from "./rsi";
 import { resetOBVIndicators, updateOBVIndicators } from "./obv";
+import { resetKDJIndicators, updateKDJIndicators } from "./kdj";
 
 const getHoverPlotFn = ({
   data,
@@ -148,6 +150,9 @@ const getHoverPlotFn = ({
       case "rsi":
         updateRSIIndicators({ features: features as RSIFeature[], xIdx });
         break;
+      case "kdj":
+        updateKDJIndicators({ features: features as KDJFeature[], xIdx, x, y });
+        break;
     }
   };
 };
@@ -204,6 +209,9 @@ const getLeavePlotFn = ({
         break;
       case "rsi":
         resetRSIIndicators({ features: features as RSIFeature[] });
+        break;
+      case "kdj":
+        resetKDJIndicators({ features: features as KDJFeature[] });
         break;
     }
   };

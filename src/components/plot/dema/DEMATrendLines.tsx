@@ -4,7 +4,7 @@ import { demaPeriodAtom } from "@/atoms/plot";
 import type { PriceChartType } from "@/atoms/stocks";
 import { demaIDPrefix, getDEMAFeatureNamesByPeriod } from "@plot/interactions/dema";
 import { useAtomValue } from "jotai";
-import { colorPalette, svgPathConfig } from "@plot/theme";
+import { colorPalette, svgConfig } from "@plot/theme";
 import { getLineID } from "@plot/interactions/d3-utils";
 
 type DEMATrendLinesProps = {
@@ -20,7 +20,7 @@ export default function DEMATrendLines({
   x,
   y,
 }: DEMATrendLinesProps) {
-  const { strokeWidth, opacity } = svgPathConfig;
+  const { strokeWidth, opacity } = svgConfig;
   const demaPeriod = useAtomValue(demaPeriodAtom);
   const featureNames = getDEMAFeatureNamesByPeriod(demaPeriod);
   const emaFeatureNames = featureNames.filter(
