@@ -11,6 +11,7 @@ import type {
   VolumeMomentumFeature,
   RSIFeature,
   OBVFeature,
+  KDJFeature,
 } from "@/apis";
 import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
@@ -26,6 +27,7 @@ import DEMAFeaturePlot from "@plot/dema/DEMAFeaturePlot";
 import VolumeFeaturePlot from "@plot/volume-momentum/VolumeFeaturePlot";
 import RSIPlot from "./rsi/RSIPlot";
 import OBVFeaturePlot from "./obv/OBVFeaturePlot";
+import KDJCorePlot from "./kdj/KDJCorePlot";
 
 type StockFeaturePlotProps = {
   data: StockData<FeatureGroupOpt>;
@@ -145,6 +147,15 @@ export default function StockFeaturePlot({
         return (
           <RSIPlot
             features={features as RSIFeature[]}
+            width={width}
+            height={height}
+            x={x}
+          />
+        );
+      case "kdj":
+        return (
+          <KDJCorePlot
+            features={features as KDJFeature[]}
             width={width}
             height={height}
             x={x}

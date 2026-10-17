@@ -23,7 +23,7 @@ const legendConfig = {
 };
 
 const plotSizeConfig = {
-  marginTop: 30,
+  marginTop: 35,
   marginRight: 40,
   marginBottom: 45,
   marginLeft: 0,
