@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-type DataWindowOpt = "60D" | "180D" | "1Y" | "3Y" | "5Y";
+type DataWindowOpt = "60D" | "90D" | "180D" | "1Y" | "3Y";
 
 const FeatureGroups = [
   "priceMomentum",
@@ -41,10 +41,10 @@ const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
 
 const dataWindowParam: Record<DataWindowOpt, string> = {
   "60D": "60days",
+  "90D": "90days",
   "180D": "180days",
   "1Y": "1year",
   "3Y": "3years",
-  "5Y": "5years",
 };
 
 const StockValuesSchema = z

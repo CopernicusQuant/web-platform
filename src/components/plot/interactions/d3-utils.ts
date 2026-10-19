@@ -20,6 +20,7 @@ const updateTextValue = (id: string, text: string) => {
 
 const updateCircleOpacity = (id: string, hovering: boolean) => {
   const circleGroup = d3.select(`#${id}`);
+  if (circleGroup.empty()) return;
   if (circleGroup.attr("data-on") !== "off") {
     circleGroup.attr("opacity", hovering ? 1 : 0);
   }

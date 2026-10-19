@@ -13,6 +13,7 @@ import {
 import { animationConfig } from "@plot/theme";
 
 const kdjLowHighFeatures = ["kdjHigh9", "kdjLow9"] as const;
+const kdjCoreFeatures = ["kdjK", "kdjD", "kdjJ"] as const;
 const kdjIDPrefix = "kdj";
 
 const toggleKDJElement = (featureName: string) => {
@@ -28,7 +29,7 @@ const updateIndicators = (
   y?: d3.ScaleLinear<number, number>,
 ) => {
   const { duration } = animationConfig;
-  kdjLowHighFeatures.forEach((featureName) => {
+  [...kdjLowHighFeatures, ...kdjCoreFeatures].forEach((featureName) => {
     updateTextValue(
       getLegendValueID(kdjIDPrefix, featureName),
       feature[featureName].toFixed(2),
@@ -68,6 +69,7 @@ const resetKDJIndicators = ({ features }: { features: KDJFeature[] }) => {
 };
 
 export {
+  kdjCoreFeatures,
   kdjLowHighFeatures,
   kdjIDPrefix,
   toggleKDJElement,
