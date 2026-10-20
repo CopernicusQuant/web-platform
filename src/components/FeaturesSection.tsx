@@ -1,4 +1,4 @@
-import { FeatureSubplots, type FeatureGroupOpt, type StockData } from "@/apis";
+import { FeatureSubplots } from "@/apis";
 import {
   Section,
   Header,
@@ -13,11 +13,9 @@ import { usePlotSize } from "@/hooks/usePlotSize";
 import { useTranslation } from "react-i18next";
 import DEMAPeriodSelector from "@plot/dema/DEMAWindowSelector";
 
-type FeaturesSectionProps = {
-  stockData: StockData<FeatureGroupOpt> | undefined;
-} & React.ComponentPropsWithoutRef<"div">;
+type FeaturesSectionProps = {} & React.ComponentPropsWithoutRef<"div">;
 
-export default function FeaturesSection({ stockData, ...props }: FeaturesSectionProps) {
+export default function FeaturesSection({ ...props }: FeaturesSectionProps) {
   const { t } = useTranslation();
   const { featureGroup, featureSubPlot } = useAtomValue(stockSelectionAtom);
   const setFeatureSubplot = useSetAtom(setFeatureSubplotAtom);
@@ -45,14 +43,7 @@ export default function FeaturesSection({ stockData, ...props }: FeaturesSection
         </Selections>
       </Header>
       <Content ref={plotContainerRef} className="flex-1">
-        {stockData && (
-          <StockFeaturePlot
-            data={stockData}
-            width={plotSize.width}
-            height={plotSize.height}
-            featureGroup={featureGroup}
-          />
-        )}
+        <StockFeaturePlot width={plotSize.width} height={plotSize.height} />
       </Content>
     </Section>
   );

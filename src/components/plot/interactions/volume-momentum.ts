@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import type { StockValues, VolumeMomentumFeature } from "@/apis";
+import type { StockPrice, VolumeMomentumFeature } from "@/apis";
 import {
   getBarGroupID,
   getLegendID,
@@ -28,9 +28,9 @@ const toggleVolumeFeature = (featureName: string) => {
   toggleElement(getLineID(vmIDPrefix, featureName));
 };
 
-const updateIndicator = (stockValues: StockValues, feature: VolumeMomentumFeature) => {
+const updateIndicator = (StockPrice: StockPrice, feature: VolumeMomentumFeature) => {
   const { duration } = animationConfig;
-  const { adjClose, adjOpen } = stockValues;
+  const { adjClose, adjOpen } = StockPrice;
   const currFeature = feature;
   const volumeLegend = d3
     .select(`#${getLegendID(vmIDPrefix, "adjVol")}`)
@@ -58,7 +58,7 @@ const updateVolumeIndicators = ({
   features,
   xIdx,
 }: {
-  stock: StockValues[];
+  stock: StockPrice[];
   features: VolumeMomentumFeature[];
   xIdx: number;
 }) => {
@@ -69,7 +69,7 @@ const resetVolumeIndicators = ({
   stock,
   features,
 }: {
-  stock: StockValues[];
+  stock: StockPrice[];
   features: VolumeMomentumFeature[];
 }) => {
   updateIndicator(stock.at(-1)!, features.at(-1)!);

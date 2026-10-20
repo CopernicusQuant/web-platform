@@ -1,11 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
-import {
-  dataWindowParam,
-  type DataWindowOpt,
-  type FeatureGroupOpt,
-  type StockData,
-} from "@/apis";
+import { dataWindowParam, type DataWindowOpt } from "@/apis";
 import {
   priceChartTypeAtom,
   setStockWindowAtom,
@@ -27,14 +22,12 @@ import LineIcon from "@/components/icons/LineIcon";
 
 const priceChartTypes: PriceChartType[] = ["candle", "line"];
 
-type PriceChartProps = {
-  stockData: StockData<FeatureGroupOpt> | undefined;
-} & React.ComponentPropsWithoutRef<"div">;
+type PriceChartProps = {} & React.ComponentPropsWithoutRef<"div">;
 
-export default function PriceChart({ stockData, ...props }: PriceChartProps) {
+export default function PriceChart({ ...props }: PriceChartProps) {
   const [chartType, setChartType] = useAtom(priceChartTypeAtom);
 
-  const { window, featureGroup } = useAtomValue(stockSelectionAtom);
+  const { window } = useAtomValue(stockSelectionAtom);
   const setStockWindow = useSetAtom(setStockWindowAtom);
 
   const { plotSize, plotContainerRef } = usePlotSize();
@@ -74,15 +67,11 @@ export default function PriceChart({ stockData, ...props }: PriceChartProps) {
         </Selections>
       </Header>
       <Content ref={plotContainerRef} className="flex-1">
-        {stockData && (
-          <StockDataPlot
-            data={stockData}
-            chartType={chartType}
-            featureGroup={featureGroup}
-            width={plotSize.width}
-            height={plotSize.height}
-          />
-        )}
+        <StockDataPlot
+          chartType={chartType}
+          width={plotSize.width}
+          height={plotSize.height}
+        />
       </Content>
     </Section>
   );

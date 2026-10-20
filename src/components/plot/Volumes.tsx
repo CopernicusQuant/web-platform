@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import type { StockValues } from "@/apis";
+import type { StockPrice } from "@/apis";
 import { priceColors } from "@plot/theme";
 import { getYScale } from "@plot/interactions/d3-utils";
 import Legend from "@/components/ui/Legend";
@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { priceElementIds, toggleVolumeGroup } from "./interactions/price-trend";
 
 type VolumesProps = {
-  stock: StockValues[];
+  stock: StockPrice[];
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 };

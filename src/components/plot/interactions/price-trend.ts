@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { parseVolume, computePriceChange, parseDate, getMonthName } from "@/lib/utils";
-import type { StockValues } from "@/apis";
+import type { StockPrice } from "@/apis";
 import { animationConfig, priceColors } from "../theme";
 import { toggleElement, updateTextValue } from "./d3-utils";
 
@@ -47,7 +47,7 @@ const updateDateLine = (show: boolean, date?: string, xPos?: number) => {
 
 // update hover tag's position, value, and color (tag on Y axis)
 const updateHoverValueTag = (
-  stock: StockValues[],
+  stock: StockPrice[],
   xIdx: number,
   y: d3.ScaleLinear<number, number>,
   width: number,
@@ -68,8 +68,8 @@ const updateHoverValueTag = (
 };
 
 // update stock display values (V, L, H, C, O)
-const updateDisplayValues = (stockValues: StockValues, priceChangePct: string) => {
-  const { adjClose, adjOpen, adjHigh, adjLow, adjVol } = stockValues;
+const updateDisplayValues = (StockPrice: StockPrice, priceChangePct: string) => {
+  const { adjClose, adjOpen, adjHigh, adjLow, adjVol } = StockPrice;
   updateTextValue(priceElementIds.valuesClose, adjClose.toFixed(2));
   updateTextValue(priceElementIds.valuesOpen, adjOpen.toFixed(2));
   updateTextValue(priceElementIds.valuesHigh, adjHigh.toFixed(2));
@@ -79,8 +79,8 @@ const updateDisplayValues = (stockValues: StockValues, priceChangePct: string) =
 };
 
 // update volume legend
-const updateVolumeLegend = (stockValues: StockValues) => {
-  const { adjClose, adjOpen } = stockValues;
+const updateVolumeLegend = (StockPrice: StockPrice) => {
+  const { adjClose, adjOpen } = StockPrice;
   const volumeLegend = d3.select(`#${priceElementIds.volumeLegend}`);
   if (!volumeLegend.empty()) {
     const volumeColor = adjClose >= adjOpen ? priceColors.up : priceColors.down;
@@ -97,7 +97,7 @@ const updatePriceTrendIndicators = ({
   x,
   y,
 }: {
-  stock: StockValues[];
+  stock: StockPrice[];
   pointerPos: number;
   xIdx: number;
   width: number;
@@ -130,7 +130,7 @@ const resetPriceTrendIndicators = ({
   marginRight,
   y,
 }: {
-  stock: StockValues[];
+  stock: StockPrice[];
   width: number;
   marginRight: number;
   y: d3.ScaleLinear<number, number>;

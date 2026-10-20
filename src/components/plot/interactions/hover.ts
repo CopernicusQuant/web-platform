@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import type {
-  StockData,
   FeatureGroupOpt,
   PriceMomentumFeature,
   MarketActivityFeature,
@@ -11,6 +10,8 @@ import type {
   RSIFeature,
   OBVFeature,
   KDJFeature,
+  StockPrice,
+  FeatureByGroup,
 } from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
@@ -34,20 +35,21 @@ import { updateRSIIndicators, resetRSIIndicators } from "./rsi";
 import { resetOBVIndicators, updateOBVIndicators } from "./obv";
 import { resetKDJIndicators, updateKDJIndicators } from "./kdj";
 
-const getHoverPlotFn = ({
-  data,
+const getHoverPlotFn = <G extends FeatureGroupOpt>({
+  stock,
+  features,
   featureGroup,
   width,
   referenceHeight,
 }: {
-  data: StockData<FeatureGroupOpt>;
+  stock: StockPrice[] | undefined;
+  features: FeatureByGroup[G][] | undefined;
   featureGroup: FeatureGroupOpt;
   width: number;
   referenceHeight: number;
 }) => {
-  const { stock, features } = data;
+  if (!stock) return;
   const { marginBottom, marginTop, marginLeft, marginRight } = plotSizeConfig;
-
   // x-axis mapper
   const x = d3
     .scaleBand(
@@ -85,6 +87,7 @@ const getHoverPlotFn = ({
       xIdx,
       x,
     });
+    if (!features) return;
     switch (featureGroup) {
       case "priceMomentum":
         updatePriceMomentumIndicators({
@@ -157,20 +160,21 @@ const getHoverPlotFn = ({
   };
 };
 
-const getLeavePlotFn = ({
-  data,
+const getLeavePlotFn = <G extends FeatureGroupOpt>({
+  stock,
+  features,
   featureGroup,
   width,
   referenceHeight,
 }: {
-  data: StockData<FeatureGroupOpt>;
+  stock: StockPrice[] | undefined;
+  features: FeatureByGroup[G][] | undefined;
   featureGroup: FeatureGroupOpt;
   width: number;
   referenceHeight: number;
 }) => {
-  const { stock, features } = data;
   const { marginRight, marginBottom, marginTop } = plotSizeConfig;
-
+  if (!stock) return;
   // y-axis mapper
   const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
   const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
@@ -182,6 +186,7 @@ const getLeavePlotFn = ({
   return () => {
     resetPriceTrendIndicators({ stock, width, marginRight, y });
     resetFeatureTrendIndicators();
+    if (!features) return;
     switch (featureGroup) {
       case "priceMomentum":
         resetPriceMomentumIndicators({ features: features as PriceMomentumFeature[] });

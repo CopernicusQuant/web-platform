@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import type { StockValues } from "@/apis";
+import type { StockPrice } from "@/apis";
 import { colorPalette } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
 import {
@@ -10,7 +10,7 @@ import {
 import { marketIDPrefix, toggleFeature } from "@plot/interactions/market-activity";
 
 type TurnoverBarsProps = {
-  stock: StockValues[];
+  stock: StockPrice[];
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 };
