@@ -1,7 +1,7 @@
-import { getStockData, type DataWindowOpt, type FeatureGroupOpt } from "@/apis";
+import { getStockFeatures, type DataWindowOpt, type FeatureGroupOpt } from "@/apis";
 import { useQuery } from "@tanstack/react-query";
 
-const useGetStockQuery = (
+const useGetStockFeaturesQuery = (
   ticker: string,
   window: DataWindowOpt,
   featureGroup: FeatureGroupOpt,
@@ -9,11 +9,11 @@ const useGetStockQuery = (
   const query = useQuery({
     queryKey: [ticker, window, featureGroup],
     queryFn: async ({ signal }) => {
-      return getStockData(ticker, window, featureGroup, signal);
+      return getStockFeatures(ticker, window, featureGroup, signal);
     },
     staleTime: Infinity,
   });
   return query;
 };
 
-export { useGetStockQuery };
+export { useGetStockFeaturesQuery };

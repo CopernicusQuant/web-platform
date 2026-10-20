@@ -3,14 +3,14 @@ import { useAtomValue } from "jotai";
 import type {
   BollingerBandsFeature,
   DEMAFeature,
-  FeatureGroupOpt,
   KDJFeature,
   MACDFeature,
   PriceMomentumFeature,
-  StockData,
 } from "@/apis";
-import type { PriceChartType } from "@/atoms/stocks";
+import { stockSelectionAtom, type PriceChartType } from "@/atoms/stocks";
 import { plotConfigAtom } from "@/atoms/plot";
+import { useGetStockPriceQuery } from "@/hooks/queries/useGetStockPriceQuery";
+import { useGetStockFeaturesQuery } from "@/hooks/queries/useGetStockFeaturesQuery";
 import CandleStick from "@plot/CandleSticks";
 import XAxis from "@/components/ui/XAxis";
 import YAxis from "@/components/ui/YAxis";
@@ -32,25 +32,24 @@ import Volumes from "./Volumes";
 import KDJLowHigh from "./kdj/KDJLowHigh";
 
 type StockDataPlotProps = {
-  data: StockData<FeatureGroupOpt>;
   chartType: PriceChartType;
-  featureGroup: FeatureGroupOpt;
   width: number;
   height: number;
   maxXTickNum?: number;
 };
 
 export default function StockDataPlot({
-  data,
   chartType,
-  featureGroup,
   width,
   height,
   maxXTickNum = 30,
 }: StockDataPlotProps) {
-  const { stock, features } = data;
-  const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
+  const { ticker, window, featureGroup } = useAtomValue(stockSelectionAtom);
   const plotConfig = useAtomValue(plotConfigAtom);
+  const { data: stock } = useGetStockPriceQuery(ticker, window);
+  const { data: features } = useGetStockFeaturesQuery(ticker, window, featureGroup);
+  if (!stock) return <></>;
+  const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
 
   // x-axis mapper
   const x = d3
@@ -74,20 +73,22 @@ export default function StockDataPlot({
 
   // controls hover-based indicators
   const onPointerMove = getHoverPlotFn({
-    data,
+    stock,
+    features,
     featureGroup,
     width,
     referenceHeight: plotConfig.referenceHeight,
   });
 
   const onPointerLeave = getLeavePlotFn({
-    data,
+    stock,
+    features,
     featureGroup,
     width,
     referenceHeight: plotConfig.referenceHeight,
   });
 
-  const getPriceTrendPlot = () => {
+  const getFeaturesPlot = () => {
     switch (featureGroup) {
       case "priceMomentum":
         return (
@@ -187,8 +188,8 @@ export default function StockDataPlot({
       {/* x axis marks */}
       <XAxis labels={xLabels} x={x} xPos={0} yPos={height - marginBottom} />
       {/* price trend */}
-      {getPriceTrendPlot()}
-      {getIndicators()}
+      {features && getFeaturesPlot()}
+      {features && getIndicators()}
       {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
       {chartType === "line" && (
         <TrendLine

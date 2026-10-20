@@ -1,8 +1,6 @@
 import * as d3 from "d3";
 import { useAtomValue } from "jotai";
 import type {
-  FeatureGroupOpt,
-  StockData,
   PriceMomentumFeature,
   MarketActivityFeature,
   MACDFeature,
@@ -13,6 +11,8 @@ import type {
   OBVFeature,
   KDJFeature,
 } from "@/apis";
+import { useGetStockFeaturesQuery } from "@/hooks/queries/useGetStockFeaturesQuery";
+import { useGetStockPriceQuery } from "@/hooks/queries/useGetStockPriceQuery";
 import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
 import { plotSizeConfig } from "@plot/theme";
@@ -30,24 +30,23 @@ import OBVFeaturePlot from "./obv/OBVFeaturePlot";
 import KDJCorePlot from "./kdj/KDJCorePlot";
 
 type StockFeaturePlotProps = {
-  data: StockData<FeatureGroupOpt>;
   width: number;
   height: number;
-  featureGroup: FeatureGroupOpt;
   maxXTickNum?: number;
 };
 
 export default function StockFeaturePlot({
-  data,
   width,
   height,
-  featureGroup,
   maxXTickNum = 30,
 }: StockFeaturePlotProps) {
   const { marginRight, marginBottom, marginLeft } = plotSizeConfig;
+  const { ticker, window, featureGroup } = useAtomValue(stockSelectionAtom);
   const { featureSubPlot } = useAtomValue(stockSelectionAtom);
   const { referenceHeight } = useAtomValue(plotConfigAtom);
-  const { features } = data;
+  const { data: stock } = useGetStockPriceQuery(ticker, window);
+  const { data: features } = useGetStockFeaturesQuery(ticker, window, featureGroup);
+  if (!features) return <></>;
   const x = d3
     .scaleBand(
       features.map((d) => d.tradeDate),
@@ -61,13 +60,15 @@ export default function StockFeaturePlot({
 
   // controls hover-based indicators
   const onPointerMove = getHoverPlotFn({
-    data,
+    stock,
+    features,
     featureGroup,
     width,
     referenceHeight,
   });
   const onPointerLeave = getLeavePlotFn({
-    data,
+    stock,
+    features,
     featureGroup,
     width,
     referenceHeight,

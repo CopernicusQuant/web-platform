@@ -34,7 +34,7 @@ export default function StockSelector({
       <Portal>
         <Content side="bottom" align="center" className={styles.content}>
           <div className="w-full flex items-center border gap-1 border-gray-300 rounded-sm px-2">
-            <SearchIcon className="w-4" stroke="gray" />
+            <SearchIcon className="w-4 min-w-4" stroke="gray" />
             <input
               name={"stock search"}
               onChange={updateStockPrefix}

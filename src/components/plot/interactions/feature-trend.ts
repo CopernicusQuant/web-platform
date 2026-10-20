@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import type { StockValues } from "@/apis";
+import type { StockPrice } from "@/apis";
 import { animationConfig } from "@plot/theme";
 import { getMonthName, parseDate } from "@/lib/utils";
 
@@ -35,7 +35,7 @@ const updateFeatureTrendIndicators = ({
   xIdx,
   x,
 }: {
-  stock: StockValues[];
+  stock: StockPrice[];
   xIdx: number;
   x: d3.ScaleBand<string>;
 }) => {

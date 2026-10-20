@@ -1,5 +1,7 @@
 type DataServiceError = {
-  detail: string;
+  error: {
+    message: string;
+  };
 };
 
 const DATA_URL = import.meta.env.VITE_DATA_ENDPOINT;

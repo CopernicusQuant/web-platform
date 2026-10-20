@@ -1,9 +1,9 @@
-import type { StockValues } from "@/apis";
+import type { StockPrice } from "@/apis";
 import * as d3 from "d3";
 import { priceColors } from "./theme";
 
 type StockTrendLineProps = {
-  prices: StockValues[];
+  prices: StockPrice[];
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
   showArea?: boolean;
@@ -16,7 +16,7 @@ export default function StockTrendLine({
   showArea = true,
 }: StockTrendLineProps) {
   const path = d3
-    .line<StockValues>()
+    .line<StockPrice>()
     .x((price) => (x(price.tradeDate) ?? 0) + x.bandwidth() / 2)
     .y((price) => y(price.adjClose))(prices);
 
@@ -26,7 +26,7 @@ export default function StockTrendLine({
   const [chartBottom, chartTop] = y.range();
 
   const area = d3
-    .area<StockValues>()
+    .area<StockPrice>()
     .x((price) => (x(price.tradeDate) ?? 0) + x.bandwidth() / 2)
     .y0(chartBottom)
     .y1((price) => y(price.adjClose))(prices);

@@ -20,7 +20,7 @@ const StockInfoSchema = z
   }));
 
 const getStockInfo = async (ticker: string, signal?: AbortSignal) => {
-  const url = new URL(`stockinfo?ticker=${ticker}`, DATA_URL);
+  const url = new URL(`data/stock/info/${ticker}`, DATA_URL);
   const response = await fetch(url, {
     method: "GET",
     signal,
@@ -28,7 +28,7 @@ const getStockInfo = async (ticker: string, signal?: AbortSignal) => {
   if (!response.ok) {
     const errorData = (await response.json()) as DataServiceError;
     const errorMessage =
-      errorData.detail ||
+      errorData.error.message ||
       `Failed to get ${ticker} stock info from server. Status ${response.status}`;
     throw new Error(errorMessage);
   }

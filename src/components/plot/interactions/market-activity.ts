@@ -1,4 +1,4 @@
-import type { MarketActivityFeature, StockValues } from "@/apis";
+import type { MarketActivityFeature, StockPrice } from "@/apis";
 import {
   getBarGroupID,
   getCirclesGroupID,
@@ -31,15 +31,15 @@ const updateMarketActivityIndicators = ({
   features,
   xIdx,
 }: {
-  stock: StockValues[];
+  stock: StockPrice[];
   features: MarketActivityFeature[];
   xIdx: number;
 }) => {
   const currFeature = features[xIdx];
-  const currStockValues = stock[xIdx];
+  const currStockPrice = stock[xIdx];
   updateTextValue(
     getLegendValueID(marketIDPrefix, "turnover"),
-    currStockValues["turnover"].toFixed(2),
+    currStockPrice["turnover"].toFixed(2),
   );
   [...activityScoreFeatures, ...priceAndTurnoverFeatures, ...amplitudeFeatures].forEach(
     (featureName) => {
@@ -61,7 +61,7 @@ const resetMarketActivityIndicators = ({
   stock,
   features,
 }: {
-  stock: StockValues[];
+  stock: StockPrice[];
   features: MarketActivityFeature[];
 }) => {
   updateTextValue(

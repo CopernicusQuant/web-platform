@@ -47,7 +47,7 @@ const dataWindowParam: Record<DataWindowOpt, string> = {
   "3Y": "3years",
 };
 
-const StockValuesSchema = z
+const StockPriceSchema = z
   .object({
     ts_code: z.string(),
     trade_date: z.string(),
@@ -275,7 +275,7 @@ const FeatureSchemas = {
   kdj: KDJSchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
-type StockValues = z.infer<typeof StockValuesSchema>;
+type StockPrice = z.infer<typeof StockPriceSchema>;
 type PriceMomentumFeature = z.infer<typeof PriceMomentumFeaturesSchema>;
 type VolumeMomentumFeature = z.infer<typeof VolumeMomentumFeatureSchema>;
 type OBVFeature = z.infer<typeof OBVFeatureSchema>;
@@ -296,17 +296,12 @@ type FeatureByGroup = {
   rsi: RSIFeature;
   kdj: KDJFeature;
 };
-type StockData<G extends FeatureGroupOpt> = {
-  ticker: string;
-  stock: StockValues[];
-  features: FeatureByGroup[G][];
-};
 
 export {
   dataWindowParam,
   featureGroupParam,
   FeatureGroups,
-  StockValuesSchema,
+  StockPriceSchema,
   MarketActivityFeaturesSchema,
   PriceMomentumFeaturesSchema,
   VolumeMomentumFeatureSchema,
@@ -322,8 +317,7 @@ export type {
   DataWindowOpt,
   DEMAPeriodOpt,
   DEMAFeature,
-  StockData,
-  StockValues,
+  StockPrice,
   FeatureGroupOpt,
   FeatureByGroup,
   RSIFeature,
