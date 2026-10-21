@@ -2,6 +2,7 @@ import Legend from "@/components/ui/Legend";
 import YAxis from "@/components/ui/YAxis";
 import {
   getBarGroupID,
+  getFeatureValues,
   getLegendID,
   getLegendValueID,
   getYScale,
@@ -18,10 +19,7 @@ import { useTranslation } from "react-i18next";
 export default function OBVMomentum({ features, width, height, x }: SubplotProps<"obv">) {
   const { t } = useTranslation();
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
-  const values = features.reduce((acc, feature) => {
-    obvMomentumFeatures.forEach((featureName) => acc.push(feature[featureName]));
-    return acc;
-  }, [] as number[]);
+  const values = getFeatureValues<"obv">(features, obvMomentumFeatures);
   const y = getYScale(values, height - marginBottom, marginTop);
   const lastFeature = features.at(-1)!;
   return (

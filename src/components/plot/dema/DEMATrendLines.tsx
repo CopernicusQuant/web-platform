@@ -5,7 +5,7 @@ import type { PriceChartType } from "@/atoms/stocks";
 import { demaIDPrefix, getDEMAFeatureNamesByPeriod } from "@plot/interactions/dema";
 import { useAtomValue } from "jotai";
 import { colorPalette, svgConfig } from "@plot/theme";
-import { getLineID } from "@plot/interactions/d3-utils";
+import { getLineID, getPaths } from "@plot/interactions/d3-utils";
 
 type DEMATrendLinesProps = {
   features: DEMAFeature[];
@@ -29,25 +29,13 @@ export default function DEMATrendLines({
 
   const goldDays: string[] = [];
   const deadDays: string[] = [];
-  features.filter((feature) => {
+  features.forEach((feature) => {
     const goldCrossName = featureNames.filter((name) => name.endsWith("gold"))[0];
     const deadCrossName = featureNames.filter((name) => name.endsWith("dead"))[0];
     if (feature[goldCrossName] === 1) goldDays.push(feature.tradeDate);
     if (feature[deadCrossName] === 1) deadDays.push(feature.tradeDate);
   });
-
-  const paths: Record<string, string> = {};
-  emaFeatureNames.forEach((featureName) => {
-    const path = d3
-      .line<DEMAFeature>()
-      .defined(
-        (feature) =>
-          feature[featureName] >= y.domain()[0] && feature[featureName] <= y.domain()[1],
-      )
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path !== null) paths[featureName] = path;
-  });
+  const paths = getPaths<"dema">(features, emaFeatureNames, x, y);
   return (
     <>
       <g>

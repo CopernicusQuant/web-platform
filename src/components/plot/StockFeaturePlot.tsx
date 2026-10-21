@@ -10,6 +10,7 @@ import type {
   RSIFeature,
   OBVFeature,
   KDJFeature,
+  CCIFeature,
 } from "@/apis";
 import { useGetStockFeaturesQuery } from "@/hooks/queries/useGetStockFeaturesQuery";
 import { useGetStockPriceQuery } from "@/hooks/queries/useGetStockPriceQuery";
@@ -28,6 +29,7 @@ import VolumeFeaturePlot from "@plot/volume-momentum/VolumeFeaturePlot";
 import RSIPlot from "./rsi/RSIPlot";
 import OBVFeaturePlot from "./obv/OBVFeaturePlot";
 import KDJCorePlot from "./kdj/KDJCorePlot";
+import CCICorePlot from "./cci/CCICorePlot";
 
 type StockFeaturePlotProps = {
   width: number;
@@ -47,6 +49,7 @@ export default function StockFeaturePlot({
   const { data: stock } = useGetStockPriceQuery(ticker, window);
   const { data: features } = useGetStockFeaturesQuery(ticker, window, featureGroup);
   if (!features) return <></>;
+
   const x = d3
     .scaleBand(
       features.map((d) => d.tradeDate),
@@ -157,6 +160,15 @@ export default function StockFeaturePlot({
         return (
           <KDJCorePlot
             features={features as KDJFeature[]}
+            width={width}
+            height={height}
+            x={x}
+          />
+        );
+      case "cci":
+        return (
+          <CCICorePlot
+            features={features as CCIFeature[]}
             width={width}
             height={height}
             x={x}

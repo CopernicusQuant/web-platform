@@ -1,5 +1,3 @@
-import * as d3 from "d3";
-import type { PriceMomentumFeature } from "@/apis";
 import {
   toggleFeature,
   upDayRatioFeatures,
@@ -10,7 +8,7 @@ import { colorPalette, plotSizeConfig } from "@plot/theme";
 import FeatureIndicators from "./FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
 import type { SubplotProps } from "@plot/shared";
-import { getLineID } from "@plot/interactions/d3-utils";
+import { getLineID, getPaths, getYScale } from "@plot/interactions/d3-utils";
 
 export default function UpDayRatio({
   features,
@@ -19,22 +17,10 @@ export default function UpDayRatio({
   x,
 }: SubplotProps<"priceMomentum">) {
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
-
-  const yPadding = 0.05;
-  const y = d3.scaleLinear(
-    [0.0 - yPadding, 1.0 + yPadding],
-    [height - marginBottom, marginTop],
-  );
-  const paths: Record<string, string> = {};
+  const y = getYScale([0.0, 1.0], height - marginBottom, marginTop);
+  const paths = getPaths<"priceMomentum">(features, upDayRatioFeatures, x, y);
   const legendLabels: string[] = [];
   upDayRatioFeatures.forEach((featureName) => {
-    const path = d3
-      .line<PriceMomentumFeature>()
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path !== null) paths[featureName] = path;
-    else return;
-    // create label
     const daysLabel = featureName.match(/\d+/);
     if (!daysLabel) legendLabels.push(featureName);
     else legendLabels.push(`${daysLabel}D`);
@@ -49,6 +35,15 @@ export default function UpDayRatio({
         labelPostfix="%"
         labelFormatter={(value: number) => (value * 100).toFixed(1)}
       />
+      <line
+        x1={marginLeft}
+        x2={width - marginRight}
+        y1={y(0.5)}
+        y2={y(0.5)}
+        stroke="black"
+        strokeWidth={1.4}
+        strokeDasharray={"6 4"}
+      />
       {Object.entries(paths).map(([featureName, value], i) => (
         <path
           key={getLineID(pmIDPrefix, featureName)}
@@ -59,15 +54,6 @@ export default function UpDayRatio({
           stroke={colorPalette[i]}
         />
       ))}
-      <line
-        x1={marginLeft}
-        x2={width - marginRight}
-        y1={y(0.5)}
-        y2={y(0.5)}
-        stroke="black"
-        strokeWidth={1.4}
-        strokeDasharray={"6 4"}
-      />
       <FeatureIndicators
         featureNames={upDayRatioFeatures}
         features={features}

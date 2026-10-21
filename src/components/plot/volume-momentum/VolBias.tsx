@@ -1,4 +1,3 @@
-import * as d3 from "d3";
 import {
   toggleVolumeFeature,
   vmIDPrefix,
@@ -7,11 +6,12 @@ import {
 import type { SubplotProps } from "@plot/shared";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
-import type { VolumeMomentumFeature } from "@/apis";
 import {
+  getFeatureValues,
   getLegendID,
   getLegendValueID,
   getLineID,
+  getPaths,
   getYScale,
 } from "@plot/interactions/d3-utils";
 import Legend from "@/components/ui/Legend";
@@ -25,21 +25,9 @@ export default function VolBias({
 }: SubplotProps<"volumeMomentum">) {
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgConfig;
-  const biasVals = features.reduce((acc, feature) => {
-    volBiasFeatures.forEach((featureName) => acc.push(feature[featureName]));
-    return acc;
-  }, [] as number[]);
-  const y = getYScale(biasVals, height - marginBottom, marginTop);
-
-  const paths: Record<string, string> = {};
-  volBiasFeatures.forEach((featureName) => {
-    const path = d3
-      .line<VolumeMomentumFeature>()
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path !== null) paths[featureName] = path;
-  });
-
+  const values = getFeatureValues<"volumeMomentum">(features, volBiasFeatures);
+  const y = getYScale(values, height - marginBottom, marginTop);
+  const paths = getPaths<"volumeMomentum">(features, volBiasFeatures, x, y);
   const legendLabels = volBiasFeatures.map(
     (featureName) => `${featureName.match(/\d+/)}D`,
   );

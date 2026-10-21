@@ -17,6 +17,7 @@ import {
   getLegendID,
   getLegendValueID,
   getLineID,
+  getPaths,
 } from "@plot/interactions/d3-utils";
 
 type BollingerBandsProps = {
@@ -39,18 +40,7 @@ export default function BollingerBands({
     .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
     .y0((feature) => Math.min(y(feature.bbLower), y.range()[0]))
     .y1((feature) => Math.max(y(feature.bbUpper), y.range()[1]))(features);
-  const paths: Record<string, string> = {};
-  bandFeatures.forEach((featureName) => {
-    const path = d3
-      .line<BollingerBandsFeature>()
-      .defined(
-        (feature) =>
-          feature[featureName] >= y.domain()[0] && feature[featureName] <= y.domain()[1],
-      )
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path !== null) paths[featureName] = path;
-  });
+  const paths = getPaths<"bollingerBands">(features, bandFeatures, x, y);
 
   if (!area) return <></>;
   const lastFeature = features.at(-1)!;

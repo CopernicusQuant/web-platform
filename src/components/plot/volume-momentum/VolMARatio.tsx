@@ -1,10 +1,11 @@
-import * as d3 from "d3";
 import YAxis from "@/components/ui/YAxis";
 import { useTranslation } from "react-i18next";
 import {
+  getFeatureValues,
   getLegendID,
   getLegendValueID,
   getLineID,
+  getPaths,
   getYScale,
 } from "@plot/interactions/d3-utils";
 import {
@@ -14,7 +15,6 @@ import {
 } from "@plot/interactions/volume-momentum";
 import type { SubplotProps } from "@plot/shared";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
-import type { VolumeMomentumFeature } from "@/apis";
 import Legend from "@/components/ui/Legend";
 
 export default function VolMARatio({
@@ -26,19 +26,9 @@ export default function VolMARatio({
   const { t } = useTranslation();
   const { marginBottom, marginTop, marginLeft, marginRight } = plotSizeConfig;
   const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgConfig;
-  const maRatioValues = features.reduce((curr, feature) => {
-    volMARatioFeatures.forEach((featureName) => curr.push(feature[featureName]));
-    return curr;
-  }, [] as number[]);
-  const y = getYScale(maRatioValues, height - marginBottom, marginTop);
-  const paths: Record<string, string> = {};
-  volMARatioFeatures.forEach((featureName) => {
-    const path = d3
-      .line<VolumeMomentumFeature>()
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path !== null) paths[featureName] = path;
-  });
+  const values = getFeatureValues<"volumeMomentum">(features, volMARatioFeatures);
+  const y = getYScale(values, height - marginBottom, marginTop);
+  const paths = getPaths<"volumeMomentum">(features, volMARatioFeatures, x, y);
   const lastFeature = features.at(-1);
   return (
     <>
@@ -46,6 +36,15 @@ export default function VolMARatio({
         y={y}
         plotWidth={width - marginLeft - marginRight}
         labelXOffset={marginRight}
+      />
+      <line
+        x1={x.range()[0]}
+        x2={x.range()[1]}
+        y1={y(1.0)}
+        y2={y(1.0)}
+        stroke={"black"}
+        strokeWidth={markStrokeWidth}
+        strokeDasharray={markStrokeDasharray}
       />
       {volMARatioFeatures.map((featureName, i) => (
         <g key={getLineID(vmIDPrefix, featureName)}>
@@ -67,15 +66,6 @@ export default function VolMARatio({
           />
         </g>
       ))}
-      <line
-        x1={x.range()[0]}
-        x2={x.range()[1]}
-        y1={y(1.0)}
-        y2={y(1.0)}
-        stroke={"black"}
-        strokeWidth={markStrokeWidth}
-        strokeDasharray={markStrokeDasharray}
-      />
     </>
   );
 }
