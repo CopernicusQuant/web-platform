@@ -12,10 +12,11 @@ import { stockSelectionAtom, type PriceChartType } from "@/atoms/stocks";
 import { plotConfigAtom } from "@/atoms/plot";
 import { useGetStockPriceQuery } from "@/hooks/queries/useGetStockPriceQuery";
 import { useGetStockFeaturesQuery } from "@/hooks/queries/useGetStockFeaturesQuery";
-import CandleStick from "@plot/CandleSticks";
 import XAxis from "@/components/ui/XAxis";
 import YAxis from "@/components/ui/YAxis";
 import TrendLine from "@plot/StockTrendLine";
+import CandleStick from "@plot/CandleSticks";
+import Volumes from "@plot/Volumes";
 import MALines from "@plot/price-momentum/MALines";
 import StockDataIndicators from "@plot/StockDataIndicators";
 import MAIndicators from "@plot/price-momentum/MAIndicators";
@@ -29,9 +30,8 @@ import BollingerBands from "@plot/bollinger-bands/BollingerBands";
 import DEMATrendLines from "@plot/dema/DEMATrendLines";
 import DEMASignals from "@plot/dema/DEMASignals";
 import DEMAIndicators from "./dema/DEMAIndicators";
-import Volumes from "./Volumes";
-import KDJLowHigh from "./kdj/KDJLowHigh";
-import CCITpPlot from "./cci/CCITpPlot";
+import KDJLowHigh from "@plot/kdj/KDJLowHigh";
+import CCITpPlot from "@plot/cci/CCITpPlot";
 
 type StockDataPlotProps = {
   chartType: PriceChartType;
