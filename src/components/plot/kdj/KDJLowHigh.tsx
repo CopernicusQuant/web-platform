@@ -12,6 +12,7 @@ import {
   getLegendID,
   getLegendValueID,
   getLineID,
+  getPaths,
 } from "@plot/interactions/d3-utils";
 import { colorPalette, svgConfig } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
@@ -27,16 +28,7 @@ type KDJLowHighProps = {
 export default function KDJLowHigh({ features, chartType, x, y }: KDJLowHighProps) {
   const { t } = useTranslation();
   const { strokeWidth, strokeDasharray, circleR, circleStroke } = svgConfig;
-  const paths: Record<string, string> = {};
-  kdjLowHighFeatures.forEach((featureName) => {
-    const path = d3
-      .line<KDJFeature>()
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path !== null) {
-      paths[featureName] = path;
-    }
-  });
+  const paths = getPaths<"kdj">(features, kdjLowHighFeatures, x, y);
   const lastFeature = features.at(-1)!;
   return (
     <>
@@ -73,6 +65,7 @@ export default function KDJLowHigh({ features, chartType, x, y }: KDJLowHighProp
             r={circleR}
             stroke={"white"}
             strokeWidth={circleStroke}
+            opacity={0}
           />
         ))}
       </g>

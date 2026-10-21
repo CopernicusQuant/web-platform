@@ -1,13 +1,17 @@
-import * as d3 from "d3";
 import { useTranslation } from "react-i18next";
-import type { MarketActivityFeature } from "@/apis";
 import { amplitudeFeatures, marketIDPrefix } from "@plot/interactions/market-activity";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import type { SubplotProps } from "@plot/shared";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
 import { toggleFeature } from "@plot/interactions/market-activity";
 import YAxis from "@/components/ui/YAxis";
-import { getBarGroupID, getLineID } from "@plot/interactions/d3-utils";
+import {
+  getBarGroupID,
+  getFeatureValues,
+  getLineID,
+  getPaths,
+  getYScale,
+} from "@plot/interactions/d3-utils";
 
 export default function Amplitude({
   features,
@@ -17,27 +21,12 @@ export default function Amplitude({
 }: SubplotProps<"marketActivity">) {
   const { t } = useTranslation();
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
-  let [yMax, yMin] = [-Infinity, Infinity];
-  features.forEach((feature) => {
-    amplitudeFeatures.forEach((featureName) => {
-      yMax = Math.max(yMax, feature[featureName]);
-      yMin = Math.min(yMin, feature[featureName]);
-    });
-  });
-  const yPadding = (yMax - yMin) * 0.05 || 1;
-  const y = d3.scaleLinear(
-    [yMin - yPadding, yMax + yPadding],
-    [height - marginBottom, marginTop],
+  const values = getFeatureValues<"marketActivity">(features, amplitudeFeatures);
+  const y = getYScale(values, height - marginBottom, marginTop);
+  const pathFeatures = amplitudeFeatures.filter(
+    (featureName) => featureName !== "amplitude",
   );
-  const paths: Record<string, string> = {};
-  amplitudeFeatures.forEach((featureName) => {
-    if (featureName === "amplitude") return;
-    const path = d3
-      .line<MarketActivityFeature>()
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path !== null) paths[featureName] = path;
-  });
+  const paths = getPaths<"marketActivity">(features, pathFeatures, x, y);
   return (
     <>
       <YAxis

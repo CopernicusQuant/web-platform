@@ -8,7 +8,8 @@
     "bollingerBands": "Bollinger Bands",
     "dema": "DEMA",
     "rsi": "RSI",
-    "kdj": "KDJ"
+    "kdj": "KDJ",
+    "cci": "CCI"
   },
   "featureGroupBrief": {
     "priceMomentum": "moving averages, deviations, returns, and up-day ratios.",
@@ -19,7 +20,8 @@
     "bollingerBands": "price position and volatility relative to a moving-average band.",
     "dema": "double exponential moving averages, spreads, and crossover signals.",
     "rsi": "relative strength index, measuring the speed and magnitude of price changes.",
-    "kdj": "KDJ stochastic oscillator, comparing the price with its recent high-low range."
+    "kdj": "KDJ stochastic oscillator, comparing the price with its recent high-low range.",
+    "cci": "commodity channel index, measuring price deviation from its typical-price."
   },
   "featureGroupDescription": {
     "priceMomentum": "measures price momentum using moving averages, deviations, returns, and up-day ratios to help predict future price movement from the direction, strength, and persistence of recent trends.",
@@ -30,7 +32,8 @@
     "bollingerBands": "measures price volatility and relative position using moving-average bands to identify expanding or contracting volatility and unusually strong moves near the upper or lower band.",
     "dema": "tracks price trends and momentum that react faster than standard exponential averages. Crossovers and spreads highlight potential trend reversals, accelerating moves, and weakening momentum.",
     "rsi": "measures price momentum from the speed and magnitude of recent price changes to identify strengthening or weakening momentum and potential overbought or oversold conditions.",
-    "kdj": "measures the closing price relative to its recent high-low range using K, D, and J lines to identify momentum shifts and potential overbought or oversold conditions."
+    "kdj": "measures the closing price relative to its recent high-low range using K, D, and J lines to identify momentum shifts and potential overbought or oversold conditions.",
+    "cci": "measures how far typical price deviates from its moving average, normalized by mean deviation, to identify strengthening or weakening momentum and potential overbought or oversold conditions."
   },
   "subPlotName": {
     "maBias": "MA Bias",
@@ -60,7 +63,9 @@
 
     "rsi": "RSI",
 
-    "kdj": "KDJ"
+    "kdj": "KDJ",
+
+    "cci": "CCI"
   },
   "featureName": {
 
@@ -98,6 +103,11 @@
    "kdjLow9": "9D Low",
    "kdjK": "K",
    "kdjD": "D",
-   "kdjJ": "J"
+   "kdjJ": "J",
+
+   "tp": "TP",
+   "tpSma": "TP MA",
+   "cci": "CCI",
+   "cciMa5": "CCI MA"
   }
 }

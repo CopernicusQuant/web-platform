@@ -1,5 +1,3 @@
-import * as d3 from "d3";
-import { useMemo } from "react";
 import { digitToPercent } from "@/lib/utils";
 import {
   pmIDPrefix,
@@ -10,7 +8,7 @@ import { plotSizeConfig, priceColors } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
 import type { SubplotProps } from "@plot/shared";
-import { getBarGroupID } from "@plot/interactions/d3-utils";
+import { getBarGroupID, getFeatureValues, getYScale } from "@plot/interactions/d3-utils";
 
 export default function Returns({
   features,
@@ -19,28 +17,15 @@ export default function Returns({
   height,
 }: SubplotProps<"priceMomentum">) {
   const { marginTop, marginBottom, marginLeft, marginRight } = plotSizeConfig;
-  // y-axis mapper
-  const [yMin, yMax] = useMemo(() => {
-    let yMin = Infinity;
-    let yMax = -Infinity;
-    features.forEach((feature) => {
-      returnFeatures.forEach((featureName) => {
-        yMin = Math.min(yMin, feature[featureName]);
-        yMax = Math.max(yMax, feature[featureName]);
-      });
-    });
-    const yPadding = (yMax - yMin) * 0.05 || 1;
-    return [yMin - yPadding, yMax + yPadding];
-  }, [features]);
 
+  const values = getFeatureValues<"priceMomentum">(features, returnFeatures);
+  const y = getYScale(values, height - marginBottom, marginTop);
   const legendLabels = returnFeatures.map(
     (featureName) => `${featureName.match(/\d+/)}D`,
   );
   const initialColors = returnFeatures.map((featureName) =>
     features.at(-1)![featureName] >= 0 ? priceColors.up : priceColors.down,
   );
-
-  const y = d3.scaleLinear([yMin, yMax], [height - marginBottom, marginTop]);
   const opacities = [1.0, 0.6, 0.4];
 
   return (

@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import { useAtomValue } from "jotai";
 import type {
   BollingerBandsFeature,
+  CCIFeature,
   DEMAFeature,
   KDJFeature,
   MACDFeature,
@@ -30,6 +31,7 @@ import DEMASignals from "@plot/dema/DEMASignals";
 import DEMAIndicators from "./dema/DEMAIndicators";
 import Volumes from "./Volumes";
 import KDJLowHigh from "./kdj/KDJLowHigh";
+import CCITpPlot from "./cci/CCITpPlot";
 
 type StockDataPlotProps = {
   chartType: PriceChartType;
@@ -91,15 +93,7 @@ export default function StockDataPlot({
   const getFeaturesPlot = () => {
     switch (featureGroup) {
       case "priceMomentum":
-        return (
-          <MALines
-            features={features as PriceMomentumFeature[]}
-            x={x}
-            y={y}
-            yAxisMin={marginTop}
-            yAxisMax={height - marginBottom}
-          />
-        );
+        return <MALines features={features as PriceMomentumFeature[]} x={x} y={y} />;
       case "volumeMomentum":
       case "obv":
         return <Volumes stock={stock} x={x} y={y} />;
@@ -137,6 +131,15 @@ export default function StockDataPlot({
         return (
           <KDJLowHigh
             features={features as KDJFeature[]}
+            chartType={chartType}
+            x={x}
+            y={y}
+          />
+        );
+      case "cci":
+        return (
+          <CCITpPlot
+            features={features as CCIFeature[]}
             chartType={chartType}
             x={x}
             y={y}

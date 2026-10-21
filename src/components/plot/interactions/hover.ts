@@ -12,6 +12,7 @@ import type {
   KDJFeature,
   StockPrice,
   FeatureByGroup,
+  CCIFeature,
 } from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
@@ -34,6 +35,7 @@ import { resetVolumeIndicators, updateVolumeIndicators } from "./volume-momentum
 import { updateRSIIndicators, resetRSIIndicators } from "./rsi";
 import { resetOBVIndicators, updateOBVIndicators } from "./obv";
 import { resetKDJIndicators, updateKDJIndicators } from "./kdj";
+import { resetCCIIndicators, updateCCIIndicators } from "./cci";
 
 const getHoverPlotFn = <G extends FeatureGroupOpt>({
   stock,
@@ -156,6 +158,9 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
       case "kdj":
         updateKDJIndicators({ features: features as KDJFeature[], xIdx, x, y });
         break;
+      case "cci":
+        updateCCIIndicators({ features: features as CCIFeature[], xIdx, x, y });
+        break;
     }
   };
 };
@@ -217,6 +222,9 @@ const getLeavePlotFn = <G extends FeatureGroupOpt>({
         break;
       case "kdj":
         resetKDJIndicators({ features: features as KDJFeature[] });
+        break;
+      case "cci":
+        resetCCIIndicators({ features: features as CCIFeature[] });
         break;
     }
   };

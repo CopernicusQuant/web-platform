@@ -1,3 +1,4 @@
+import type { FeatureByGroup, FeatureGroupOpt } from "@/apis";
 import * as d3 from "d3";
 
 const getLineID = (idPrefix: string, featureName: string) =>
@@ -68,11 +69,45 @@ const getYScale = (
   return y;
 };
 
+const getFeatureValues = <G extends FeatureGroupOpt>(
+  features: FeatureByGroup[G][],
+  featureNames: readonly (keyof FeatureByGroup[G])[],
+) => {
+  const featureValues = features.reduce((acc, feature) => {
+    featureNames.forEach((featureName) => acc.push(feature[featureName] as number));
+    return acc;
+  }, [] as number[]);
+  return featureValues;
+};
+
+const getPaths = <G extends FeatureGroupOpt>(
+  features: FeatureByGroup[G][],
+  featureNames: readonly (keyof FeatureByGroup[G])[],
+  x: d3.ScaleBand<string>,
+  y: d3.ScaleLinear<number, number>,
+) => {
+  const paths: Record<string, string> = {};
+  featureNames.forEach((featureName) => {
+    const path = d3
+      .line<FeatureByGroup[G]>()
+      .defined(
+        (feature) =>
+          (feature[featureName] as number) >= y.domain()[0] &&
+          (feature[featureName] as number) <= y.domain()[1],
+      )
+      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
+      .y((feature) => y(feature[featureName] as number))(features);
+    if (path != null) paths[featureName as string] = path;
+  });
+  return paths;
+};
+
 export {
   updateCirclePos,
   updateCircleOpacity,
   updateTextValue,
   toggleElement,
+  getFeatureValues,
   getLineID,
   getCrossLinesID,
   getLegendID,
@@ -81,4 +116,5 @@ export {
   getCircleID,
   getBarGroupID,
   getYScale,
+  getPaths,
 };

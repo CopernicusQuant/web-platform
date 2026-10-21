@@ -1,10 +1,11 @@
-import * as d3 from "d3";
 import YAxis from "@/components/ui/YAxis";
 import { digitToPercent } from "@/lib/utils";
 import {
+  getFeatureValues,
   getLegendID,
   getLegendValueID,
   getLineID,
+  getPaths,
   getYScale,
 } from "@plot/interactions/d3-utils";
 import {
@@ -14,7 +15,6 @@ import {
 } from "@plot/interactions/volume-momentum";
 import type { SubplotProps } from "@plot/shared";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
-import type { VolumeMomentumFeature } from "@/apis";
 import Legend from "@/components/ui/Legend";
 
 export default function VolChange({
@@ -25,19 +25,9 @@ export default function VolChange({
 }: SubplotProps<"volumeMomentum">) {
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const { strokeWidth, markStrokeWidth, markStrokeDasharray } = svgConfig;
-  const changesVals = features.reduce((acc, feature) => {
-    volChangesFeatures.forEach((featureName) => acc.push(feature[featureName]));
-    return acc;
-  }, [] as number[]);
-  const y = getYScale(changesVals, height - marginBottom, marginTop);
-  const paths: Record<string, string> = {};
-  volChangesFeatures.forEach((featureName) => {
-    const path = d3
-      .line<VolumeMomentumFeature>()
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path) paths[featureName] = path;
-  });
+  const values = getFeatureValues<"volumeMomentum">(features, volChangesFeatures);
+  const y = getYScale(values, height - marginBottom, marginTop);
+  const paths = getPaths<"volumeMomentum">(features, volChangesFeatures, x, y);
   const legendLabels = volChangesFeatures.map(
     (featureName) => `${featureName.match(/\d+/)}D`,
   );

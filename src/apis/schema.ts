@@ -12,6 +12,7 @@ const FeatureGroups = [
   "dema",
   "rsi",
   "kdj",
+  "cci",
 ] as const;
 type FeatureGroupOpt = (typeof FeatureGroups)[number];
 
@@ -25,6 +26,7 @@ const featureGroupParam: Record<FeatureGroupOpt, string> = {
   dema: "dema",
   rsi: "rsi",
   kdj: "kdj",
+  cci: "cci",
 };
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
@@ -37,6 +39,7 @@ const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
   dema: ["spread"] as const,
   rsi: ["rsi"] as const,
   kdj: ["kdj"] as const,
+  cci: ["cci"] as const,
 };
 
 const dataWindowParam: Record<DataWindowOpt, string> = {
@@ -263,6 +266,22 @@ const KDJSchema = z
     kdjJ: input.kdj_j,
   }));
 
+const CCISchema = z
+  .object({
+    trade_date: z.string(),
+    tp: z.float32(),
+    tp_sma: z.float32(),
+    cci: z.float32(),
+    cci_ma_5: z.float32(),
+  })
+  .transform((input) => ({
+    tradeDate: input.trade_date,
+    tp: input.tp,
+    tpSma: input.tp_sma,
+    cci: input.cci,
+    cciMa5: input.cci_ma_5,
+  }));
+
 const FeatureSchemas = {
   priceMomentum: PriceMomentumFeaturesSchema,
   volumeMomentum: VolumeMomentumFeatureSchema,
@@ -273,6 +292,7 @@ const FeatureSchemas = {
   dema: DEMAFeaturesSchema,
   rsi: RSISchema,
   kdj: KDJSchema,
+  cci: CCISchema,
 } satisfies Record<FeatureGroupOpt, z.ZodType>;
 
 type StockPrice = z.infer<typeof StockPriceSchema>;
@@ -285,6 +305,7 @@ type BollingerBandsFeature = z.infer<typeof BollingerBandsFeaturesSchema>;
 type DEMAFeature = z.infer<typeof DEMAFeaturesSchema>;
 type RSIFeature = z.infer<typeof RSISchema>;
 type KDJFeature = z.infer<typeof KDJSchema>;
+type CCIFeature = z.infer<typeof CCISchema>;
 type FeatureByGroup = {
   priceMomentum: PriceMomentumFeature;
   volumeMomentum: VolumeMomentumFeature;
@@ -295,6 +316,7 @@ type FeatureByGroup = {
   dema: DEMAFeature;
   rsi: RSIFeature;
   kdj: KDJFeature;
+  cci: CCIFeature;
 };
 
 export {
@@ -309,8 +331,9 @@ export {
   BollingerBandsFeaturesSchema,
   DEMAFeaturesSchema,
   KDJSchema,
-  DEMAPeriods,
+  CCISchema,
   FeatureSchemas,
+  DEMAPeriods,
   FeatureSubplots,
 };
 export type {
@@ -326,6 +349,7 @@ export type {
   PriceMomentumFeature,
   VolumeMomentumFeature,
   OBVFeature,
+  CCIFeature,
   MarketActivityFeature,
   BollingerBandsFeature,
 };

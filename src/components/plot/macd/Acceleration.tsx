@@ -1,6 +1,3 @@
-import * as d3 from "d3";
-
-import type { MACDFeature } from "@/apis";
 import { colorPalette, plotSizeConfig, priceColors } from "@plot/theme";
 import { useTranslation } from "react-i18next";
 import {
@@ -12,7 +9,13 @@ import YAxis from "@/components/ui/YAxis";
 import type { SubplotProps } from "@plot/shared";
 import CrossoverSignals from "./CrossoverSignals";
 import MACDFeatureIndicators from "./MACDFeatureIndicators";
-import { getBarGroupID, getLineID } from "@plot/interactions/d3-utils";
+import {
+  getBarGroupID,
+  getFeatureValues,
+  getLineID,
+  getPaths,
+  getYScale,
+} from "@plot/interactions/d3-utils";
 
 export default function Acceleration({
   features,
@@ -22,26 +25,10 @@ export default function Acceleration({
 }: SubplotProps<"macd">) {
   const { t } = useTranslation();
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
-  let [yMax, yMin] = [-Infinity, Infinity];
-  features.forEach((feature) => {
-    accelerationFeatures.forEach((featureName) => {
-      yMax = Math.max(yMax, feature[featureName], feature["hist"]);
-      yMin = Math.min(yMin, feature[featureName], feature["hist"]);
-    });
-  });
-  const yPadding = (yMax - yMin) * 0.05 || 1;
-  const y = d3.scaleLinear(
-    [yMin - yPadding, yMax + yPadding],
-    [height - marginBottom, marginTop],
-  );
-  const paths: Record<string, string> = {};
-  accelerationFeatures.forEach((featureName) => {
-    const path = d3
-      .line<MACDFeature>()
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path !== null) paths[featureName] = path;
-  });
+  const values = getFeatureValues<"macd">(features, [...accelerationFeatures, "hist"]);
+  const y = getYScale(values, height - marginBottom, marginTop);
+  const paths = getPaths<"macd">(features, accelerationFeatures, x, y);
+
   return (
     <>
       <YAxis

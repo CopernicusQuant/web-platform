@@ -1,18 +1,19 @@
-import * as d3 from "d3";
-import type { FeatureByGroup } from "@/apis";
 import YAxis from "@/components/ui/YAxis";
 import {
   maBiasFeatures,
   pmIDPrefix,
   toggleFeature,
 } from "@plot/interactions/price-momentum";
-import { getLineID } from "@plot/interactions/d3-utils";
+import {
+  getFeatureValues,
+  getLineID,
+  getPaths,
+  getYScale,
+} from "@plot/interactions/d3-utils";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
 import type { SubplotProps } from "@plot/shared";
-
-type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
 
 export default function MABias({
   features,
@@ -22,32 +23,12 @@ export default function MABias({
 }: SubplotProps<"priceMomentum">) {
   const { markStrokeDasharray, markStrokeWidth, strokeWidth } = svgConfig;
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
-  // y-axis mapper
-  let yMin = 1.0;
-  let yMax = -1.0;
-  features.forEach((feature) => {
-    maBiasFeatures.forEach((featureName) => {
-      yMin = Math.min(yMin, feature[featureName]);
-      yMax = Math.max(yMax, feature[featureName]);
-    });
-  });
-  const yPadding = (yMax - yMin) * 0.05 || 1;
-  const y = d3.scaleLinear(
-    [yMin - yPadding, yMax + yPadding],
-    [height - marginBottom, marginTop],
-  );
 
-  const paths: Record<string, string> = {};
+  const values = getFeatureValues<"priceMomentum">(features, maBiasFeatures);
+  const y = getYScale(values, height - marginBottom, marginTop);
+  const paths = getPaths<"priceMomentum">(features, maBiasFeatures, x, y);
   const legendLabels: string[] = [];
   maBiasFeatures.forEach((featureName) => {
-    // create path
-    const path = d3
-      .line<PriceMomentumFeature>()
-      .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
-      .y((feature) => y(feature[featureName]))(features);
-    if (path !== null) paths[featureName] = path;
-    else return;
-    // create label
     const daysLabel = featureName.match(/\d+/);
     if (!daysLabel) legendLabels.push(featureName);
     else legendLabels.push(`${daysLabel}D`);
