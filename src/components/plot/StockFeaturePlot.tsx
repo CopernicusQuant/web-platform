@@ -11,6 +11,7 @@ import type {
   OBVFeature,
   KDJFeature,
   CCIFeature,
+  VolatilityFeature,
 } from "@/apis";
 import { useGetStockFeaturesQuery } from "@/hooks/queries/useGetStockFeaturesQuery";
 import { useGetStockPriceQuery } from "@/hooks/queries/useGetStockPriceQuery";
@@ -26,10 +27,11 @@ import MarketFeaturePlot from "@plot/market-activity/MarketFeaturePlot";
 import BBFeaturePlot from "@plot/bollinger-bands/BBFeaturePlot";
 import DEMAFeaturePlot from "@plot/dema/DEMAFeaturePlot";
 import VolumeFeaturePlot from "@plot/volume-momentum/VolumeFeaturePlot";
-import RSIPlot from "./rsi/RSIPlot";
-import OBVFeaturePlot from "./obv/OBVFeaturePlot";
-import KDJCorePlot from "./kdj/KDJCorePlot";
-import CCICorePlot from "./cci/CCICorePlot";
+import RSIPlot from "@plot/rsi/RSIPlot";
+import OBVFeaturePlot from "@plot/obv/OBVFeaturePlot";
+import KDJCorePlot from "@plot/kdj/KDJCorePlot";
+import CCICorePlot from "@plot/cci/CCICorePlot";
+import VolatilityFeaturesPlot from "./volatility/VolatilityFeaturesPlot";
 
 type StockFeaturePlotProps = {
   width: number;
@@ -97,6 +99,16 @@ export default function StockFeaturePlot({
             height={height}
             x={x}
             subplotName={featureSubPlot}
+          />
+        );
+      case "volatility":
+        return (
+          <VolatilityFeaturesPlot
+            features={features as VolatilityFeature[]}
+            width={width}
+            height={height}
+            subplotName={featureSubPlot}
+            x={x}
           />
         );
       case "obv":

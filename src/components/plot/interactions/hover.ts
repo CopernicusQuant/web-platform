@@ -13,6 +13,7 @@ import type {
   StockPrice,
   FeatureByGroup,
   CCIFeature,
+  VolatilityFeature,
 } from "@/apis";
 import { updatePriceTrendIndicators, resetPriceTrendIndicators } from "./price-trend";
 import {
@@ -27,15 +28,22 @@ import { plotSizeConfig } from "@plot/theme";
 import {
   resetMarketActivityIndicators,
   updateMarketActivityIndicators,
-} from "./market-activity";
-import { resetMACDIndicators, updateMACDIndicators } from "./macd";
-import { resetBBIndicators, updateBBIndicators } from "./bollinger-bands";
-import { resetDEMAIndicators, updateDEMAIndicators } from "./dema";
-import { resetVolumeIndicators, updateVolumeIndicators } from "./volume-momentum";
-import { updateRSIIndicators, resetRSIIndicators } from "./rsi";
-import { resetOBVIndicators, updateOBVIndicators } from "./obv";
-import { resetKDJIndicators, updateKDJIndicators } from "./kdj";
-import { resetCCIIndicators, updateCCIIndicators } from "./cci";
+} from "@plot/interactions/market-activity";
+import { resetMACDIndicators, updateMACDIndicators } from "@plot/interactions/macd";
+import {
+  resetBBIndicators,
+  updateBBIndicators,
+} from "@plot/interactions/bollinger-bands";
+import { resetDEMAIndicators, updateDEMAIndicators } from "@plot/interactions/dema";
+import {
+  resetVolumeIndicators,
+  updateVolumeIndicators,
+} from "@plot/interactions/volume-momentum";
+import { updateRSIIndicators, resetRSIIndicators } from "@plot/interactions/rsi";
+import { resetOBVIndicators, updateOBVIndicators } from "@plot/interactions/obv";
+import { resetKDJIndicators, updateKDJIndicators } from "@plot/interactions/kdj";
+import { resetCCIIndicators, updateCCIIndicators } from "@plot/interactions/cci";
+import { resetVolatilityIndicators, updateVolatilityIndicators } from "./volatility";
 
 const getHoverPlotFn = <G extends FeatureGroupOpt>({
   stock,
@@ -108,6 +116,9 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
           stock,
           features: features as VolumeMomentumFeature[],
         });
+        break;
+      case "volatility":
+        updateVolatilityIndicators({ features: features as VolatilityFeature[], xIdx });
         break;
       case "obv":
         updateOBVIndicators({ features: features as OBVFeature[], xIdx });
@@ -198,6 +209,9 @@ const getLeavePlotFn = <G extends FeatureGroupOpt>({
         break;
       case "volumeMomentum":
         resetVolumeIndicators({ features: features as VolumeMomentumFeature[], stock });
+        break;
+      case "volatility":
+        resetVolatilityIndicators({ features: features as VolatilityFeature[] });
         break;
       case "obv":
         resetOBVIndicators({ features: features as OBVFeature[] });
