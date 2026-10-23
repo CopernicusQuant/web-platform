@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { amplitudeFeatures, marketIDPrefix } from "@plot/interactions/market-activity";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
 import { toggleFeature } from "@plot/interactions/market-activity";
 import YAxis from "@/components/ui/YAxis";

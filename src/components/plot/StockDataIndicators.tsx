@@ -1,10 +1,10 @@
 import * as d3 from "d3";
 import type { StockPrice } from "@/apis";
 import { plotSizeConfig, priceColors, legendConfig } from "@plot/theme";
-import type { PriceChartType } from "@/atoms/stocks";
 import { parseVolume, computePriceChange } from "@/lib/utils";
 import { priceElementIds } from "@plot/interactions/price-trend";
-import DateLine from "../ui/DateLine";
+import DateLine from "@/components/ui/DateLine";
+import type { PriceChartType } from "@/components/shared";
 
 type StockDataIndicatorsProps = {
   prices: StockPrice[];

@@ -3,7 +3,7 @@ import {
   vmIDPrefix,
   volBiasFeatures,
 } from "@plot/interactions/volume-momentum";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import {

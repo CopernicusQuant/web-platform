@@ -1,5 +1,5 @@
 import type { FeatureByGroup } from "@/apis";
-import type { PriceChartType } from "@/atoms/stocks";
+import type { PriceChartType } from "@/components/shared";
 import { maFeatures, pmIDPrefix, toggleFeature } from "@plot/interactions/price-momentum";
 import { colorPalette } from "@plot/theme";
 import Legend from "@/components/ui/Legend";

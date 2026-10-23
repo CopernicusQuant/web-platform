@@ -1,27 +1,26 @@
 import type { FeatureGroupOpt } from "@/apis";
-import { setFeatureGroupAtom } from "@/atoms/stocks";
-import { useSetAtom } from "jotai";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 type FeatureGroupCardProps = {
   featureGroup: FeatureGroupOpt;
   active?: boolean;
+  onClick: () => void;
 };
 
 export default function FeatureGroupCard({
   featureGroup,
+  onClick,
   active = false,
 }: FeatureGroupCardProps) {
   const { t } = useTranslation();
-  const setFeatureGroup = useSetAtom(setFeatureGroupAtom);
   return (
     <div
       className={cn(
         "hover:cursor-pointer border-b hover:bg-gray-200 px-4 transition-all duration-100 border-gray-300 flex flex-col gap-1",
         active ? "min-h-46! bg-gray-200" : "min-h-28!",
       )}
-      onClick={() => setFeatureGroup(featureGroup)}
+      onClick={onClick}
     >
       <h2
         className={cn(

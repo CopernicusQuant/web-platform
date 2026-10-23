@@ -13,14 +13,14 @@ import {
   obvPressureFeatures,
   toggleOBVElements,
 } from "@plot/interactions/obv";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { colorPalette, plotSizeConfig, priceColors, svgConfig } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
+import ShadeRegion from "@/components/ui/ShadeRegion";
 
 export default function OBVPressure({ features, width, height, x }: SubplotProps<"obv">) {
   const { marginTop, marginBottom, marginLeft, marginRight } = plotSizeConfig;
-  const { strokeWidth, markStrokeWidth, markStrokeDasharray, shadeOpacity } = svgConfig;
-  const [xStart, xEnd] = x.range();
+  const { strokeWidth, shadeOpacity } = svgConfig;
   const values = getFeatureValues<"obv">(features, obvPressureFeatures);
   const y = getYScale(values, height - marginBottom, marginTop);
   const paths = getPaths<"obv">(features, obvPressureFeatures, x, y);
@@ -34,21 +34,15 @@ export default function OBVPressure({ features, width, height, x }: SubplotProps
         labelXOffset={marginRight}
         labelFormatter={(value: number) => digitToPercent(value, 0)}
       />
-      <rect
-        x={xStart}
-        y={y.range()[1]}
-        width={xEnd - xStart}
-        height={y(0) - y.range()[1]}
-        fill={priceColors.up}
+      <ShadeRegion
+        upper={0}
+        lower={0}
+        x={x}
+        y={y}
+        upperColor={priceColors.up}
+        lowerColor={priceColors.down}
         opacity={shadeOpacity - 0.05}
-      />
-      <rect
-        x={xStart}
-        y={y(0)}
-        width={xEnd - xStart}
-        height={y.range()[0] - y(0)}
-        fill={priceColors.down}
-        opacity={shadeOpacity - 0.05}
+        center={0}
       />
       {obvPressureFeatures.map((featureName, i) => (
         <g key={getLineID(obvIDPrefix, featureName)}>
@@ -69,15 +63,6 @@ export default function OBVPressure({ features, width, height, x }: SubplotProps
           />
         </g>
       ))}
-      <line
-        x1={xStart}
-        x2={xEnd}
-        y1={y(0)}
-        y2={y(0)}
-        stroke="black"
-        strokeDasharray={markStrokeDasharray}
-        strokeWidth={markStrokeWidth}
-      />
     </>
   );
 }

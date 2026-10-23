@@ -6,7 +6,7 @@ import {
   toggleMACDFeature,
 } from "@plot/interactions/macd";
 import YAxis from "@/components/ui/YAxis";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import CrossoverSignals from "./CrossoverSignals";
 import MACDFeatureIndicators from "./MACDFeatureIndicators";
 import {

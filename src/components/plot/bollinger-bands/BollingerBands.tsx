@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import type { BollingerBandsFeature } from "@/apis";
 import { colorPalette } from "@plot/theme";
-import type { PriceChartType } from "@/atoms/stocks";
+import type { PriceChartType } from "@/components/shared";
 import Legend from "@/components/ui/Legend";
 import {
   bandFeatures,

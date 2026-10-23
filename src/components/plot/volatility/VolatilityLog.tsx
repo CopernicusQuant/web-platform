@@ -12,7 +12,7 @@ import {
   volatilityIDPrefix,
   volatilityLogFeature,
 } from "@plot/interactions/volatility";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import { useTranslation } from "react-i18next";
 

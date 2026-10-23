@@ -10,7 +10,7 @@ function RootLayout() {
   return (
     <div className="w-full h-full flex flex-col items-center gap-2 min-h-200 [&_div]:min-h-0">
       <Header />
-      <div className="w-full flex-1 flex justify-center gap-2 px-4 max-w-[1800px]">
+      <div className="w-full flex-1 px-4 max-w-[1800px]">
         <Outlet />
       </div>
     </div>

@@ -1,10 +1,21 @@
-import { FeatureGroups } from "@/apis";
+import { FeatureGroups, type FeatureGroupOpt } from "@/apis";
 import FeatureGroupCard from "@/components/ui/FeatureGroupCard";
-import { useAtomValue } from "jotai";
-import { stockSelectionAtom } from "@/atoms/stocks";
+import { stockRouteAPI } from "@/routes/stocks.$ticker";
 
 export default function FeatureGroupSidebar() {
-  const { featureGroup } = useAtomValue(stockSelectionAtom);
+  // const { featureGroup } = useAtomValue(stockSelectionAtom);
+  const featureGroup = stockRouteAPI.useSearch({
+    select: (search) => search.featureGroup,
+  });
+  const navigate = stockRouteAPI.useNavigate();
+
+  const changeFeatureGroup = (nextFeatureGroup: FeatureGroupOpt) => {
+    navigate({
+      to: ".",
+      search: (previous) => ({ ...previous, featureGroup: nextFeatureGroup }),
+    });
+  };
+
   return (
     <div className="w-full h-full bg-white rounded-md border-gray-300 border flex flex-col">
       <div className="h-10 flex justify-center items-center border-b border-gray-300">
@@ -16,6 +27,7 @@ export default function FeatureGroupSidebar() {
             key={`sidebar-${group}`}
             featureGroup={group}
             active={featureGroup === group}
+            onClick={() => changeFeatureGroup(group)}
           />
         ))}
       </div>

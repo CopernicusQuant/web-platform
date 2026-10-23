@@ -1,4 +1,4 @@
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import VolBias from "./VolBias";
 import VolChange from "./VolChange";
 import VolMARatio from "./VolMARatio";

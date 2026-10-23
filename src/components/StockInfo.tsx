@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { cn } from "@/lib/utils";
 import StockSelector from "@/components/StockSelector";
-import { getRouteApi } from "@tanstack/react-router";
+import { stockRouteAPI } from "@/routes/stocks.$ticker";
 
 const styles = {
   container: clsx(
@@ -19,10 +19,8 @@ const styles = {
   columnDownloadSeparator: clsx("border-r h-full border-gray-300"),
 };
 
-const stockRoute = getRouteApi("/stocks/$ticker");
-
 export default function StockInfo() {
-  const data = stockRoute.useLoaderData({ select: (loaderData) => loaderData.info });
+  const data = stockRouteAPI.useLoaderData({ select: (loaderData) => loaderData.info });
   return (
     <div className="w-full">
       <div className={styles.container}>

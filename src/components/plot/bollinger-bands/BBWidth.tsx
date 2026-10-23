@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import {
   bbIDPrefix,
   toggleBBFeature,

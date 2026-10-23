@@ -1,7 +1,7 @@
 import ActivityScores from "@plot/market-activity/ActivityScores";
 import Amplitude from "@plot/market-activity/Amplitude";
 import PriceAndTurnover from "@plot/market-activity/PriceAndTurnover";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 
 type MarketFeature = {
   subplotName: string;

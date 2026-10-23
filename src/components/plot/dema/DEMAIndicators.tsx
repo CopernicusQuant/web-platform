@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import Legend from "@/components/ui/Legend";
 import { colorPalette, legendConfig, priceColors } from "@plot/theme";
 import type { DEMAFeature } from "@/apis";
-import type { PriceChartType } from "@/atoms/stocks";
+import type { PriceChartType } from "@/components/shared";
 import { useAtomValue } from "jotai";
 import { demaPeriodAtom } from "@/atoms/plot";
 import {
