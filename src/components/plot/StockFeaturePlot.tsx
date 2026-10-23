@@ -81,7 +81,7 @@ export default function StockFeaturePlot({
 
   const getFeaturePlot = () => {
     switch (featureGroup) {
-      case "priceMomentum":
+      case "pricemomentum":
         return (
           <PMFeature
             features={features as PriceMomentumFeature[]}
@@ -91,7 +91,7 @@ export default function StockFeaturePlot({
             subplotName={featureSubPlot}
           />
         );
-      case "volumeMomentum":
+      case "volumemomentum":
         return (
           <VolumeFeaturePlot
             features={features as VolumeMomentumFeature[]}
@@ -121,7 +121,7 @@ export default function StockFeaturePlot({
             subplotName={featureSubPlot}
           />
         );
-      case "marketActivity":
+      case "marketactivity":
         return (
           <MarketFeaturePlot
             features={features as MarketActivityFeature[]}
@@ -140,7 +140,7 @@ export default function StockFeaturePlot({
             x={x}
           />
         );
-      case "bollingerBands":
+      case "bollingerbands":
         return (
           <BBFeaturePlot
             features={features as BollingerBandsFeature[]}

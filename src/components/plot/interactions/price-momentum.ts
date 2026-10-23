@@ -12,7 +12,7 @@ import {
   updateTextValue,
 } from "@plot/interactions/d3-utils";
 import { digitToPercent } from "@/lib/utils";
-type PriceMomentumFeature = FeatureByGroup["priceMomentum"];
+type PriceMomentumFeature = FeatureByGroup["pricemomentum"];
 
 const maFeatures = ["ma5", "ma20", "ma60"] as const;
 const maBiasFeatures = ["ma5Bias", "ma20Bias", "ma60Bias"] as const;

@@ -5,14 +5,14 @@ import { stockRouteAPI } from "@/routes/stocks.$ticker";
 export default function FeatureGroupSidebar() {
   // const { featureGroup } = useAtomValue(stockSelectionAtom);
   const featureGroup = stockRouteAPI.useSearch({
-    select: (search) => search.featureGroup,
+    select: (search) => search.group,
   });
   const navigate = stockRouteAPI.useNavigate();
 
   const changeFeatureGroup = (nextFeatureGroup: FeatureGroupOpt) => {
     navigate({
       to: ".",
-      search: (previous) => ({ ...previous, featureGroup: nextFeatureGroup }),
+      search: (previous) => ({ ...previous, group: nextFeatureGroup }),
     });
   };
 

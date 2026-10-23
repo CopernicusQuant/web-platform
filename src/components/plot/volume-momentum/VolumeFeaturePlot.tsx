@@ -3,7 +3,7 @@ import VolBias from "./VolBias";
 import VolChange from "./VolChange";
 import VolMARatio from "./VolMARatio";
 
-type VolumeFeaturePlot = { subplotName: string } & SubplotProps<"volumeMomentum">;
+type VolumeFeaturePlot = { subplotName: string } & SubplotProps<"volumemomentum">;
 
 export default function VolumeFeaturePlot({
   features,

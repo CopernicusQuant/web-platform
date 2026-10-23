@@ -15,10 +15,10 @@ export default function UpDayRatio({
   width,
   height,
   x,
-}: SubplotProps<"priceMomentum">) {
+}: SubplotProps<"pricemomentum">) {
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
   const y = getYScale([0.0, 1.0], height - marginBottom, marginTop);
-  const paths = getPaths<"priceMomentum">(features, upDayRatioFeatures, x, y);
+  const paths = getPaths<"pricemomentum">(features, upDayRatioFeatures, x, y);
   const legendLabels: string[] = [];
   upDayRatioFeatures.forEach((featureName) => {
     const daysLabel = featureName.match(/\d+/);

@@ -15,7 +15,7 @@ export default function ActivityScores({
   x,
   width,
   height,
-}: SubplotProps<"marketActivity">) {
+}: SubplotProps<"marketactivity">) {
   const { t } = useTranslation();
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const values = features.reduce((acc, feature) => {
@@ -23,7 +23,7 @@ export default function ActivityScores({
     return acc;
   }, [] as number[]);
   const y = getYScale(values, height - marginBottom, marginTop);
-  const paths = getPaths<"marketActivity">(features, activityScoreFeatures, x, y);
+  const paths = getPaths<"marketactivity">(features, activityScoreFeatures, x, y);
 
   return (
     <>

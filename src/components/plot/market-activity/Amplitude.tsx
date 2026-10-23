@@ -18,15 +18,15 @@ export default function Amplitude({
   x,
   width,
   height,
-}: SubplotProps<"marketActivity">) {
+}: SubplotProps<"marketactivity">) {
   const { t } = useTranslation();
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
-  const values = getFeatureValues<"marketActivity">(features, amplitudeFeatures);
+  const values = getFeatureValues<"marketactivity">(features, amplitudeFeatures);
   const y = getYScale(values, height - marginBottom, marginTop);
   const pathFeatures = amplitudeFeatures.filter(
     (featureName) => featureName !== "amplitude",
   );
-  const paths = getPaths<"marketActivity">(features, pathFeatures, x, y);
+  const paths = getPaths<"marketactivity">(features, pathFeatures, x, y);
   return (
     <>
       <YAxis

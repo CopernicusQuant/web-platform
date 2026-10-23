@@ -22,13 +22,13 @@ export default function VolMARatio({
   width,
   height,
   x,
-}: SubplotProps<"volumeMomentum">) {
+}: SubplotProps<"volumemomentum">) {
   const { t } = useTranslation();
   const { marginBottom, marginTop, marginLeft, marginRight } = plotSizeConfig;
   const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgConfig;
-  const values = getFeatureValues<"volumeMomentum">(features, volMARatioFeatures);
+  const values = getFeatureValues<"volumemomentum">(features, volMARatioFeatures);
   const y = getYScale(values, height - marginBottom, marginTop);
-  const paths = getPaths<"volumeMomentum">(features, volMARatioFeatures, x, y);
+  const paths = getPaths<"volumemomentum">(features, volMARatioFeatures, x, y);
   const lastFeature = features.at(-1);
   return (
     <>

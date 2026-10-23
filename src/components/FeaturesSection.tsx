@@ -18,7 +18,7 @@ type FeaturesSectionProps = {} & React.ComponentPropsWithoutRef<"div">;
 export default function FeaturesSection({ ...props }: FeaturesSectionProps) {
   const { t } = useTranslation();
   const featureGroup = stockRouteAPI.useSearch({
-    select: (search) => search.featureGroup,
+    select: (search) => search.group,
   });
   const featureSubplots = FeatureSubplots[featureGroup];
   const [currSubplot, setCurrSubplot] = useState<string>(featureSubplots[0]);

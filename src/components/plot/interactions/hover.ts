@@ -99,7 +99,7 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
     });
     if (!features) return;
     switch (featureGroup) {
-      case "priceMomentum":
+      case "pricemomentum":
         updatePriceMomentumIndicators({
           xIdx,
           features: features as PriceMomentumFeature[],
@@ -110,7 +110,7 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
           y,
         });
         break;
-      case "volumeMomentum":
+      case "volumemomentum":
         updateVolumeIndicators({
           xIdx,
           prices,
@@ -123,7 +123,7 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
       case "obv":
         updateOBVIndicators({ features: features as OBVFeature[], xIdx });
         break;
-      case "marketActivity":
+      case "marketactivity":
         updateMarketActivityIndicators({
           prices,
           features: features as MarketActivityFeature[],
@@ -141,7 +141,7 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
           y,
         });
         break;
-      case "bollingerBands":
+      case "bollingerbands":
         updateBBIndicators({
           xIdx,
           features: features as BollingerBandsFeature[],
@@ -204,10 +204,10 @@ const getLeavePlotFn = <G extends FeatureGroupOpt>({
     resetFeatureTrendIndicators();
     if (!features) return;
     switch (featureGroup) {
-      case "priceMomentum":
+      case "pricemomentum":
         resetPriceMomentumIndicators({ features: features as PriceMomentumFeature[] });
         break;
-      case "volumeMomentum":
+      case "volumemomentum":
         resetVolumeIndicators({ features: features as VolumeMomentumFeature[], prices });
         break;
       case "volatility":
@@ -216,7 +216,7 @@ const getLeavePlotFn = <G extends FeatureGroupOpt>({
       case "obv":
         resetOBVIndicators({ features: features as OBVFeature[] });
         break;
-      case "marketActivity":
+      case "marketactivity":
         resetMarketActivityIndicators({
           prices,
           features: features as MarketActivityFeature[],
@@ -225,7 +225,7 @@ const getLeavePlotFn = <G extends FeatureGroupOpt>({
       case "macd":
         resetMACDIndicators({ features: features as MACDFeature[] });
         break;
-      case "bollingerBands":
+      case "bollingerbands":
         resetBBIndicators({ features: features as BollingerBandsFeature[] });
         break;
       case "dema":

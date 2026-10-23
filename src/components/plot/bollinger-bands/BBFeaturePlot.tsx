@@ -4,7 +4,7 @@ import BBWidth from "./BBWidth";
 
 type BBFeaturePlotProps = {
   subplotName: string;
-} & SubplotProps<"bollingerBands">;
+} & SubplotProps<"bollingerbands">;
 
 export default function BBFeaturePlot({
   features,
@@ -13,7 +13,7 @@ export default function BBFeaturePlot({
   height,
   x,
 }: BBFeaturePlotProps) {
-  const props: SubplotProps<"bollingerBands"> = {
+  const props: SubplotProps<"bollingerbands"> = {
     features,
     x,
     width,

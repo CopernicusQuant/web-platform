@@ -4,12 +4,12 @@ const dataWindows = ["60D", "90D", "180D", "1Y", "3Y"] as const;
 type DataWindowOpt = (typeof dataWindows)[number];
 
 const FeatureGroups = [
-  "priceMomentum",
-  "volumeMomentum",
+  "pricemomentum",
+  "volumemomentum",
   "volatility",
   "obv",
-  "marketActivity",
-  "bollingerBands",
+  "marketactivity",
+  "bollingerbands",
   "macd",
   "dema",
   "rsi",
@@ -19,12 +19,12 @@ const FeatureGroups = [
 type FeatureGroupOpt = (typeof FeatureGroups)[number];
 
 const featureGroupParam: Record<FeatureGroupOpt, string> = {
-  priceMomentum: "pricemomentum",
-  volumeMomentum: "volumemomentum",
+  pricemomentum: "pricemomentum",
+  volumemomentum: "volumemomentum",
   volatility: "volatility",
   obv: "obv",
-  marketActivity: "marketactivity",
-  bollingerBands: "bollingerbands",
+  marketactivity: "marketactivity",
+  bollingerbands: "bollingerbands",
   macd: "macd",
   dema: "dema",
   rsi: "rsi",
@@ -33,13 +33,13 @@ const featureGroupParam: Record<FeatureGroupOpt, string> = {
 };
 
 const FeatureSubplots: Record<FeatureGroupOpt, string[]> = {
-  priceMomentum: ["maBias", "return", "upDayRatio"] as const,
-  volumeMomentum: ["volumeBias", "volumeChanges", "volumeMARatio"] as const,
+  pricemomentum: ["maBias", "return", "upDayRatio"] as const,
+  volumemomentum: ["volumeBias", "volumeChanges", "volumeMARatio"] as const,
   volatility: ["logVolatility", "volatilityRank"] as const,
   obv: ["pressure", "momentum"] as const,
-  marketActivity: ["activityScores", "priceAndTurnover", "amplitude"] as const,
+  marketactivity: ["activityScores", "priceAndTurnover", "amplitude"] as const,
   macd: ["acceleration"] as const,
-  bollingerBands: ["position", "width"] as const,
+  bollingerbands: ["position", "width"] as const,
   dema: ["spread"] as const,
   rsi: ["rsi"] as const,
   kdj: ["kdj"] as const,
@@ -299,13 +299,13 @@ const CCISchema = z
   }));
 
 const FeatureSchemas = {
-  priceMomentum: PriceMomentumFeaturesSchema,
-  volumeMomentum: VolumeMomentumFeatureSchema,
+  pricemomentum: PriceMomentumFeaturesSchema,
+  volumemomentum: VolumeMomentumFeatureSchema,
   volatility: VolatilitySchema,
   obv: OBVFeatureSchema,
-  marketActivity: MarketActivityFeaturesSchema,
+  marketactivity: MarketActivityFeaturesSchema,
   macd: MACDFeatureSchema,
-  bollingerBands: BollingerBandsFeaturesSchema,
+  bollingerbands: BollingerBandsFeaturesSchema,
   dema: DEMAFeaturesSchema,
   rsi: RSISchema,
   kdj: KDJSchema,
@@ -325,13 +325,13 @@ type RSIFeature = z.infer<typeof RSISchema>;
 type KDJFeature = z.infer<typeof KDJSchema>;
 type CCIFeature = z.infer<typeof CCISchema>;
 type FeatureByGroup = {
-  priceMomentum: PriceMomentumFeature;
-  volumeMomentum: VolumeMomentumFeature;
+  pricemomentum: PriceMomentumFeature;
+  volumemomentum: VolumeMomentumFeature;
   volatility: VolatilityFeature;
   obv: OBVFeature;
-  marketActivity: MarketActivityFeature;
+  marketactivity: MarketActivityFeature;
   macd: MACDFeature;
-  bollingerBands: BollingerBandsFeature;
+  bollingerbands: BollingerBandsFeature;
   dema: DEMAFeature;
   rsi: RSIFeature;
   kdj: KDJFeature;

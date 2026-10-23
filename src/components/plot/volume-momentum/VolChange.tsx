@@ -22,12 +22,12 @@ export default function VolChange({
   width,
   height,
   x,
-}: SubplotProps<"volumeMomentum">) {
+}: SubplotProps<"volumemomentum">) {
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const { strokeWidth, markStrokeWidth, markStrokeDasharray } = svgConfig;
-  const values = getFeatureValues<"volumeMomentum">(features, volChangesFeatures);
+  const values = getFeatureValues<"volumemomentum">(features, volChangesFeatures);
   const y = getYScale(values, height - marginBottom, marginTop);
-  const paths = getPaths<"volumeMomentum">(features, volChangesFeatures, x, y);
+  const paths = getPaths<"volumemomentum">(features, volChangesFeatures, x, y);
   const legendLabels = volChangesFeatures.map(
     (featureName) => `${featureName.match(/\d+/)}D`,
   );

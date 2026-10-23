@@ -22,12 +22,12 @@ export default function VolBias({
   width,
   height,
   x,
-}: SubplotProps<"volumeMomentum">) {
+}: SubplotProps<"volumemomentum">) {
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const { strokeWidth, markStrokeDasharray, markStrokeWidth } = svgConfig;
-  const values = getFeatureValues<"volumeMomentum">(features, volBiasFeatures);
+  const values = getFeatureValues<"volumemomentum">(features, volBiasFeatures);
   const y = getYScale(values, height - marginBottom, marginTop);
-  const paths = getPaths<"volumeMomentum">(features, volBiasFeatures, x, y);
+  const paths = getPaths<"volumemomentum">(features, volBiasFeatures, x, y);
   const legendLabels = volBiasFeatures.map(
     (featureName) => `${featureName.match(/\d+/)}D`,
   );
