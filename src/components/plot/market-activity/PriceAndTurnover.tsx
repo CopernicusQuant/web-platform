@@ -13,7 +13,7 @@ export default function PriceAndTurnover({
   x,
   width,
   height,
-}: SubplotProps<"marketActivity">) {
+}: SubplotProps<"marketactivity">) {
   const { shadeOpacity } = svgConfig;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const { t } = useTranslation();

@@ -20,13 +20,13 @@ export default function MABias({
   width,
   height,
   x,
-}: SubplotProps<"priceMomentum">) {
+}: SubplotProps<"pricemomentum">) {
   const { markStrokeDasharray, markStrokeWidth, strokeWidth } = svgConfig;
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
 
-  const values = getFeatureValues<"priceMomentum">(features, maBiasFeatures);
+  const values = getFeatureValues<"pricemomentum">(features, maBiasFeatures);
   const y = getYScale(values, height - marginBottom, marginTop);
-  const paths = getPaths<"priceMomentum">(features, maBiasFeatures, x, y);
+  const paths = getPaths<"pricemomentum">(features, maBiasFeatures, x, y);
   const legendLabels: string[] = [];
   maBiasFeatures.forEach((featureName) => {
     const daysLabel = featureName.match(/\d+/);

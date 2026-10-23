@@ -14,7 +14,7 @@ import FeatureGroupSidebar from "@/components/FeatureGroupSidebar";
 
 const searchSchema = z.object({
   window: z.enum(dataWindows).catch("60D"),
-  featureGroup: z.enum(FeatureGroups).catch("priceMomentum"),
+  group: z.enum(FeatureGroups).catch("pricemomentum"),
 });
 
 export type StockSearchSchema = z.infer<typeof searchSchema>;
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/stocks/$ticker")({
   validateSearch: searchSchema,
   loaderDeps: ({ search }) => ({
     window: search.window,
-    featureGroup: search.featureGroup,
+    group: search.group,
   }),
   loader: async ({ context, params, deps }) => {
     const [info, list, prices, features] = await Promise.all([
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/stocks/$ticker")({
       context.queryClient.query(stockListQuery()),
       context.queryClient.query(stockPriceQuery(params.ticker, deps.window)),
       context.queryClient.query(
-        stockFeatureQuery(params.ticker, deps.window, deps.featureGroup),
+        stockFeatureQuery(params.ticker, deps.window, deps.group),
       ),
     ]);
     return { info, list, prices, features };

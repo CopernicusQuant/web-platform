@@ -15,10 +15,10 @@ export default function Returns({
   x,
   width,
   height,
-}: SubplotProps<"priceMomentum">) {
+}: SubplotProps<"pricemomentum">) {
   const { marginTop, marginBottom, marginLeft, marginRight } = plotSizeConfig;
 
-  const values = getFeatureValues<"priceMomentum">(features, returnFeatures);
+  const values = getFeatureValues<"pricemomentum">(features, returnFeatures);
   const y = getYScale(values, height - marginBottom, marginTop);
   const legendLabels = returnFeatures.map(
     (featureName) => `${featureName.match(/\d+/)}D`,

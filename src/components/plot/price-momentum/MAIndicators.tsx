@@ -11,7 +11,7 @@ import {
 } from "@plot/interactions/d3-utils";
 
 type MAIndicatorsProps = {
-  features: FeatureByGroup["priceMomentum"][];
+  features: FeatureByGroup["pricemomentum"][];
   chartType: PriceChartType;
 };
 

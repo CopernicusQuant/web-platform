@@ -22,13 +22,13 @@ export default function BBPosition({
   width,
   height,
   x,
-}: SubplotProps<"bollingerBands">) {
+}: SubplotProps<"bollingerbands">) {
   const { t } = useTranslation();
   const { strokeWidth } = svgConfig;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
   const values = features.map((feature) => feature[positionFeature]);
   const y = getYScale(values, height - marginBottom, marginTop);
-  const path = getPaths<"bollingerBands">(features, [positionFeature], x, y)[
+  const path = getPaths<"bollingerbands">(features, [positionFeature], x, y)[
     positionFeature
   ];
   if (!path) return <></>;

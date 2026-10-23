@@ -5,7 +5,7 @@ export const Route = createFileRoute("/")({
     throw redirect({
       to: "/stocks/$ticker",
       params: { ticker: "AAPL" },
-      search: { window: "60D", featureGroup: "priceMomentum" },
+      search: { window: "60D", group: "pricemomentum" },
     });
   },
 });

@@ -41,7 +41,7 @@ const getStockPrices = async (
 const getStockFeatures = async (
   ticker: string,
   window: DataWindowOpt,
-  featureGroup: FeatureGroupOpt = "priceMomentum",
+  featureGroup: FeatureGroupOpt = "pricemomentum",
   signal?: AbortSignal,
 ) => {
   const url = new URL(

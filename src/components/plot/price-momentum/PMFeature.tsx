@@ -5,7 +5,7 @@ import type { SubplotProps } from "@/components/shared";
 
 type PMFeatureProps = {
   subplotName: string;
-} & SubplotProps<"priceMomentum">;
+} & SubplotProps<"pricemomentum">;
 
 export default function PMFeature({
   features,
@@ -14,7 +14,7 @@ export default function PMFeature({
   x,
   subplotName,
 }: PMFeatureProps) {
-  const props: SubplotProps<"priceMomentum"> = {
+  const props: SubplotProps<"pricemomentum"> = {
     features,
     x,
     width,

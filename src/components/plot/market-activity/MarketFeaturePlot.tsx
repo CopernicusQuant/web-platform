@@ -5,7 +5,7 @@ import type { SubplotProps } from "@/components/shared";
 
 type MarketFeature = {
   subplotName: string;
-} & SubplotProps<"marketActivity">;
+} & SubplotProps<"marketactivity">;
 
 export default function MarketFeaturePlot({
   features,
@@ -14,7 +14,7 @@ export default function MarketFeaturePlot({
   height,
   x,
 }: MarketFeature) {
-  const props: SubplotProps<"marketActivity"> = {
+  const props: SubplotProps<"marketactivity"> = {
     features,
     x,
     width,

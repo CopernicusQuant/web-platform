@@ -40,7 +40,7 @@ export default function BollingerBands({
     .x((feature) => (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2)
     .y0((feature) => Math.min(y(feature.bbLower), y.range()[0]))
     .y1((feature) => Math.max(y(feature.bbUpper), y.range()[1]))(features);
-  const paths = getPaths<"bollingerBands">(features, bandFeatures, x, y);
+  const paths = getPaths<"bollingerbands">(features, bandFeatures, x, y);
 
   if (!area) return <></>;
   const lastFeature = features.at(-1)!;

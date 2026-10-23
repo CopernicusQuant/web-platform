@@ -50,7 +50,7 @@ export default function StockDataPlot({
     select: (loaderData) => loaderData,
   });
   const featureGroup = stockRouteAPI.useSearch({
-    select: (search) => search.featureGroup,
+    select: (search) => search.group,
   });
   if (!prices) return <></>;
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
@@ -94,12 +94,12 @@ export default function StockDataPlot({
 
   const getFeaturesPlot = () => {
     switch (featureGroup) {
-      case "priceMomentum":
+      case "pricemomentum":
         return <MALines features={features as PriceMomentumFeature[]} x={x} y={y} />;
-      case "volumeMomentum":
+      case "volumemomentum":
       case "obv":
         return <Volumes prices={prices} x={x} y={y} />;
-      case "marketActivity":
+      case "marketactivity":
         return <TurnoverBars prices={prices} x={x} y={y} />;
       case "macd":
         return (
@@ -108,7 +108,7 @@ export default function StockDataPlot({
             <CrossoverSignals features={features as MACDFeature[]} x={x} y={y} />
           </>
         );
-      case "bollingerBands":
+      case "bollingerbands":
         return (
           <BollingerBands
             features={features as BollingerBandsFeature[]}
@@ -154,7 +154,7 @@ export default function StockDataPlot({
 
   const getIndicators = () => {
     switch (featureGroup) {
-      case "priceMomentum":
+      case "pricemomentum":
         return (
           <MAIndicators
             features={features as PriceMomentumFeature[]}
@@ -201,7 +201,7 @@ export default function StockDataPlot({
           prices={prices}
           x={x}
           y={y}
-          showArea={featureGroup !== "bollingerBands"}
+          showArea={featureGroup !== "bollingerbands"}
         />
       )}
       <StockDataIndicators

@@ -17,7 +17,7 @@ export default function BBWidth({
   width,
   height,
   x,
-}: SubplotProps<"bollingerBands">) {
+}: SubplotProps<"bollingerbands">) {
   const { t } = useTranslation();
   let yMax = 0;
   const { marginLeft, marginRight, marginTop, marginBottom } = plotSizeConfig;
