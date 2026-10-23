@@ -13,7 +13,7 @@ import {
   vmIDPrefix,
   volChangesFeatures,
 } from "@plot/interactions/volume-momentum";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
 

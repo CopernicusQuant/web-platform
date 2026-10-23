@@ -25,6 +25,7 @@ export default function ShadeRegion({
   const { markStrokeDasharray, markStrokeWidth, shadeOpacity } = svgConfig;
   const [xStart, xEnd] = x.range();
   const [yEnd, yStart] = y.range();
+  if (yEnd <= yStart) return <></>;
   return (
     <>
       {y.domain()[1] >= upper && (

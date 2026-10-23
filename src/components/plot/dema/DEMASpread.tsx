@@ -6,7 +6,7 @@ import {
   getDEMAFeatureNamesByPeriod,
   toggleDEMAFeature,
 } from "@plot/interactions/dema";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import DEMASignals from "@plot/dema/DEMASignals";
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";

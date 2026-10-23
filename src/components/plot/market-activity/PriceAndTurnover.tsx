@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import YAxis from "@/components/ui/YAxis";
 import { priceAndTurnoverFeatures } from "@plot/interactions/market-activity";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { toggleFeature } from "@plot/interactions/market-activity";
 import { getCirclesGroupID } from "@plot/interactions/d3-utils";
 

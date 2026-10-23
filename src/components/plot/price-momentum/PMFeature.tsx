@@ -1,7 +1,7 @@
 import MABias from "@plot/price-momentum/MABias";
 import Returns from "@plot/price-momentum/Returns";
 import UpDayRatio from "@plot/price-momentum/UpDayRatio";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 
 type PMFeatureProps = {
   subplotName: string;

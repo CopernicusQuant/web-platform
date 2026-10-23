@@ -14,18 +14,14 @@ import StockDataPlot from "@plot/StockDataPlot";
 import CandleIcon from "@/components/icons/CandleIcon";
 import LineIcon from "@/components/icons/LineIcon";
 import { getRouteApi } from "@tanstack/react-router";
-
-const priceChartTypes: PriceChartType[] = ["candle", "line"];
+import { priceChartTypes, type PriceChartType } from "@/components/shared";
 
 type PriceChartProps = {} & React.ComponentPropsWithoutRef<"div">;
-type PriceChartType = "candle" | "line";
 
 const stockRoute = getRouteApi("/stocks/$ticker");
 
 export default function PriceChart({ ...props }: PriceChartProps) {
   const [chartType, setChartType] = useState<PriceChartType>("candle");
-
-  // const { window } = useAtomValue(stockSelectionAtom);
   const navigate = stockRoute.useNavigate();
   const window = stockRoute.useSearch({
     select: (search) => search.window,

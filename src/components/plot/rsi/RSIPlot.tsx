@@ -8,7 +8,7 @@ import {
   getYScale,
 } from "@plot/interactions/d3-utils";
 import { rsiFeatures, rsiIDPrefix, toggleRSIFeature } from "@plot/interactions/rsi";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { colorPalette, plotSizeConfig, priceColors, svgConfig } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
 import ShadeRegion from "@/components/ui/ShadeRegion";

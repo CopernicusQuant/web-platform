@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import type { CCIFeature } from "@/apis";
-import type { PriceChartType } from "@/atoms/stocks";
+import type { PriceChartType } from "@/components/shared";
 import { cciIDPrefix, cciTpFeatures, toggleCCIElement } from "@plot/interactions/cci";
 import {
   getCircleID,

@@ -7,7 +7,7 @@ import {
 import { plotSizeConfig, priceColors } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { getBarGroupID, getFeatureValues, getYScale } from "@plot/interactions/d3-utils";
 
 export default function Returns({

@@ -6,10 +6,11 @@ import {
   stockListQuery,
   stockPriceQuery,
 } from "@/queries/stock";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import { z } from "zod";
 import PriceSection from "@/components/PriceSection";
 import FeaturesSection from "@/components/FeaturesSection";
+import FeatureGroupSidebar from "@/components/FeatureGroupSidebar";
 
 const searchSchema = z.object({
   window: z.enum(dataWindows).catch("60D"),
@@ -38,13 +39,20 @@ export const Route = createFileRoute("/stocks/$ticker")({
   component: StocksDashboard,
 });
 
+export const stockRouteAPI = getRouteApi("/stocks/$ticker");
+
 function StocksDashboard() {
   return (
-    <div className="w-full flex-1 py-4 min-w-0 flex flex-col gap-3">
-      <StockInfo />
-      <div className="flex-1 flex flex-col gap-3">
-        <PriceSection className="flex flex-col flex-3" />
-        <FeaturesSection className="flex flex-col flex-2" />
+    <div className="w-full h-full flex justify-center gap-2">
+      <div className="w-full flex-1 py-4 min-w-0 flex flex-col gap-3">
+        <StockInfo />
+        <div className="flex-1 flex flex-col gap-3">
+          <PriceSection className="flex flex-col flex-3" />
+          <FeaturesSection className="flex flex-col flex-2" />
+        </div>
+      </div>
+      <div className="min-w-70 w-70 py-4">
+        <FeatureGroupSidebar />
       </div>
     </div>
   );

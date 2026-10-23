@@ -1,4 +1,4 @@
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import Acceleration from "./Acceleration";
 
 type MACDFeatureProps = {} & SubplotProps<"macd">;

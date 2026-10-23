@@ -12,8 +12,8 @@ import type {
   KDJFeature,
   CCIFeature,
   VolatilityFeature,
+  FeatureGroupOpt,
 } from "@/apis";
-import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
 import { plotSizeConfig } from "@plot/theme";
 import XAxis from "@/components/ui/XAxis";
@@ -29,27 +29,27 @@ import RSIPlot from "@plot/rsi/RSIPlot";
 import OBVFeaturePlot from "@plot/obv/OBVFeaturePlot";
 import KDJCorePlot from "@plot/kdj/KDJCorePlot";
 import CCICorePlot from "@plot/cci/CCICorePlot";
-import VolatilityFeaturesPlot from "./volatility/VolatilityFeaturesPlot";
-import { getRouteApi } from "@tanstack/react-router";
+import VolatilityFeaturesPlot from "@plot/volatility/VolatilityFeaturesPlot";
+import { stockRouteAPI } from "@/routes/stocks.$ticker";
 
 type StockFeaturePlotProps = {
   width: number;
   height: number;
+  featureGroup: FeatureGroupOpt;
+  featureSubPlot: string;
   maxXTickNum?: number;
 };
 
-const stockRoute = getRouteApi("/stocks/$ticker");
-
 export default function StockFeaturePlot({
   width,
+  featureGroup,
+  featureSubPlot,
   height,
   maxXTickNum = 30,
 }: StockFeaturePlotProps) {
   const { marginRight, marginBottom, marginLeft } = plotSizeConfig;
-  const { featureGroup } = useAtomValue(stockSelectionAtom);
-  const { featureSubPlot } = useAtomValue(stockSelectionAtom);
   const { referenceHeight } = useAtomValue(plotConfigAtom);
-  const { features, prices } = stockRoute.useLoaderData();
+  const { features, prices } = stockRouteAPI.useLoaderData();
   if (!features) return <></>;
 
   const x = d3

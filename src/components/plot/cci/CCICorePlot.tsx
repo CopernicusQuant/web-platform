@@ -8,7 +8,7 @@ import {
   getPaths,
   getYScale,
 } from "@plot/interactions/d3-utils";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { colorPalette, plotSizeConfig, priceColors, svgConfig } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
 import { useTranslation } from "react-i18next";

@@ -16,7 +16,7 @@ import {
 } from "@plot/interactions/d3-utils";
 import { colorPalette, svgConfig } from "@plot/theme";
 import Legend from "@/components/ui/Legend";
-import type { PriceChartType } from "@/atoms/stocks";
+import type { PriceChartType } from "@/components/shared";
 
 type KDJLowHighProps = {
   features: KDJFeature[];

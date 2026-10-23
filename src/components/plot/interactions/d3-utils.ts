@@ -65,7 +65,9 @@ const getYScale = (
     yMin = Math.min(yMin, value);
   });
   const yPadding = (yMax - yMin) * 0.05 || 1;
-  const y = d3.scaleLinear([yMin - yPadding, yMax + yPadding], [low, high]);
+  // this line avoids wrong y scale before the plot got a proper height
+  const range = low >= high ? [low, high] : [0, 0];
+  const y = d3.scaleLinear([yMin - yPadding, yMax + yPadding], range);
   return y;
 };
 

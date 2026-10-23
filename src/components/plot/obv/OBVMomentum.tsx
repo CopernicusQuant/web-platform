@@ -12,7 +12,7 @@ import {
   obvMomentumFeatures,
   toggleOBVElements,
 } from "@plot/interactions/obv";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { plotSizeConfig, priceColors } from "@plot/theme";
 import { useTranslation } from "react-i18next";
 

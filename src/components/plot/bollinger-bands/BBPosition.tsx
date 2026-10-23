@@ -3,7 +3,7 @@ import {
   positionFeature,
   toggleBBFeature,
 } from "@plot/interactions/bollinger-bands";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { colorPalette, plotSizeConfig, priceColors, svgConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import Legend from "@/components/ui/Legend";

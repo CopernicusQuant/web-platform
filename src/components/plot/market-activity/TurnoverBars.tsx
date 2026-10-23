@@ -6,6 +6,7 @@ import {
   getBarGroupID,
   getLegendID,
   getLegendValueID,
+  getYScale,
 } from "@plot/interactions/d3-utils";
 import { marketIDPrefix, toggleFeature } from "@plot/interactions/market-activity";
 
@@ -16,14 +17,10 @@ type TurnoverBarsProps = {
 };
 
 export default function TurnoverBars({ prices, x, y }: TurnoverBarsProps) {
-  const yMax = d3.max(prices, (d) => d.turnover) ?? 1;
-  const yMin = d3.min(prices, (d) => d.turnover) ?? 0;
+  const values = prices.map((price) => price.turnover);
   const yRange = y.range();
-  const yPadding = (yMax - yMin) * 0.05 || 1;
-  const subY = d3.scaleLinear(
-    [yMin === 0 ? 0 : yMin - yPadding, yMax + yPadding],
-    [yRange[0], yRange[0] + (yRange[1] - yRange[0]) / 2],
-  );
+  const [yEnd, yStart] = [yRange[0], yRange[0] + (yRange[1] - yRange[0]) / 2];
+  const subY = getYScale(values, yEnd, yStart);
   return (
     <>
       <g id={getBarGroupID(marketIDPrefix, "turnover")}>

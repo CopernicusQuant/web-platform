@@ -7,7 +7,7 @@ import {
 import { colorPalette, plotSizeConfig } from "@plot/theme";
 import YAxis from "@/components/ui/YAxis";
 import MarketFeatureIndicators from "@plot/market-activity/MarketFeatureIndicators";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import { getLineID, getPaths, getYScale } from "@plot/interactions/d3-utils";
 
 export default function ActivityScores({

@@ -8,7 +8,6 @@ import type {
   MACDFeature,
   PriceMomentumFeature,
 } from "@/apis";
-import { stockSelectionAtom, type PriceChartType } from "@/atoms/stocks";
 import { plotConfigAtom } from "@/atoms/plot";
 import XAxis from "@/components/ui/XAxis";
 import YAxis from "@/components/ui/YAxis";
@@ -30,7 +29,8 @@ import DEMASignals from "@plot/dema/DEMASignals";
 import DEMAIndicators from "./dema/DEMAIndicators";
 import KDJLowHigh from "@plot/kdj/KDJLowHigh";
 import CCITpPlot from "@plot/cci/CCITpPlot";
-import { getRouteApi } from "@tanstack/react-router";
+import { stockRouteAPI } from "@/routes/stocks.$ticker";
+import type { PriceChartType } from "@/components/shared";
 
 type StockDataPlotProps = {
   chartType: PriceChartType;
@@ -39,18 +39,18 @@ type StockDataPlotProps = {
   maxXTickNum?: number;
 };
 
-const stockRoute = getRouteApi("/stocks/$ticker");
-
 export default function StockDataPlot({
   chartType,
   width,
   height,
   maxXTickNum = 30,
 }: StockDataPlotProps) {
-  const { featureGroup } = useAtomValue(stockSelectionAtom);
   const plotConfig = useAtomValue(plotConfigAtom);
-  const { prices, features } = stockRoute.useLoaderData({
+  const { prices, features } = stockRouteAPI.useLoaderData({
     select: (loaderData) => loaderData,
+  });
+  const featureGroup = stockRouteAPI.useSearch({
+    select: (search) => search.featureGroup,
   });
   if (!prices) return <></>;
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;

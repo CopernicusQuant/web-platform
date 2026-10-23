@@ -2,9 +2,7 @@ import { Content, Portal, Root, Trigger } from "@radix-ui/react-popover";
 import SearchIcon from "@/components/icons/SearchIcon";
 import { useState } from "react";
 import clsx from "clsx";
-import { getRouteApi } from "@tanstack/react-router";
-import { Route } from "@/routes";
-import type { StockSearchSchema } from "@/routes/stocks.$ticker";
+import { stockRouteAPI, type StockSearchSchema } from "@/routes/stocks.$ticker";
 
 const styles = {
   content: clsx(
@@ -12,21 +10,19 @@ const styles = {
   ),
 };
 
-const stockRouter = getRouteApi("/stocks/$ticker");
-
 export default function StockSelector({
   children,
 }: React.ComponentPropsWithoutRef<"div">) {
   const [stockPrefix, setStockPrefix] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
-  const navigate = Route.useNavigate();
-  const stockList = stockRouter.useLoaderData({
+  const navigate = stockRouteAPI.useNavigate();
+  const stockList = stockRouteAPI.useLoaderData({
     select: (loaderData) => loaderData.list,
   });
 
   const changeStock = (ticker: string) => {
     navigate({
-      to: "/stocks/$ticker",
+      to: ".",
       params: { ticker: ticker },
       search: (previous) => previous as StockSearchSchema,
     });

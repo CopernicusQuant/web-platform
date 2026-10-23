@@ -13,7 +13,7 @@ import {
 import { colorPalette, plotSizeConfig, svgConfig } from "@plot/theme";
 import FeatureIndicators from "@plot/price-momentum/FeatureIndicators";
 import { digitToPercent } from "@/lib/utils";
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 
 export default function MABias({
   features,

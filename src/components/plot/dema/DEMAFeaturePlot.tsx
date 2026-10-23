@@ -1,4 +1,4 @@
-import type { SubplotProps } from "@plot/shared";
+import type { SubplotProps } from "@/components/shared";
 import DEMASpread from "./DEMASpread";
 
 type DEMAFeaturePlotProps = {} & SubplotProps<"dema">;

@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import type { DEMAFeature } from "@/apis";
 import { demaPeriodAtom } from "@/atoms/plot";
-import type { PriceChartType } from "@/atoms/stocks";
+import type { PriceChartType } from "@/components/shared";
 import { demaIDPrefix, getDEMAFeatureNamesByPeriod } from "@plot/interactions/dema";
 import { useAtomValue } from "jotai";
 import { colorPalette, svgConfig } from "@plot/theme";

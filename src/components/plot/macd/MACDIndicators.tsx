@@ -4,7 +4,7 @@ import { getCircleID, getLegendID, getLegendValueID } from "@plot/interactions/d
 import { emaFeatures, macdIDPrefix, toggleMACDFeature } from "@plot/interactions/macd";
 import { colorPalette, legendConfig, priceColors } from "@plot/theme";
 import type { MACDFeature } from "@/apis";
-import type { PriceChartType } from "@/atoms/stocks";
+import type { PriceChartType } from "@/components/shared";
 
 type MACDIndicatorsProps = {
   features: MACDFeature[];
