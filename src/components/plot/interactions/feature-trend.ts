@@ -31,16 +31,16 @@ const updateDateLine = (show: boolean, date?: string, xPos?: number) => {
 };
 
 const updateFeatureTrendIndicators = ({
-  stock,
+  prices,
   xIdx,
   x,
 }: {
-  stock: StockPrice[];
+  prices: StockPrice[];
   xIdx: number;
   x: d3.ScaleBand<string>;
 }) => {
   d3.select(`#${featureElementIds.indicatorGroup}`).attr("opacity", 1);
-  const { tradeDate } = stock[xIdx];
+  const { tradeDate } = prices[xIdx];
   const xPos = (x(tradeDate) ?? 0) + x.bandwidth() / 2;
   updateDateLine(true, tradeDate, xPos);
 };

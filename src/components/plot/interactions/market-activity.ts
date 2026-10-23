@@ -27,16 +27,16 @@ const toggleFeature = (featureName: string) => {
 };
 
 const updateMarketActivityIndicators = ({
-  stock,
+  prices,
   features,
   xIdx,
 }: {
-  stock: StockPrice[];
+  prices: StockPrice[];
   features: MarketActivityFeature[];
   xIdx: number;
 }) => {
   const currFeature = features[xIdx];
-  const currStockPrice = stock[xIdx];
+  const currStockPrice = prices[xIdx];
   updateTextValue(
     getLegendValueID(marketIDPrefix, "turnover"),
     currStockPrice["turnover"].toFixed(2),
@@ -58,15 +58,15 @@ const updateMarketActivityIndicators = ({
 };
 
 const resetMarketActivityIndicators = ({
-  stock,
+  prices,
   features,
 }: {
-  stock: StockPrice[];
+  prices: StockPrice[];
   features: MarketActivityFeature[];
 }) => {
   updateTextValue(
     getLegendValueID(marketIDPrefix, "turnover"),
-    stock.at(-1)!["turnover"].toFixed(2),
+    prices.at(-1)!["turnover"].toFixed(2),
   );
   [...activityScoreFeatures, ...priceAndTurnoverFeatures].forEach((featureName) => {
     updateTextValue(

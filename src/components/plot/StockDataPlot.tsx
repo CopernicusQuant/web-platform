@@ -10,8 +10,6 @@ import type {
 } from "@/apis";
 import { stockSelectionAtom, type PriceChartType } from "@/atoms/stocks";
 import { plotConfigAtom } from "@/atoms/plot";
-import { useGetStockPriceQuery } from "@/hooks/queries/useGetStockPriceQuery";
-import { useGetStockFeaturesQuery } from "@/hooks/queries/useGetStockFeaturesQuery";
 import XAxis from "@/components/ui/XAxis";
 import YAxis from "@/components/ui/YAxis";
 import TrendLine from "@plot/StockTrendLine";
@@ -32,6 +30,7 @@ import DEMASignals from "@plot/dema/DEMASignals";
 import DEMAIndicators from "./dema/DEMAIndicators";
 import KDJLowHigh from "@plot/kdj/KDJLowHigh";
 import CCITpPlot from "@plot/cci/CCITpPlot";
+import { getRouteApi } from "@tanstack/react-router";
 
 type StockDataPlotProps = {
   chartType: PriceChartType;
@@ -40,33 +39,36 @@ type StockDataPlotProps = {
   maxXTickNum?: number;
 };
 
+const stockRoute = getRouteApi("/stocks/$ticker");
+
 export default function StockDataPlot({
   chartType,
   width,
   height,
   maxXTickNum = 30,
 }: StockDataPlotProps) {
-  const { ticker, window, featureGroup } = useAtomValue(stockSelectionAtom);
+  const { featureGroup } = useAtomValue(stockSelectionAtom);
   const plotConfig = useAtomValue(plotConfigAtom);
-  const { data: stock } = useGetStockPriceQuery(ticker, window);
-  const { data: features } = useGetStockFeaturesQuery(ticker, window, featureGroup);
-  if (!stock) return <></>;
+  const { prices, features } = stockRoute.useLoaderData({
+    select: (loaderData) => loaderData,
+  });
+  if (!prices) return <></>;
   const { marginTop, marginRight, marginBottom, marginLeft } = plotSizeConfig;
 
   // x-axis mapper
   const x = d3
     .scaleBand(
-      stock.map((d) => d.tradeDate),
+      prices.map((d) => d.tradeDate),
       [marginLeft, width - marginRight],
     )
     .paddingInner(0.2);
-  const xSteps = Math.floor(stock.length / maxXTickNum);
-  const xLabels = stock
-    .filter((_, i) => (stock.length - 1 - i) % xSteps == 0)
+  const xSteps = Math.floor(prices.length / maxXTickNum);
+  const xLabels = prices
+    .filter((_, i) => (prices.length - 1 - i) % xSteps == 0)
     .map((d) => d.tradeDate);
   // y-axis mapper
-  const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
-  const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
+  const yMax = d3.max(prices, (d) => d.adjHigh) ?? 1;
+  const yMin = d3.min(prices, (d) => d.adjLow) ?? 0;
   const yPadding = (yMax - yMin) * 0.05 || 1;
   const y = d3.scaleLinear(
     [yMin - yPadding, yMax + yPadding],
@@ -75,7 +77,7 @@ export default function StockDataPlot({
 
   // controls hover-based indicators
   const onPointerMove = getHoverPlotFn({
-    stock,
+    prices,
     features,
     featureGroup,
     width,
@@ -83,7 +85,7 @@ export default function StockDataPlot({
   });
 
   const onPointerLeave = getLeavePlotFn({
-    stock,
+    prices,
     features,
     featureGroup,
     width,
@@ -96,9 +98,9 @@ export default function StockDataPlot({
         return <MALines features={features as PriceMomentumFeature[]} x={x} y={y} />;
       case "volumeMomentum":
       case "obv":
-        return <Volumes stock={stock} x={x} y={y} />;
+        return <Volumes prices={prices} x={x} y={y} />;
       case "marketActivity":
-        return <TurnoverBars stock={stock} x={x} y={y} />;
+        return <TurnoverBars prices={prices} x={x} y={y} />;
       case "macd":
         return (
           <>
@@ -193,17 +195,17 @@ export default function StockDataPlot({
       {/* price trend */}
       {features && getFeaturesPlot()}
       {features && getIndicators()}
-      {chartType === "candle" && <CandleStick prices={stock} x={x} y={y} />}
+      {chartType === "candle" && <CandleStick prices={prices} x={x} y={y} />}
       {chartType === "line" && (
         <TrendLine
-          prices={stock}
+          prices={prices}
           x={x}
           y={y}
           showArea={featureGroup !== "bollingerBands"}
         />
       )}
       <StockDataIndicators
-        stock={stock}
+        prices={prices}
         chartType={chartType}
         width={width}
         height={height}

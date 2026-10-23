@@ -54,25 +54,25 @@ const updateIndicator = (StockPrice: StockPrice, feature: VolumeMomentumFeature)
 };
 
 const updateVolumeIndicators = ({
-  stock,
+  prices,
   features,
   xIdx,
 }: {
-  stock: StockPrice[];
+  prices: StockPrice[];
   features: VolumeMomentumFeature[];
   xIdx: number;
 }) => {
-  updateIndicator(stock[xIdx], features[xIdx]);
+  updateIndicator(prices[xIdx], features[xIdx]);
 };
 
 const resetVolumeIndicators = ({
-  stock,
+  prices,
   features,
 }: {
-  stock: StockPrice[];
+  prices: StockPrice[];
   features: VolumeMomentumFeature[];
 }) => {
-  updateIndicator(stock.at(-1)!, features.at(-1)!);
+  updateIndicator(prices.at(-1)!, features.at(-1)!);
 };
 
 export {

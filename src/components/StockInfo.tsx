@@ -1,9 +1,7 @@
 import clsx from "clsx";
-import { useAtom } from "jotai";
 import { cn } from "@/lib/utils";
-import { stockSelectionAtom } from "@/atoms/stocks";
-import { useGetStockInfoQuery } from "@/hooks/queries/useGetStockInfoQuery";
 import StockSelector from "@/components/StockSelector";
+import { getRouteApi } from "@tanstack/react-router";
 
 const styles = {
   container: clsx(
@@ -21,9 +19,10 @@ const styles = {
   columnDownloadSeparator: clsx("border-r h-full border-gray-300"),
 };
 
+const stockRoute = getRouteApi("/stocks/$ticker");
+
 export default function StockInfo() {
-  const [selection] = useAtom(stockSelectionAtom);
-  const { data } = useGetStockInfoQuery(selection.ticker);
+  const data = stockRoute.useLoaderData({ select: (loaderData) => loaderData.info });
   return (
     <div className="w-full">
       <div className={styles.container}>

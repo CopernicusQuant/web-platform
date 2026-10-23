@@ -1,12 +1,18 @@
+import path from "path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { analyzer } from "vite-bundle-analyzer";
 import tailwindcss from "@tailwindcss/vite";
-import path from "path";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), analyzer({ analyzerMode: "static" })],
+  plugins: [
+    tanstackRouter({ target: "react", autoCodeSplitting: true }),
+    react(),
+    tailwindcss(),
+    analyzer({ analyzerMode: "static" }),
+  ],
   resolve: {
     alias: {
       "@plot": path.resolve(import.meta.dirname, "./src/components/plot"),

@@ -7,22 +7,22 @@ import { useTranslation } from "react-i18next";
 import { priceElementIds, toggleVolumeGroup } from "./interactions/price-trend";
 
 type VolumesProps = {
-  stock: StockPrice[];
+  prices: StockPrice[];
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 };
 
-export default function Volumes({ stock, x, y }: VolumesProps) {
+export default function Volumes({ prices, x, y }: VolumesProps) {
   const { t } = useTranslation();
-  const volVals = stock.map((values) => values.adjVol);
+  const volVals = prices.map((values) => values.adjVol);
   const yRange = y.range();
   const yVol = getYScale(volVals, yRange[0], yRange[0] + (yRange[1] - yRange[0]) / 2);
-  if (!stock) return <></>;
-  const isUp = stock.at(-1)!["adjClose"] >= stock.at(-1)!["adjOpen"];
+  if (!prices) return <></>;
+  const isUp = prices.at(-1)!["adjClose"] >= prices.at(-1)!["adjOpen"];
   return (
     <>
       <g id={priceElementIds.volumeBarGroup}>
-        {stock.map(({ tradeDate, adjVol, adjClose, adjOpen }) => (
+        {prices.map(({ tradeDate, adjVol, adjClose, adjOpen }) => (
           <rect
             key={`volume-${tradeDate}`}
             x={x(tradeDate) ?? 0}

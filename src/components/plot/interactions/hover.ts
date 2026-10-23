@@ -46,30 +46,30 @@ import { resetCCIIndicators, updateCCIIndicators } from "@plot/interactions/cci"
 import { resetVolatilityIndicators, updateVolatilityIndicators } from "./volatility";
 
 const getHoverPlotFn = <G extends FeatureGroupOpt>({
-  stock,
+  prices,
   features,
   featureGroup,
   width,
   referenceHeight,
 }: {
-  stock: StockPrice[] | undefined;
+  prices: StockPrice[] | undefined;
   features: FeatureByGroup[G][] | undefined;
   featureGroup: FeatureGroupOpt;
   width: number;
   referenceHeight: number;
 }) => {
-  if (!stock) return;
+  if (!prices) return;
   const { marginBottom, marginTop, marginLeft, marginRight } = plotSizeConfig;
   // x-axis mapper
   const x = d3
     .scaleBand(
-      stock.map((d) => d.tradeDate),
+      prices.map((d) => d.tradeDate),
       [marginLeft, width - marginRight],
     )
     .paddingInner(0.2);
   // y-axis mapper
-  const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
-  const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
+  const yMax = d3.max(prices, (d) => d.adjHigh) ?? 1;
+  const yMin = d3.min(prices, (d) => d.adjLow) ?? 0;
   const yPadding = (yMax - yMin) * 0.05 || 1;
   const y = d3.scaleLinear(
     [yMin - yPadding, yMax + yPadding],
@@ -80,9 +80,9 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
     const rect = event.currentTarget.getBoundingClientRect();
     const pointerPos = event.clientX - rect.x - marginLeft;
     let xIdx = Math.floor(pointerPos / x.step());
-    xIdx = Math.max(Math.min(xIdx, stock.length - 1), 0);
+    xIdx = Math.max(Math.min(xIdx, prices.length - 1), 0);
     updatePriceTrendIndicators({
-      stock,
+      prices,
       pointerPos,
       xIdx,
       width,
@@ -93,7 +93,7 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
       y,
     });
     updateFeatureTrendIndicators({
-      stock,
+      prices,
       xIdx,
       x,
     });
@@ -113,7 +113,7 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
       case "volumeMomentum":
         updateVolumeIndicators({
           xIdx,
-          stock,
+          prices,
           features: features as VolumeMomentumFeature[],
         });
         break;
@@ -125,7 +125,7 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
         break;
       case "marketActivity":
         updateMarketActivityIndicators({
-          stock,
+          prices,
           features: features as MarketActivityFeature[],
           xIdx,
         });
@@ -177,30 +177,30 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
 };
 
 const getLeavePlotFn = <G extends FeatureGroupOpt>({
-  stock,
+  prices,
   features,
   featureGroup,
   width,
   referenceHeight,
 }: {
-  stock: StockPrice[] | undefined;
+  prices: StockPrice[] | undefined;
   features: FeatureByGroup[G][] | undefined;
   featureGroup: FeatureGroupOpt;
   width: number;
   referenceHeight: number;
 }) => {
   const { marginRight, marginBottom, marginTop } = plotSizeConfig;
-  if (!stock) return;
+  if (!prices) return;
   // y-axis mapper
-  const yMax = d3.max(stock, (d) => d.adjHigh) ?? 1;
-  const yMin = d3.min(stock, (d) => d.adjLow) ?? 0;
+  const yMax = d3.max(prices, (d) => d.adjHigh) ?? 1;
+  const yMin = d3.min(prices, (d) => d.adjLow) ?? 0;
   const yPadding = (yMax - yMin) * 0.05 || 1;
   const y = d3.scaleLinear(
     [yMin - yPadding, yMax + yPadding],
     [referenceHeight - marginBottom, marginTop],
   );
   return () => {
-    resetPriceTrendIndicators({ stock, width, marginRight, y });
+    resetPriceTrendIndicators({ prices, width, marginRight, y });
     resetFeatureTrendIndicators();
     if (!features) return;
     switch (featureGroup) {
@@ -208,7 +208,7 @@ const getLeavePlotFn = <G extends FeatureGroupOpt>({
         resetPriceMomentumIndicators({ features: features as PriceMomentumFeature[] });
         break;
       case "volumeMomentum":
-        resetVolumeIndicators({ features: features as VolumeMomentumFeature[], stock });
+        resetVolumeIndicators({ features: features as VolumeMomentumFeature[], prices });
         break;
       case "volatility":
         resetVolatilityIndicators({ features: features as VolatilityFeature[] });
@@ -218,7 +218,7 @@ const getLeavePlotFn = <G extends FeatureGroupOpt>({
         break;
       case "marketActivity":
         resetMarketActivityIndicators({
-          stock,
+          prices,
           features: features as MarketActivityFeature[],
         });
         break;
