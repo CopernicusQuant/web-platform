@@ -1,10 +1,10 @@
 import { Content, Portal, Root, Trigger } from "@radix-ui/react-popover";
 import SearchIcon from "@/components/icons/SearchIcon";
-import { useGetStockListQuery } from "@/hooks/queries/useGetStockListQuery";
 import { useState } from "react";
-import { useSetAtom } from "jotai";
-import { setTickerAtom } from "@/atoms/stocks";
 import clsx from "clsx";
+import { getRouteApi } from "@tanstack/react-router";
+import { Route } from "@/routes";
+import type { StockSearchSchema } from "@/routes/stocks.$ticker";
 
 const styles = {
   content: clsx(
@@ -12,13 +12,25 @@ const styles = {
   ),
 };
 
+const stockRouter = getRouteApi("/stocks/$ticker");
+
 export default function StockSelector({
   children,
 }: React.ComponentPropsWithoutRef<"div">) {
   const [stockPrefix, setStockPrefix] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
-  const setTicker = useSetAtom(setTickerAtom);
-  const { data: stockList } = useGetStockListQuery();
+  const navigate = Route.useNavigate();
+  const stockList = stockRouter.useLoaderData({
+    select: (loaderData) => loaderData.list,
+  });
+
+  const changeStock = (ticker: string) => {
+    navigate({
+      to: "/stocks/$ticker",
+      params: { ticker: ticker },
+      search: (previous) => previous as StockSearchSchema,
+    });
+  };
 
   const updateStockPrefix = (
     event: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
@@ -48,7 +60,7 @@ export default function StockSelector({
                   key={stock.join("-")}
                   className="flex gap-2 items-center p-1 hover:cursor-pointer hover:bg-gray-100 w-full rounded-md"
                   onClick={() => {
-                    setTicker(stock[0]);
+                    changeStock(stock[0]);
                     setOpen(false);
                   }}
                 >

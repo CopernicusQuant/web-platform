@@ -10,14 +10,14 @@ import {
 import { marketIDPrefix, toggleFeature } from "@plot/interactions/market-activity";
 
 type TurnoverBarsProps = {
-  stock: StockPrice[];
+  prices: StockPrice[];
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 };
 
-export default function TurnoverBars({ stock, x, y }: TurnoverBarsProps) {
-  const yMax = d3.max(stock, (d) => d.turnover) ?? 1;
-  const yMin = d3.min(stock, (d) => d.turnover) ?? 0;
+export default function TurnoverBars({ prices, x, y }: TurnoverBarsProps) {
+  const yMax = d3.max(prices, (d) => d.turnover) ?? 1;
+  const yMin = d3.min(prices, (d) => d.turnover) ?? 0;
   const yRange = y.range();
   const yPadding = (yMax - yMin) * 0.05 || 1;
   const subY = d3.scaleLinear(
@@ -27,7 +27,7 @@ export default function TurnoverBars({ stock, x, y }: TurnoverBarsProps) {
   return (
     <>
       <g id={getBarGroupID(marketIDPrefix, "turnover")}>
-        {stock.map((values) => (
+        {prices.map((values) => (
           <rect
             key={`market-turnover-${values.tradeDate}`}
             x={x(values.tradeDate)}
@@ -44,7 +44,7 @@ export default function TurnoverBars({ stock, x, y }: TurnoverBarsProps) {
         valueId={getLegendValueID(marketIDPrefix, "turnover")}
         label="Turnover"
         index={0}
-        value={stock.at(-1)?.turnover.toFixed(2) || "0.0"}
+        value={prices.at(-1)?.turnover.toFixed(2) || "0.0"}
         color={colorPalette[2]}
         onMouseDown={() => toggleFeature("turnover")}
       />

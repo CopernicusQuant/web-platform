@@ -90,14 +90,14 @@ const updateVolumeLegend = (StockPrice: StockPrice) => {
 };
 
 const updatePriceTrendIndicators = ({
-  stock,
+  prices,
   xIdx,
   width,
   marginRight,
   x,
   y,
 }: {
-  stock: StockPrice[];
+  prices: StockPrice[];
   pointerPos: number;
   xIdx: number;
   width: number;
@@ -109,42 +109,42 @@ const updatePriceTrendIndicators = ({
 }) => {
   const indicatorGroup = d3.select(`#${priceElementIds.indicatorGroup}`);
   indicatorGroup.attr("opacity", 1);
-  const { tradeDate, adjClose } = stock[xIdx];
+  const { tradeDate, adjClose } = prices[xIdx];
   const xPos = (x(tradeDate) ?? 0) + x.bandwidth() / 2;
   const yPos = y(adjClose) ?? 0;
   const circle = d3.select(`#${priceElementIds.indicatorPoint}`);
   circle.transition().duration(50).ease(d3.easeLinear).attr("cy", yPos);
   d3.select(`#${priceElementIds.valuesPctRect}`).attr(
     "fill",
-    adjClose >= stock[0].adjClose ? priceColors.up : priceColors.down,
+    adjClose >= prices[0].adjClose ? priceColors.up : priceColors.down,
   );
   updateDateLine(true, tradeDate, xPos);
-  updateDisplayValues(stock[xIdx], computePriceChange(stock.at(0)!.adjClose, adjClose));
-  updateHoverValueTag(stock, xIdx, y, width, marginRight);
-  updateVolumeLegend(stock[xIdx]);
+  updateDisplayValues(prices[xIdx], computePriceChange(prices.at(0)!.adjClose, adjClose));
+  updateHoverValueTag(prices, xIdx, y, width, marginRight);
+  updateVolumeLegend(prices[xIdx]);
 };
 
 const resetPriceTrendIndicators = ({
-  stock,
+  prices,
   width,
   marginRight,
   y,
 }: {
-  stock: StockPrice[];
+  prices: StockPrice[];
   width: number;
   marginRight: number;
   y: d3.ScaleLinear<number, number>;
 }) => {
-  const lastestStock = stock.at(-1);
+  const lastestStock = prices.at(-1);
   if (!lastestStock) return;
   const { adjClose } = lastestStock;
   d3.select(`#${priceElementIds.valuesPctRect}`).attr(
     "fill",
-    adjClose > stock[0].adjClose ? priceColors.up : priceColors.down,
+    adjClose > prices[0].adjClose ? priceColors.up : priceColors.down,
   );
   updateDateLine(false);
-  updateHoverValueTag(stock, -1, y, width, marginRight);
-  updateDisplayValues(lastestStock, computePriceChange(stock.at(0)!.adjClose, adjClose));
+  updateHoverValueTag(prices, -1, y, width, marginRight);
+  updateDisplayValues(lastestStock, computePriceChange(prices.at(0)!.adjClose, adjClose));
   updateVolumeLegend(lastestStock);
 };
 

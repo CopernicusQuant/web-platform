@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-type DataWindowOpt = "60D" | "90D" | "180D" | "1Y" | "3Y";
+const dataWindows = ["60D", "90D", "180D", "1Y", "3Y"] as const;
+type DataWindowOpt = (typeof dataWindows)[number];
 
 const FeatureGroups = [
   "priceMomentum",
@@ -338,6 +339,7 @@ type FeatureByGroup = {
 };
 
 export {
+  dataWindows,
   dataWindowParam,
   featureGroupParam,
   FeatureGroups,

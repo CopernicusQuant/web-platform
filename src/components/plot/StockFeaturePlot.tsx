@@ -13,8 +13,6 @@ import type {
   CCIFeature,
   VolatilityFeature,
 } from "@/apis";
-import { useGetStockFeaturesQuery } from "@/hooks/queries/useGetStockFeaturesQuery";
-import { useGetStockPriceQuery } from "@/hooks/queries/useGetStockPriceQuery";
 import { stockSelectionAtom } from "@/atoms/stocks";
 import { getHoverPlotFn, getLeavePlotFn } from "@plot/interactions/hover";
 import { plotSizeConfig } from "@plot/theme";
@@ -32,6 +30,7 @@ import OBVFeaturePlot from "@plot/obv/OBVFeaturePlot";
 import KDJCorePlot from "@plot/kdj/KDJCorePlot";
 import CCICorePlot from "@plot/cci/CCICorePlot";
 import VolatilityFeaturesPlot from "./volatility/VolatilityFeaturesPlot";
+import { getRouteApi } from "@tanstack/react-router";
 
 type StockFeaturePlotProps = {
   width: number;
@@ -39,17 +38,18 @@ type StockFeaturePlotProps = {
   maxXTickNum?: number;
 };
 
+const stockRoute = getRouteApi("/stocks/$ticker");
+
 export default function StockFeaturePlot({
   width,
   height,
   maxXTickNum = 30,
 }: StockFeaturePlotProps) {
   const { marginRight, marginBottom, marginLeft } = plotSizeConfig;
-  const { ticker, window, featureGroup } = useAtomValue(stockSelectionAtom);
+  const { featureGroup } = useAtomValue(stockSelectionAtom);
   const { featureSubPlot } = useAtomValue(stockSelectionAtom);
   const { referenceHeight } = useAtomValue(plotConfigAtom);
-  const { data: stock } = useGetStockPriceQuery(ticker, window);
-  const { data: features } = useGetStockFeaturesQuery(ticker, window, featureGroup);
+  const { features, prices } = stockRoute.useLoaderData();
   if (!features) return <></>;
 
   const x = d3
@@ -65,14 +65,14 @@ export default function StockFeaturePlot({
 
   // controls hover-based indicators
   const onPointerMove = getHoverPlotFn({
-    stock,
+    prices,
     features,
     featureGroup,
     width,
     referenceHeight,
   });
   const onPointerLeave = getLeavePlotFn({
-    stock,
+    prices,
     features,
     featureGroup,
     width,

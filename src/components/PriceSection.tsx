@@ -1,12 +1,6 @@
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
 import { dataWindowParam, type DataWindowOpt } from "@/apis";
-import {
-  priceChartTypeAtom,
-  setStockWindowAtom,
-  stockSelectionAtom,
-  type PriceChartType,
-} from "@/atoms/stocks";
 import { plotConfigAtom } from "@/atoms/plot";
 import { usePlotSize } from "@/hooks/usePlotSize";
 import {
@@ -19,16 +13,27 @@ import {
 import StockDataPlot from "@plot/StockDataPlot";
 import CandleIcon from "@/components/icons/CandleIcon";
 import LineIcon from "@/components/icons/LineIcon";
+import { getRouteApi } from "@tanstack/react-router";
 
 const priceChartTypes: PriceChartType[] = ["candle", "line"];
 
 type PriceChartProps = {} & React.ComponentPropsWithoutRef<"div">;
+type PriceChartType = "candle" | "line";
+
+const stockRoute = getRouteApi("/stocks/$ticker");
 
 export default function PriceChart({ ...props }: PriceChartProps) {
-  const [chartType, setChartType] = useAtom(priceChartTypeAtom);
+  const [chartType, setChartType] = useState<PriceChartType>("candle");
 
-  const { window } = useAtomValue(stockSelectionAtom);
-  const setStockWindow = useSetAtom(setStockWindowAtom);
+  // const { window } = useAtomValue(stockSelectionAtom);
+  const navigate = stockRoute.useNavigate();
+  const window = stockRoute.useSearch({
+    select: (search) => search.window,
+  });
+
+  const updateDataWindow = (nextWindow: DataWindowOpt) => {
+    navigate({ to: ".", search: (previous) => ({ ...previous, window: nextWindow }) });
+  };
 
   const { plotSize, plotContainerRef } = usePlotSize();
   const setPlotConfig = useSetAtom(plotConfigAtom);
@@ -57,9 +62,9 @@ export default function PriceChart({ ...props }: PriceChartProps) {
           {Object.entries(dataWindowParam).map(([key]) => (
             <Button
               key={`selector-button-${key}`}
-              active={key === window}
+              active={window === key}
               className={"w-11"}
-              onClick={() => setStockWindow(key as DataWindowOpt)}
+              onClick={() => updateDataWindow(key as DataWindowOpt)}
             >
               {key}
             </Button>
