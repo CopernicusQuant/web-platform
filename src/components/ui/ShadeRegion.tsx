@@ -1,4 +1,4 @@
-import { svgConfig } from "@plot/theme";
+import { svgConfig } from "@/lib/theme";
 import * as d3 from "d3";
 
 type ShadeRegionProps = {

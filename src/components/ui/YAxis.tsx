@@ -1,4 +1,4 @@
-import { svgConfig } from "@plot/theme";
+import { svgConfig } from "@/lib/theme";
 
 type YAxisProps = {
   y: d3.ScaleLinear<number, number>;
