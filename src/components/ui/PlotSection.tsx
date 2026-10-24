@@ -31,7 +31,7 @@ function Content({ children, className, ref, ...props }: BodyProps) {
   return (
     <div
       className={cn(
-        "border border-gray-300 rounded-md w-full bg-white px-6 py-2",
+        "border border-gray-300 rounded-md w-full bg-white px-6 py-1.5",
         className,
       )}
       {...props}

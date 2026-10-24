@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SigninRouteImport } from './routes/signin'
+import { Route as StocksRouteImport } from './routes/stocks'
 import { Route as StocksTickerRouteImport } from './routes/stocks.$ticker'
 
 const IndexRoute = IndexRouteImport.update({
@@ -17,36 +19,53 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StocksTickerRoute = StocksTickerRouteImport.update({
-  id: '/stocks/$ticker',
-  path: '/stocks/$ticker',
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
   getParentRoute: () => rootRouteImport,
+} as any)
+const StocksRoute = StocksRouteImport.update({
+  id: '/stocks',
+  path: '/stocks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StocksTickerRoute = StocksTickerRouteImport.update({
+  id: '/$ticker',
+  path: '/$ticker',
+  getParentRoute: () => StocksRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/signin': typeof SigninRoute
+  '/stocks': typeof StocksRouteWithChildren
   '/stocks/$ticker': typeof StocksTickerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/signin': typeof SigninRoute
+  '/stocks': typeof StocksRouteWithChildren
   '/stocks/$ticker': typeof StocksTickerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/signin': typeof SigninRoute
+  '/stocks': typeof StocksRouteWithChildren
   '/stocks/$ticker': typeof StocksTickerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/stocks/$ticker'
+  fullPaths: '/' | '/signin' | '/stocks' | '/stocks/$ticker'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/stocks/$ticker'
-  id: '__root__' | '/' | '/stocks/$ticker'
+  to: '/' | '/signin' | '/stocks' | '/stocks/$ticker'
+  id: '__root__' | '/' | '/signin' | '/stocks' | '/stocks/$ticker'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  StocksTickerRoute: typeof StocksTickerRoute
+  SigninRoute: typeof SigninRoute
+  StocksRoute: typeof StocksRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -58,19 +77,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stocks': {
+      id: '/stocks'
+      path: '/stocks'
+      fullPath: '/stocks'
+      preLoaderRoute: typeof StocksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stocks/$ticker': {
       id: '/stocks/$ticker'
-      path: '/stocks/$ticker'
+      path: '/$ticker'
       fullPath: '/stocks/$ticker'
       preLoaderRoute: typeof StocksTickerRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof StocksRoute
     }
   }
 }
 
+interface StocksRouteChildren {
+  StocksTickerRoute: typeof StocksTickerRoute
+}
+
+const StocksRouteChildren: StocksRouteChildren = {
+  StocksTickerRoute: StocksTickerRoute,
+}
+
+const StocksRouteWithChildren =
+  StocksRoute._addFileChildren(StocksRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  StocksTickerRoute: StocksTickerRoute,
+  SigninRoute: SigninRoute,
+  StocksRoute: StocksRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

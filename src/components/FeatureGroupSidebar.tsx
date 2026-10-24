@@ -3,7 +3,6 @@ import FeatureGroupCard from "@/components/ui/FeatureGroupCard";
 import { stockRouteAPI } from "@/routes/stocks.$ticker";
 
 export default function FeatureGroupSidebar() {
-  // const { featureGroup } = useAtomValue(stockSelectionAtom);
   const featureGroup = stockRouteAPI.useSearch({
     select: (search) => search.group,
   });

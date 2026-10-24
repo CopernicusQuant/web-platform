@@ -23,9 +23,9 @@ const legendConfig = {
 };
 
 const plotSizeConfig = {
-  marginTop: 35,
-  marginRight: 40,
-  marginBottom: 45,
+  marginTop: 30,
+  marginRight: 35,
+  marginBottom: 40,
   marginLeft: 0,
 };
 
