@@ -1,12 +1,12 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
-import "@/i18n/i18n";
+import type { AppRouterContext } from "./routes/__root";
 
 export const queryClient = new QueryClient();
 export const router = createRouter({
   routeTree,
-  context: { queryClient },
+  context: { queryClient, auth: undefined! as AppRouterContext["auth"] },
   defaultPreload: "intent",
   scrollRestoration: true,
 });

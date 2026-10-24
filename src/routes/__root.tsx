@@ -1,18 +1,33 @@
-import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+import { Outlet, createRootRouteWithContext, redirect } from "@tanstack/react-router";
 import type { QueryClient } from "@tanstack/react-query";
-import Header from "@/components/Header";
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export type AppRouterContext = {
+  queryClient: QueryClient;
+  auth: {
+    isSignedIn: boolean;
+    getToken: () => Promise<string | null>;
+  };
+};
+
+const publicPaths = new Set([
+  "/signin",
+  // /signup,
+  // /forget-password
+]);
+
+export const Route = createRootRouteWithContext<AppRouterContext>()({
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isSignedIn && !publicPaths.has(location.pathname)) {
+      throw redirect({
+        to: "/signin",
+        search: { redirect: location.href },
+        replace: true,
+      });
+    }
+  },
   component: RootLayout,
 });
 
 function RootLayout() {
-  return (
-    <div className="w-full h-full flex flex-col items-center gap-2 min-h-200 [&_div]:min-h-0">
-      <Header />
-      <div className="w-full flex-1 px-4 max-w-[1800px]">
-        <Outlet />
-      </div>
-    </div>
-  );
+  return <Outlet />;
 }
