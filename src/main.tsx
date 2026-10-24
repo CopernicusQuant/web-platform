@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "@tanstack/react-router";
 import { queryClient, router } from "./router.tsx";
@@ -8,9 +8,14 @@ import "./index.css";
 
 function AppRouter() {
   const { isLoaded, isSignedIn, getToken } = useAuth();
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) router.invalidate();
+  }, [isSignedIn, isLoaded]);
   if (!isLoaded) {
     return <></>; // probably could be an animation here
   }
+
   return (
     <RouterProvider
       router={router}
