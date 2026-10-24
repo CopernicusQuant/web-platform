@@ -95,8 +95,8 @@ export default function BollingerBands({
         {chartType === "line" && (
           <circle
             id={getCircleID(bbIDPrefix, "bbMid")}
-            cx={0}
-            cy={0}
+            cx={(x(lastFeature.tradeDate) ?? 0) + x.bandwidth() / 2}
+            cy={y(lastFeature["bbMid"])}
             r={5}
             stroke="white"
             fill={colorPalette[0]}

@@ -28,6 +28,7 @@ export default function StockDataIndicators({
 }: StockDataIndicatorsProps) {
   const { marginRight } = plotSizeConfig;
   const isUp = (prices.at(0)?.adjClose ?? 0) <= (prices.at(-1)?.adjClose ?? 0);
+  const lastPrice = prices.at(-1);
   return (
     <g>
       <g id={priceElementIds.indicatorGroup} opacity={0}>
@@ -42,7 +43,7 @@ export default function StockDataIndicators({
           <circle
             id={priceElementIds.indicatorPoint}
             cx={0}
-            cy={0}
+            cy={lastPrice ? y(lastPrice["adjClose"]) : 0}
             r={5}
             stroke="white"
             strokeWidth={2}

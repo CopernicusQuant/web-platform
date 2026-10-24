@@ -103,9 +103,6 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
         updatePriceMomentumIndicators({
           xIdx,
           features: features as PriceMomentumFeature[],
-          height: referenceHeight,
-          marginTop,
-          marginBottom,
           x,
           y,
         });
@@ -131,37 +128,13 @@ const getHoverPlotFn = <G extends FeatureGroupOpt>({
         });
         break;
       case "macd":
-        updateMACDIndicators({
-          xIdx,
-          features: features as MACDFeature[],
-          height: referenceHeight,
-          marginTop,
-          marginBottom,
-          x,
-          y,
-        });
+        updateMACDIndicators({ xIdx, features: features as MACDFeature[], x, y });
         break;
       case "bollingerbands":
-        updateBBIndicators({
-          xIdx,
-          features: features as BollingerBandsFeature[],
-          height: referenceHeight,
-          marginTop,
-          marginBottom,
-          x,
-          y,
-        });
+        updateBBIndicators({ xIdx, features: features as BollingerBandsFeature[], x, y });
         break;
       case "dema":
-        updateDEMAIndicators({
-          xIdx,
-          features: features as DEMAFeature[],
-          height: referenceHeight,
-          marginTop,
-          marginBottom,
-          x,
-          y,
-        });
+        updateDEMAIndicators({ xIdx, features: features as DEMAFeature[], x, y });
         break;
       case "rsi":
         updateRSIIndicators({ features: features as RSIFeature[], xIdx });

@@ -19,11 +19,11 @@ const updateTextValue = (id: string, text: string) => {
   d3.select(`#${id}`).text(text);
 };
 
-const updateCircleOpacity = (id: string, hovering: boolean) => {
+const updateCircleOpacity = (id: string, hovering: boolean, opacity?: number) => {
   const circleGroup = d3.select(`#${id}`);
   if (circleGroup.empty()) return;
   if (circleGroup.attr("data-on") !== "off") {
-    circleGroup.attr("opacity", hovering ? 1 : 0);
+    circleGroup.attr("opacity", hovering ? (opacity ?? 1) : 0);
   }
 };
 
@@ -35,6 +35,12 @@ const updateCirclePos = (id: string, duration: number, cx: number, cy: number) =
     .ease(d3.easeLinear)
     .attr("cx", cx)
     .attr("cy", cy);
+};
+
+const updateLegendColor = (id: string, color: string) => {
+  const legend = d3.select(`#${id}`);
+  legend.select("rect").attr("stroke", color);
+  legend.select("text").attr("fill", color);
 };
 
 const toggleElement = (
@@ -108,6 +114,7 @@ export {
   updateCirclePos,
   updateCircleOpacity,
   updateTextValue,
+  updateLegendColor,
   toggleElement,
   getFeatureValues,
   getLineID,
