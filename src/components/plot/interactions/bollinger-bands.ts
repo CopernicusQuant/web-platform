@@ -7,6 +7,8 @@ import {
   getLegendValueID,
   getLineID,
   toggleElement,
+  updateCircleOpacity,
+  updateCirclePos,
   updateTextValue,
 } from "./d3-utils";
 import { animationConfig } from "@plot/theme";
@@ -29,6 +31,34 @@ const toggleBBFeature = (featureName: string) => {
   toggleElement(getCirclesGroupID("bbMid"));
 };
 
+const updateIndicators = (
+  feature: BollingerBandsFeature,
+  hovering: boolean,
+  x?: d3.ScaleBand<string>,
+  y?: d3.ScaleLinear<number, number>,
+) => {
+  const { duration } = animationConfig;
+  updateTextValue(
+    getLegendValueID(bbIDPrefix, "band"),
+    `L ${feature["bbLower"].toFixed(2)} U ${feature["bbUpper"].toFixed(2)}`,
+  );
+  [...bandFeatures, positionFeature, widthFeature].forEach((featureName) => {
+    updateTextValue(
+      getLegendValueID(bbIDPrefix, featureName),
+      feature[featureName].toFixed(2),
+    );
+  });
+  updateCircleOpacity(getCirclesGroupID("bbMid"), hovering);
+  if (x && y) {
+    updateCirclePos(
+      getCircleID(bbIDPrefix, "bbMid"),
+      duration,
+      (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2,
+      y(feature.bbMid),
+    );
+  }
+};
+
 const updateBBIndicators = ({
   features,
   xIdx,
@@ -37,56 +67,15 @@ const updateBBIndicators = ({
 }: {
   features: BollingerBandsFeature[];
   xIdx: number;
-  height: number;
-  marginTop: number;
-  marginBottom: number;
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 }) => {
-  const { duration } = animationConfig;
-  const currFeature = features[xIdx];
-  updateTextValue(
-    getLegendValueID(bbIDPrefix, "band"),
-    `L ${currFeature["bbLower"].toFixed(2)} U ${currFeature["bbUpper"].toFixed(2)}`,
-  );
-  [...bandFeatures, positionFeature, widthFeature].forEach((featureName) => {
-    updateTextValue(
-      getLegendValueID(bbIDPrefix, featureName),
-      currFeature[featureName].toFixed(2),
-    );
-  });
-  // update circle position
-  const circleGroup = d3.select(`#${getCirclesGroupID("bbMid")}`);
-  if (circleGroup.attr("data-on") !== "off") {
-    d3.select(`#${getCirclesGroupID("bbMid")}`).attr("opacity", 1);
-  }
-  d3.select(`#${getCircleID(bbIDPrefix, "bbMid")}`)
-    .transition()
-    .duration(duration)
-    .ease(d3.easeLinear)
-    .attr("cx", (x(currFeature.tradeDate) ?? 0) + x.bandwidth() / 2)
-    .attr("cy", y(currFeature.bbMid))
-    .attr(
-      "opacity",
-      currFeature.bbMid >= y.domain()[0] && currFeature.bbMid <= y.domain()[1] ? 1 : 0,
-    );
+  updateIndicators(features[xIdx], true, x, y);
 };
 
 const resetBBIndicators = ({ features }: { features: BollingerBandsFeature[] }) => {
   const currFeature = features.at(-1)!;
-  updateTextValue(
-    getLegendValueID(bbIDPrefix, "band"),
-    `L ${currFeature["bbLower"].toFixed(2)} U ${currFeature["bbUpper"].toFixed(2)}`,
-  );
-  [...bandFeatures, positionFeature, widthFeature].forEach((featureName) => {
-    updateTextValue(
-      getLegendValueID(bbIDPrefix, featureName),
-      currFeature[featureName].toFixed(2),
-    );
-  });
-
-  // update circle position
-  d3.select(`#${getCirclesGroupID("bbMid")}`).attr("opacity", 0);
+  updateIndicators(currFeature, false);
 };
 
 export {

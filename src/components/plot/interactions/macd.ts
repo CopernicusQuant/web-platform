@@ -8,6 +8,9 @@ import {
   getLegendValueID,
   getLineID,
   toggleElement,
+  updateCircleOpacity,
+  updateCirclePos,
+  updateLegendColor,
   updateTextValue,
 } from "@plot/interactions/d3-utils";
 import { animationConfig, priceColors } from "@plot/theme";
@@ -26,88 +29,64 @@ const toggleMACDFeature = (featureName: string) => {
   toggleElement(getBarGroupID(macdIDPrefix, featureName));
 };
 
+const updateIndicators = (
+  feature: MACDFeature,
+  hovering: boolean,
+  x?: d3.ScaleBand<string>,
+  y?: d3.ScaleLinear<number, number>,
+) => {
+  const { duration } = animationConfig;
+  [...emaFeatures].forEach((featureName) => {
+    updateTextValue(
+      getLegendValueID(macdIDPrefix, featureName),
+      feature[featureName].toFixed(2),
+    );
+    if (x && y) {
+      const xPos = (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2;
+      const yPos = y(feature[featureName]) ?? 0;
+      const circleOpacity = yPos <= y.range()[0] && yPos >= y.range()[1] ? 1 : 0;
+      updateCircleOpacity(
+        getCircleID(macdIDPrefix, featureName),
+        hovering,
+        circleOpacity,
+      );
+      updateCirclePos(getCircleID(macdIDPrefix, featureName), duration, xPos, yPos);
+    } else {
+      updateCircleOpacity(getCircleID(macdIDPrefix, featureName), hovering);
+    }
+  });
+  [...accelerationFeatures].forEach((featureName) => {
+    updateTextValue(
+      getLegendValueID(macdIDPrefix, featureName),
+      feature[featureName].toFixed(3),
+    );
+  });
+  const histValue = feature["hist"];
+  updateTextValue(getLegendValueID(macdIDPrefix, "hist"), histValue.toFixed(3));
+  // update legend color
+  const legendColor = histValue >= 0 ? priceColors.up : priceColors.down;
+  updateLegendColor(getLegendID(macdIDPrefix, "hist"), legendColor);
+};
+
 const updateMACDIndicators = ({
   features,
   xIdx,
-  height,
-  marginTop,
-  marginBottom,
   x,
   y,
 }: {
   features: MACDFeature[];
   xIdx: number;
-  height: number;
-  marginTop: number;
-  marginBottom: number;
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number>;
 }) => {
-  const { duration } = animationConfig;
   const currFeature = features[xIdx];
-  // show dots on the curve
-  [...emaFeatures].forEach((featureName) => {
-    const xPos = (x(currFeature.tradeDate) ?? 0) + x.bandwidth() / 2;
-    const yPos = y(currFeature[featureName]) ?? 0;
-    const currCircle = d3.select(`#${getCircleID(macdIDPrefix, featureName)}`);
-    currCircle
-      .transition()
-      .duration(duration)
-      .ease(d3.easeLinear)
-      .attr("cx", xPos)
-      .attr("cy", yPos);
-    if (currCircle.attr("data-on") !== "off") {
-      d3.select(`#${getCircleID(macdIDPrefix, featureName)}`).attr(
-        "opacity",
-        yPos <= height - marginBottom && yPos >= marginTop ? 1 : 0,
-      );
-    }
-    updateTextValue(
-      getLegendValueID(macdIDPrefix, featureName),
-      currFeature[featureName].toFixed(2),
-    );
-  });
-  [...accelerationFeatures].forEach((featureName) => {
-    updateTextValue(
-      getLegendValueID(macdIDPrefix, featureName),
-      currFeature[featureName].toFixed(3),
-    );
-  });
-  const histValue = currFeature["hist"];
-  updateTextValue(getLegendValueID(macdIDPrefix, "hist"), histValue.toFixed(3));
-  const histLegend = d3.select(`#${getLegendID(macdIDPrefix, "hist")}`);
-  histLegend
-    .select("rect")
-    .attr("stroke", histValue >= 0 ? priceColors.up : priceColors.down);
-  histLegend
-    .select("text")
-    .attr("fill", histValue >= 0 ? priceColors.up : priceColors.down);
+  updateIndicators(currFeature, true, x, y);
 };
 
 const resetMACDIndicators = ({ features }: { features: MACDFeature[] }) => {
-  [...emaFeatures].forEach((featureName) => {
-    d3.select(`#${getCircleID(macdIDPrefix, featureName)}`).attr("opacity", 0);
-    updateTextValue(
-      getLegendValueID(macdIDPrefix, featureName),
-      features.at(-1)![featureName].toFixed(2),
-    );
-  });
-  [...accelerationFeatures].forEach((featureName) => {
-    updateTextValue(
-      getLegendValueID(macdIDPrefix, featureName),
-      features.at(-1)![featureName].toFixed(3),
-    );
-  });
-
-  const histValue = features.at(-1)!["hist"];
-  updateTextValue(getLegendValueID(macdIDPrefix, "hist"), histValue.toFixed(3));
-  const histLegend = d3.select(`#${getLegendID(macdIDPrefix, "hist")}`);
-  histLegend
-    .select("rect")
-    .attr("stroke", histValue >= 0 ? priceColors.up : priceColors.down);
-  histLegend
-    .select("text")
-    .attr("fill", histValue >= 0 ? priceColors.up : priceColors.down);
+  const lastFeature = features.at(-1);
+  if (!lastFeature) return;
+  updateIndicators(lastFeature, false);
 };
 
 export {

@@ -65,7 +65,7 @@ export default function Amplitude({
         labels={amplitudeFeatures.map((featureName) => t(`featureName.${featureName}`))}
         wide={true}
         toggleFn={toggleFeature}
-        valueFormatFn={(value) => `${(value * 100).toFixed(1)}%`}
+        valueFormatFn={(value) => `${(value * 100).toFixed(2)}%`}
       />
     </>
   );

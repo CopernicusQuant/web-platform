@@ -25,6 +25,26 @@ const toggleFeature = (featureName: string) => {
   toggleElement(getBarGroupID(marketIDPrefix, featureName));
   toggleElement(getCirclesGroupID(featureName));
 };
+const updateIndicators = (price: StockPrice, feature: MarketActivityFeature) => {
+  const currFeature = feature;
+  const currStockPrice = price;
+  updateTextValue(
+    getLegendValueID(marketIDPrefix, "turnover"),
+    currStockPrice["turnover"].toFixed(2),
+  );
+  [...activityScoreFeatures, ...priceAndTurnoverFeatures].forEach((featureName) => {
+    updateTextValue(
+      getLegendValueID(marketIDPrefix, featureName),
+      currFeature[featureName].toFixed(2),
+    );
+  });
+  amplitudeFeatures.forEach((featureName) => {
+    updateTextValue(
+      getLegendValueID(marketIDPrefix, featureName),
+      `${(currFeature[featureName] * 100).toFixed(2)}%`,
+    );
+  });
+};
 
 const updateMarketActivityIndicators = ({
   prices,
@@ -37,24 +57,7 @@ const updateMarketActivityIndicators = ({
 }) => {
   const currFeature = features[xIdx];
   const currStockPrice = prices[xIdx];
-  updateTextValue(
-    getLegendValueID(marketIDPrefix, "turnover"),
-    currStockPrice["turnover"].toFixed(2),
-  );
-  [...activityScoreFeatures, ...priceAndTurnoverFeatures, ...amplitudeFeatures].forEach(
-    (featureName) => {
-      updateTextValue(
-        getLegendValueID(marketIDPrefix, featureName),
-        currFeature[featureName].toFixed(2),
-      );
-    },
-  );
-  amplitudeFeatures.forEach((featureName) => {
-    updateTextValue(
-      getLegendValueID(marketIDPrefix, featureName),
-      `${(currFeature[featureName] * 100).toFixed(2)}%`,
-    );
-  });
+  updateIndicators(currStockPrice, currFeature);
 };
 
 const resetMarketActivityIndicators = ({
@@ -64,22 +67,10 @@ const resetMarketActivityIndicators = ({
   prices: StockPrice[];
   features: MarketActivityFeature[];
 }) => {
-  updateTextValue(
-    getLegendValueID(marketIDPrefix, "turnover"),
-    prices.at(-1)!["turnover"].toFixed(2),
-  );
-  [...activityScoreFeatures, ...priceAndTurnoverFeatures].forEach((featureName) => {
-    updateTextValue(
-      getLegendValueID(marketIDPrefix, featureName),
-      features.at(-1)![featureName].toFixed(2),
-    );
-  });
-  amplitudeFeatures.forEach((featureName) => {
-    updateTextValue(
-      getLegendValueID(marketIDPrefix, featureName),
-      `${(features.at(-1)![featureName] * 100).toFixed(2)}%`,
-    );
-  });
+  const currFeature = features.at(-1);
+  const currStockPrice = prices.at(-1);
+  if (!currFeature || !currStockPrice) return;
+  updateIndicators(currStockPrice, currFeature);
 };
 
 export {

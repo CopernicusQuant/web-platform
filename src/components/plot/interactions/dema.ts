@@ -7,6 +7,8 @@ import {
   getLegendValueID,
   getLineID,
   toggleElement,
+  updateCircleOpacity,
+  updateCirclePos,
   updateTextValue,
 } from "./d3-utils";
 import { animationConfig } from "@plot/theme";
@@ -55,85 +57,68 @@ const toggleDEMAFeature = (featureName: string) => {
   toggleElement(getCircleID(demaIDPrefix, featureName));
 };
 
-const updateDEMAIndicators = ({
-  features,
-  xIdx,
-  height,
-  marginTop,
-  marginBottom,
-  x,
-  y,
-}: {
-  features: DEMAFeature[];
-  xIdx: number;
-  height: number;
-  marginTop: number;
-  marginBottom: number;
-  x: d3.ScaleBand<string>;
-  y: d3.ScaleLinear<number, number>;
-}) => {
+const updateIndicators = (
+  feature: DEMAFeature,
+  hovering: boolean,
+  x?: d3.ScaleBand<string>,
+  y?: d3.ScaleLinear<number, number>,
+) => {
   const { duration } = animationConfig;
-  const currFeature = features[xIdx];
-  const featureNames = Object.keys(currFeature) as DEMANumericFeatureName[];
+  const featureNames = Object.keys(feature) as DEMANumericFeatureName[];
   const slowFastFeatureNames = featureNames.filter(
     (featureName) => featureName.endsWith("fast") || featureName.endsWith("slow"),
   );
   const spreadFeatureNames = featureNames.filter((featureName) =>
     featureName.endsWith("spread"),
   );
-
   spreadFeatureNames.forEach((featureName) =>
     updateTextValue(
       getLegendValueID(demaIDPrefix, featureName),
-      digitToPercent(currFeature[featureName]),
+      digitToPercent(feature[featureName]),
     ),
   );
   slowFastFeatureNames.forEach((featureName) => {
-    const xPos = (x(currFeature.tradeDate) ?? 0) + x.bandwidth() / 2;
-    const yPos = y(currFeature[featureName]) ?? 0;
-    const currCircle = d3.select(`#${getCircleID(demaIDPrefix, featureName)}`);
-    if (!currCircle.empty()) {
-      currCircle
-        .transition()
-        .duration(duration)
-        .ease(d3.easeLinear)
-        .attr("cx", xPos)
-        .attr("cy", yPos);
-      if (currCircle.attr("data-on") !== "off") {
-        d3.select(`#${getCircleID(demaIDPrefix, featureName)}`).attr(
-          "opacity",
-          yPos <= height - marginBottom && yPos >= marginTop ? 1 : 0,
-        );
-      }
-    }
     updateTextValue(
       getLegendValueID(demaIDPrefix, featureName),
-      currFeature[featureName].toFixed(2),
+      feature[featureName].toFixed(2),
     );
+    updateCircleOpacity(getCircleID(demaIDPrefix, featureName), hovering);
+    if (x && y) {
+      const xPos = (x(feature.tradeDate) ?? 0) + x.bandwidth() / 2;
+      const yPos = y(feature[featureName]) ?? 0;
+      // when the circle moves out of the plot boundary, hide it
+      const circleOpacity = yPos <= y.range()[0] && yPos >= y.range()[1] ? 1 : 0;
+      updateCircleOpacity(
+        getCircleID(demaIDPrefix, featureName),
+        hovering,
+        circleOpacity,
+      );
+      updateCirclePos(getCircleID(demaIDPrefix, featureName), duration, xPos, yPos);
+    } else {
+      updateCircleOpacity(getCircleID(demaIDPrefix, featureName), hovering);
+    }
   });
 };
 
+const updateDEMAIndicators = ({
+  features,
+  xIdx,
+  x,
+  y,
+}: {
+  features: DEMAFeature[];
+  xIdx: number;
+  x: d3.ScaleBand<string>;
+  y: d3.ScaleLinear<number, number>;
+}) => {
+  const currFeature = features[xIdx];
+  updateIndicators(currFeature, true, x, y);
+};
+
 const resetDEMAIndicators = ({ features }: { features: DEMAFeature[] }) => {
-  const featureNames = Object.keys(features.at(-1)!) as DEMANumericFeatureName[];
-  const slowFastFeatureNames = featureNames.filter(
-    (featureName) => featureName.endsWith("fast") || featureName.endsWith("slow"),
-  );
-  const spreadFeatureName = featureNames.filter((featureName) =>
-    featureName.endsWith("spread"),
-  );
-  spreadFeatureName.forEach((featureName) => {
-    updateTextValue(
-      getLegendValueID(demaIDPrefix, featureName),
-      digitToPercent(features.at(-1)![featureName]),
-    );
-  });
-  slowFastFeatureNames.forEach((featureName) => {
-    d3.select(`#${getCircleID(demaIDPrefix, featureName)}`).attr("opacity", 0);
-    updateTextValue(
-      getLegendValueID(demaIDPrefix, featureName),
-      features.at(-1)![featureName].toFixed(2),
-    );
-  });
+  const lastFeature = features.at(-1);
+  if (!lastFeature) return;
+  updateIndicators(lastFeature, false);
 };
 
 export {

@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import { parseVolume, computePriceChange, parseDate, getMonthName } from "@/lib/utils";
 import type { StockPrice } from "@/apis";
 import { animationConfig, priceColors } from "../theme";
-import { toggleElement, updateTextValue } from "./d3-utils";
+import { toggleElement, updateCirclePos, updateTextValue } from "./d3-utils";
 
 const priceElementIds = {
   indicatorGroup: "price-indicator-group",
@@ -108,16 +108,16 @@ const updatePriceTrendIndicators = ({
   y: d3.ScaleLinear<number, number>;
 }) => {
   const indicatorGroup = d3.select(`#${priceElementIds.indicatorGroup}`);
+  const { duration } = animationConfig;
   indicatorGroup.attr("opacity", 1);
   const { tradeDate, adjClose } = prices[xIdx];
-  const xPos = (x(tradeDate) ?? 0) + x.bandwidth() / 2;
-  const yPos = y(adjClose) ?? 0;
-  const circle = d3.select(`#${priceElementIds.indicatorPoint}`);
-  circle.transition().duration(50).ease(d3.easeLinear).attr("cy", yPos);
   d3.select(`#${priceElementIds.valuesPctRect}`).attr(
     "fill",
     adjClose >= prices[0].adjClose ? priceColors.up : priceColors.down,
   );
+  const xPos = (x(tradeDate) ?? 0) + x.bandwidth() / 2;
+  const yPos = y(adjClose) ?? 0;
+  updateCirclePos(priceElementIds.indicatorPoint, duration, 0, yPos);
   updateDateLine(true, tradeDate, xPos);
   updateDisplayValues(prices[xIdx], computePriceChange(prices.at(0)!.adjClose, adjClose));
   updateHoverValueTag(prices, xIdx, y, width, marginRight);
