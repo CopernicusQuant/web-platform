@@ -1,4 +1,4 @@
-import { plotSizeConfig, legendConfig } from "@plot/theme";
+import { plotSizeConfig, legendConfig } from "@/lib/theme";
 
 type DateLineProps = {
   height: number;

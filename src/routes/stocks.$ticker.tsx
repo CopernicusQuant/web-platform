@@ -1,5 +1,5 @@
 import { dataWindows, FeatureGroups } from "@/apis";
-import StockInfo from "@/components/StockInfo";
+import StockInfo from "@/components/stocks/StockInfo";
 import {
   stockFeatureQuery,
   stockInfoQuery,
@@ -8,9 +8,9 @@ import {
 } from "@/queries/stock";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import { z } from "zod";
-import PriceSection from "@/components/PriceSection";
-import FeaturesSection from "@/components/FeaturesSection";
-import FeatureGroupSidebar from "@/components/FeatureGroupSidebar";
+import PriceSection from "@/components/stocks/PriceSection";
+import FeaturesSection from "@/components/stocks/FeaturesSection";
+import FeatureGroupSidebar from "@/components/stocks/FeatureGroupSidebar";
 
 const searchSchema = z.object({
   window: z.enum(dataWindows).catch("60D"),
